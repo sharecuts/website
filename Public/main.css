@@ -96,3 +96,9 @@ footer#master-footer {
     display:block;
     margin-top:70px;
 }
+
+footer#master-footer p {
+    font-size:12px;
+    color:#4C4C4C;
+    margin-bottom:6px;
+}
