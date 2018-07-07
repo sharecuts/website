@@ -55,7 +55,15 @@ final class WebsiteController: RouteCollection {
     func upload(_ req: Request) throws -> Future<View> {
         let apiKey = try? req.query.get(String.self, at: ["apiKey"])
 
-        return try req.view().render("upload", ["apiKey": apiKey])
+        let userQuery = User.query(on: req).filter(\.apiKey, .equal, apiKey).first()
+
+        return userQuery.flatMap(to: View.self) { user in
+            guard user != nil else {
+                throw Abort(.forbidden)
+            }
+
+            return try req.view().render("upload", ["apiKey": apiKey])
+        }
     }
 
 }

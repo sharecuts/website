@@ -2,11 +2,10 @@
     <h2 class="bottom-space">Upload a Shortcut</h2>
 
     #if(apiKey != nil) {
-        <form id="upload" action="/api/shortcuts">
+        <form id="upload" action="/api/shortcuts?apiKey=#(apiKey)" method="post" enctype="multipart/form-data">
             <label><input type="text" name="title" placeholder="Title"></label>
             <label><input type="text" name="summary" placeholder="Description"></label>
             <label><input type="file" name="shortcut" placeholder="Upload your .shortcut file"></label>
-            <input type="hidden" name="key" value="#(apiKey)">
             <button type="submit">Upload</button>
         </form>   
     } else {
