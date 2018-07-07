@@ -28,7 +28,9 @@ final class ShortcutsController: RouteCollection {
     }
 
     func create(_ req: Request) throws -> Future<ModifyShortcutResponse> {
-        guard let apiKey = req.http.headers["X-Shortcuts-Key"].first else {
+        let queryKey = try? req.query.get(String.self, at: ["apiKey"])
+
+        guard let apiKey = req.http.headers["X-Shortcuts-Key"].first ?? queryKey else {
             throw Abort(.forbidden)
         }
 
