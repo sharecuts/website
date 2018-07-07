@@ -23,6 +23,7 @@ final class WebsiteController: RouteCollection {
     func boot(router: Router) throws {
         router.get(use: index)
         router.get("download", Shortcut.parameter, use: download)
+        router.get("upload", use: upload)
     }
 
     func index(_ req: Request) throws -> Future<View> {
@@ -49,6 +50,12 @@ final class WebsiteController: RouteCollection {
             let headers = HTTPHeaders([("Location",url.absoluteString)])
             return req.makeResponse(http: HTTPResponse(status: HTTPResponseStatus(statusCode: 302), headers: headers))
         }
+    }
+
+    func upload(_ req: Request) throws -> Future<View> {
+        let apiKey = try? req.query.get(String.self, at: ["apiKey"])
+
+        return try req.view().render("upload", ["apiKey": apiKey])
     }
 
 }

@@ -106,3 +106,33 @@ footer#master-footer p {
     color:#4C4C4C;
     margin-bottom:6px;
 }
+
+form input {
+    display:block;
+}
+form input[type="text"] {
+    border:1px solid #CCC;
+    padding:5px;
+    border-radius: 4px;
+    font:16px -apple-system, 'Helvetica Neue', Helvetica, sans-serif;
+    margin:0 0 16px 0;
+    width:50%;
+}
+
+form button {
+    margin-top:16px;
+    padding:6px 12px;
+    background-color:#0076FF;
+    color:white;
+    cursor:pointer;
+    display:block;
+    border:none;
+    font:14px -apple-system, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight:500;
+    text-transform:uppercase;
+    border-radius: 6px;
+}
+
+.bottom-space {
+    margin-bottom:20px;
+}
