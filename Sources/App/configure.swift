@@ -11,12 +11,14 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     B2Client.shared.config = B2Config(env: env)
 
+    let downloadsBase = env.get("B2_BUCKET_BASE_URL") ?? "https://f001.backblazeb2.com/file/sharecuts/"
+
     /// Register providers first
     try services.register(FluentPostgreSQLProvider())
 
     /// Register routes to the router
     let router = EngineRouter.default()
-    try routes(router, masterKey: key)
+    try routes(router, masterKey: key, downloadsBaseURL: URL(string: downloadsBase)!)
     services.register(router, as: Router.self)
 
     /// Register middleware
