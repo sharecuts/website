@@ -55,14 +55,17 @@ header#master-header ul li a {
     font-weight:500;
 }
 
+ul#shortcuts-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 290px);
+    grid-auto-rows: auto;
+    grid-gap: 1rem;
+}
+
 ul#shortcuts-list li {
-    float:left;
-    width:290px;
-    min-height:100px;
     border:1px solid #C0C0C0;
     border-radius: 8px;
     padding:16px;
-    margin:0 28px 28px 0;
     cursor:pointer;
     transition:transform 0.4s, background-color 0.3s, box-shadow 0.6s;
     box-shadow:0 5px 12px rgba(0,0,0,0);

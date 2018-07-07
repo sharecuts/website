@@ -5,6 +5,7 @@
 	<meta charset="utf-8">
     <link rel="stylesheet" href="/main.css">
     <script src="/sharecuts.js"></script>
+    <meta name="viewport" content="width=device-width">
 </head>
 <body>
 
