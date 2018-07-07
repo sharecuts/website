@@ -58,8 +58,10 @@ final class WebsiteController: RouteCollection {
         let userQuery = User.query(on: req).filter(\.apiKey, .equal, apiKey).first()
 
         return userQuery.flatMap(to: View.self) { user in
-            guard user != nil else {
-                throw Abort(.forbidden)
+            if (apiKey != nil && apiKey?.isEmpty != true) {
+                guard user != nil else {
+                    throw Abort(.forbidden)
+                }
             }
 
             return try req.view().render("upload", ["apiKey": apiKey])
