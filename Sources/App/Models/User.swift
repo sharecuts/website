@@ -15,6 +15,10 @@ final class User: Codable {
     var username: String
     var url: URL
     var apiKey: String?
+
+    var shortcuts: Children<User, Shortcut> {
+        return children(\.userID)
+    }
 }
 
 extension User: PostgreSQLUUIDModel { }

@@ -24,6 +24,10 @@ final class Shortcut: Codable {
     var actionCount: Int
     var actionIdentifiers: [String]
 
+    var user: Parent<Shortcut, User> {
+        return parent(\.userID)
+    }
+
     init(userID: User.ID,
          title: String,
          summary: String,
