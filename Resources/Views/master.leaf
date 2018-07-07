@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Sharecuts</title>
+	<meta charset="utf-8">
+    <link rel="stylesheet" href="/main.css">
+</head>
+<body>
+
+    <header id="master-header">
+        <h1><a href="/">Sharecuts</a></h1>
+        <ul id="master-menu">
+            <li><a href="/">HOME</a></li>
+            <li><a href="/about">ABOUT</a></li>
+            <li><a href="/upload">UPLOAD</a></li>
+        </ul>
+    </header>
+
+    <section id="master-content">
+        #get(content)
+    </section>
+
+    <footer id="master-footer">
+        <p>Powered by Swift</p>
+        <p>Created by <a href="https://twitter.com/_inside">Guilherme Rambo</a></p>
+        <p><a href="https://github.com/insidegui/Sharecuts" rel="external">Open Source</a></p>
+    </footer>
+
+</body>
+</html>

@@ -19,7 +19,11 @@ final class WebsiteController: RouteCollection {
     }
 
     func index(_ req: Request) throws -> Future<View> {
-        return try req.view().render("index")
+        let query = Shortcut.query(on: req).range(0...20).sort(\.createdAt, .descending).all()
+
+        return query.flatMap(to: View.self) { shortcuts in
+            return try req.view().render("index", ["shortcuts": shortcuts])
+        }
     }
 
 }

@@ -1,0 +1,98 @@
+* {
+    margin:0;
+    padding:0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    list-style:none;
+}
+
+.clearfix::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+body {
+    font-family:-apple-system, 'Helvetica Neue', Helvetica, sans-serif;
+    padding:0 50px;
+}
+
+a:link, a:active, a:visited {
+    color:#0076FF;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration:underline;
+}
+
+header#master-header {
+    margin:40px 0 50px 0;
+    display: table;
+    width: 100%;
+    height:74px;
+}
+
+header#master-header h1 a {
+    color:#4C4C4C;
+}
+header#master-header h1 a:hover {
+    color:#0076FF;
+}
+header#master-header h1 {
+    float:left;
+}
+
+header#master-header ul {
+    float:right;
+}
+
+header#master-header ul li {
+    float:left;
+    margin:0 20px 0 0;
+}
+
+header#master-header ul li a {
+    font-weight:500;
+}
+
+ul#shortcuts-list li {
+    float:left;
+    width:290px;
+    min-height:100px;
+    border:1px solid #C0C0C0;
+    border-radius: 8px;
+    padding:16px;
+    margin:0 28px 28px 0;
+    cursor:pointer;
+    transition:transform 0.4s, background-color 0.3s, box-shadow 0.6s;
+    box-shadow:0 5px 12px rgba(0,0,0,0);
+}
+
+ul#shortcuts-list li:hover {
+    transform:scale(1.08);
+    background-color:white;
+    box-shadow:0 5px 12px rgba(0,0,0,0.2);
+}
+
+h2.shortcut-title {
+    font-weight:600;
+    font-size:18px;
+    color:#101010;
+    margin-bottom:16px;
+}
+
+p.shortcut-summary {
+    font-size:14px;
+    color:#4C4C4C;
+    margin-bottom:16px;
+}
+
+p.shortcut-details {
+    font-size:13px;
+    color:#4C4C4C;
+}
+
+footer#master-footer {
+    display:block;
+    margin-top:70px;
+}

@@ -1,0 +1,5 @@
+<div class="shortcut-card" data-shortcut="#(shortcut.id)">
+    <h2 class="shortcut-title">#(shortcut.title)</h2>
+    <p class="shortcut-summary">#(shortcut.summary)</p>
+    <p class="shortcut-details">#(shortcut.actionCount) actions | Created by <a href="">XXX</a></p>
+</div>
