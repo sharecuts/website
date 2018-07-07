@@ -1,7 +1,7 @@
 #set("content") {
 	<ul id="shortcuts-list" class="clearfix">
 
-	#for(shortcut in shortcuts) {
+	#for(card in cards) {
 		<li>#embed("shortcutcard")</li>
 	}
 
