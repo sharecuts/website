@@ -1,0 +1,9 @@
+Packages
+.build
+xcuserdata
+*.xcodeproj
+DerivedData/
+.DS_Store
+.env
+.idea
+Sharecuts.paw
