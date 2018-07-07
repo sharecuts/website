@@ -1,0 +1,13 @@
+#set("content") {
+    <article>
+        <h2 class="bottom-space">About Sharecuts</h2>
+
+        <p>This service was created as a way for Shortcuts enthusiasts to find cool shortcuts and share their shortcuts with the community.</p>
+
+        <p>Given that this is just getting started, contributions are limited to a handful of people I selected, I plan on making it open for everyone in the future, with curation and upvoting features.</p>
+
+        <p>Found a bug? <a href="https://github.com/insidegui/Sharecuts/issues">Open an issue</a> or <a href="https://github.com/insidegui/Sharecuts/pulls">send a pull request</a>.</p>
+    </article>
+}
+
+#embed("master")

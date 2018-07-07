@@ -139,3 +139,7 @@ form button {
 .bottom-space {
     margin-bottom:20px;
 }
+
+article p {
+    padding:16px 0;
+}

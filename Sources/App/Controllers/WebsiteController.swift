@@ -24,6 +24,7 @@ final class WebsiteController: RouteCollection {
         router.get(use: index)
         router.get("download", Shortcut.parameter, use: download)
         router.get("upload", use: upload)
+        router.get("about", use: about)
     }
 
     func index(_ req: Request) throws -> Future<View> {
@@ -66,6 +67,10 @@ final class WebsiteController: RouteCollection {
 
             return try req.view().render("upload", ["apiKey": apiKey])
         }
+    }
+
+    func about(_ req: Request) throws -> Future<View> {
+        return try req.view().render("about")
     }
 
 }
