@@ -68,6 +68,10 @@ ul#shortcuts-list li {
     box-shadow:0 5px 12px rgba(0,0,0,0);
 }
 
+div.shortcut-card a:hover {
+    text-decoration:none;
+}
+
 ul#shortcuts-list li:hover {
     transform:scale(1.08);
     background-color:white;
@@ -87,7 +91,7 @@ p.shortcut-summary {
     margin-bottom:16px;
 }
 
-p.shortcut-details {
+div.shortcut-card p.shortcut-details {
     font-size:13px;
     color:#4C4C4C;
 }

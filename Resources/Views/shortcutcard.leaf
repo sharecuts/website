@@ -1,5 +1,7 @@
 <div class="shortcut-card" data-shortcut="#(shortcut.id)">
+    <a href="/download/#(card.shortcut.id)">
     <h2 class="shortcut-title">#(card.shortcut.title)</h2>
     <p class="shortcut-summary">#(card.shortcut.summary)</p>
-    <p class="shortcut-details">#(card.shortcut.actionCount) actions | Created by <a href="/user/#(card.shortcut.userID)">#(card.creator.name)</a></p>
+    <p class="shortcut-details">#(card.shortcut.actionCount) actions | Created by #(card.creator.name)</p>
+    </a>
 </div>
