@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="/main.css">
     <script src="/sharecuts.js"></script>
     <meta name="viewport" content="width=device-width">
+    <meta property="og:site_name" content="Sharecuts"/>
+    <meta property="og:title" content="Sharecuts"/>
+    <meta property="og:url" content="https://sharecuts.app"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:description" content="A public repository of shortcuts for the Shortcuts app."/>
 </head>
 <body>
 
