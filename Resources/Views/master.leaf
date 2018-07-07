@@ -4,6 +4,7 @@
 	<title>Sharecuts</title>
 	<meta charset="utf-8">
     <link rel="stylesheet" href="/main.css">
+    <script src="/sharecuts.js"></script>
 </head>
 <body>
 
