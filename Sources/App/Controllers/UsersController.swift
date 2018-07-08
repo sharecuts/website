@@ -29,6 +29,8 @@ final class UsersController: RouteCollection {
 
             return fetchUser.map(to: UserResponse.self) { user in
                 return UserResponse(user)
+            }.thenIfErrorThrowing { _ in
+                throw Abort(.notFound)
             }
         } catch {
             throw Abort(.notFound)
