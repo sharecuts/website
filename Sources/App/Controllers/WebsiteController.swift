@@ -108,8 +108,18 @@ final class WebsiteController: RouteCollection {
 struct ShortcutCard: Codable {
     let shortcut: Shortcut
     let creator: User
+    let deepLink: String
+
+    enum CardError: Error {
+        case noIdentifier
+        case url
+    }
 
     init(_ shortcut: Shortcut, users: [User]) throws {
+        guard let identifier = shortcut.id?.uuidString else {
+            throw CardError.noIdentifier
+        }
+
         self.shortcut = shortcut
 
         guard let user = users.first(where: { $0.id == shortcut.userID }) else {
@@ -117,6 +127,23 @@ struct ShortcutCard: Codable {
         }
 
         self.creator = user
+
+        let downloadURL = "https://sharecuts.app/download/\(identifier).shortcut"
+
+        guard var deepLinkComponents = URLComponents(string: "shortcuts://import-workflow") else {
+            throw CardError.url
+        }
+
+        deepLinkComponents.queryItems = [
+            URLQueryItem(name: "url", value: downloadURL),
+            URLQueryItem(name: "name", value: shortcut.title)
+        ]
+
+        guard let url = deepLinkComponents.url else {
+            throw CardError.url
+        }
+
+        self.deepLink = url.absoluteString
     }
 }
 
