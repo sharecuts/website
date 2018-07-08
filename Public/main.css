@@ -65,20 +65,29 @@ ul#shortcuts-list {
 ul#shortcuts-list li {
     border:1px solid #C0C0C0;
     border-radius: 8px;
-    padding:16px;
     cursor:pointer;
     transition:transform 0.4s, background-color 0.3s, box-shadow 0.6s;
     box-shadow:0 5px 12px rgba(0,0,0,0);
-}
-
-div.shortcut-card a:hover {
-    text-decoration:none;
 }
 
 ul#shortcuts-list li:hover {
     transform:scale(1.08);
     background-color:white;
     box-shadow:0 5px 12px rgba(0,0,0,0.2);
+}
+
+ul#shortcuts-list li div {
+    height: 100%;
+}
+
+ul#shortcuts-list li div a {
+    display: block;
+    padding: 16px;
+    height: calc(100% - 2 * 16px);
+}
+
+ul#shortcuts-list li div a:hover {
+    text-decoration: none;
 }
 
 h2.shortcut-title {
