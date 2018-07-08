@@ -29,7 +29,8 @@
 
     <footer id="master-footer">
         <p>Powered by Swift</p>
-        <p>Created by <a href="https://twitter.com/_inside">Guilherme Rambo</a></p>
+        <p>Proudly hosted on <a href="https://macstadium.com" rel="external">MacStadium</a></p>
+        <p>Created by <a href="https://twitter.com/_inside" rel="external">Guilherme Rambo</a></p>
         <p><a href="https://github.com/insidegui/Sharecuts" rel="external">Open Source</a></p>
     </footer>
 
