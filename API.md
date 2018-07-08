@@ -52,6 +52,48 @@ Returns the latest shortcuts, the same collection that shows on the website's ho
     ]
 }
 ```
+---
+---
+---
+
+### Get shortcut details and deep link
+
+Returns details for the shortcut specified, including full user profile, download link and a deep link to open it directly in Shortcuts.
+
+**Request**
+
+`GET https://sharecuts.app/api/shortcuts/SHORTCUT_ID`
+
+**Parameter**: The ID of the shortcut.
+
+**Response**
+
+```json
+{
+    "shortcut": {
+        "summary": "Restart Springboard on a jailbroken iOS device",
+        "userID": "B9C79A2E-D778-4D77-AE26-D2DCB47E6530",
+        "fileID": "4_z775fd4fd45c276586c490e1f_f102881e2d27df2e5_d20180708_m161310_c001_v0001102_t0021",
+        "id": "AFD6417C-FE65-4A21-B363-ADCCE53617F3",
+        "actionIdentifiers": [
+            "is.workflow.actions.runsshscript"
+        ],
+        "title": "Respring",
+        "updatedAt": "2018-07-08T16:13:10Z",
+        "createdAt": "2018-07-08T16:13:10Z",
+        "filePath": "respring6738E741-69BD-41AE-A60E-91132BB1BE16.shortcut",
+        "actionCount": 1
+    },
+    "deepLink": "shortcuts://import-workflow?url=https://sharecuts.app/download/AFD6417C-FE65-4A21-B363-ADCCE53617F3.shortcut&name=Respring",
+    "download": "https://sharecuts.app/download/AFD6417C-FE65-4A21-B363-ADCCE53617F3.shortcut",
+    "user": {
+        "username": "_inside",
+        "id": "B9C79A2E-D778-4D77-AE26-D2DCB47E6530",
+        "name": "Guilherme Rambo",
+        "url": "https://twitter.com/_inside"
+    }
+}
+```
 
 ---
 ---
