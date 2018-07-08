@@ -39,20 +39,29 @@ header#master-header h1 a:hover {
     color:#0076FF;
 }
 header#master-header h1 {
-    float:left;
+    float: left;
 }
 
 header#master-header ul {
-    float:right;
+    float: right;
 }
 
 header#master-header ul li {
-    float:left;
-    margin:0 20px 0 0;
+    display: inline;
+    margin-right: 20px;
 }
 
 header#master-header ul li a {
     font-weight:500;
+}
+
+@media only screen and (max-width: 600px) {
+    
+    header#master-header h1,
+    header#master-header ul {
+        float: none;
+    }
+    
 }
 
 ul#shortcuts-list {
