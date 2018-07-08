@@ -51,4 +51,8 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: Shortcut.self, database: .psql)
     migrations.add(model: User.self, database: .psql)
     services.register(migrations)
+
+    services.register(CloudFlareClient.self) { _ in
+        return CloudFlareClient(env: env)
+    }
 }

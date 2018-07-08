@@ -64,6 +64,10 @@ final class ShortcutsController: RouteCollection {
                         actionIdentifiers: shortcutFile.actions.map({ $0.identifier })
                     )
 
+                    // Purge homepage cache
+                    let cfClient = try req.make(CloudFlareClient.self)
+                    cfClient.purgeCache(at: "/")
+
                     return shortcut.save(on: req)
                 }
             }
@@ -99,6 +103,10 @@ final class ShortcutsController: RouteCollection {
             let deleteFromBucket = B2Client.shared.delete(on: req, shortcut: shortcut)
             return deleteFromBucket.flatMap { _ in
                 return shortcut.delete(on: req).map(to: ModifyShortcutResponse.self) {
+                    // Purge homepage cache
+                    let cfClient = try req.make(CloudFlareClient.self)
+                    cfClient.purgeCache(at: "/")
+                    
                     return ModifyShortcutResponse(id: shortcut.id)
                 }
             }
