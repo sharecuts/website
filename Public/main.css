@@ -69,6 +69,7 @@ ul#shortcuts-list {
     grid-template-columns: repeat(auto-fill, 290px);
     grid-auto-rows: auto;
     grid-gap: 1rem;
+    justify-content: space-evenly;
 }
 
 ul#shortcuts-list li {
