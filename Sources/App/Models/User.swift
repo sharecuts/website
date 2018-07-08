@@ -19,6 +19,16 @@ final class User: Codable {
     var shortcuts: Children<User, Shortcut> {
         return children(\.userID)
     }
+
+    var firstName: String? {
+        guard #available(macOS 10.12, *) else { return nil }
+
+        guard let components = PersonNameComponentsFormatter().personNameComponents(from: name) else {
+            return nil
+        }
+
+        return components.givenName
+    }
 }
 
 extension User: PostgreSQLUUIDModel { }

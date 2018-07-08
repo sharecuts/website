@@ -89,13 +89,19 @@ final class WebsiteController: RouteCollection {
         let userQuery = User.query(on: req).filter(\.apiKey, .equal, apiKey).first()
 
         return userQuery.flatMap(to: View.self) { user in
+            var context: UploadPageContext
+
             if (apiKey != nil && apiKey?.isEmpty != true) {
-                guard user != nil else {
+                guard let user = user else {
                     throw Abort(.forbidden)
                 }
+
+                context = UploadPageContext(user)
+            } else {
+                context = UploadPageContext(nil)
             }
 
-            return try req.view().render("upload", ["apiKey": apiKey])
+            return try req.view().render("upload", context)
         }
     }
 
@@ -148,3 +154,13 @@ struct ShortcutCard: Codable {
 }
 
 extension ShortcutCard: Content { }
+
+struct UploadPageContext: Codable {
+    let user: User?
+    let firstName: String?
+
+    init(_ user: User?) {
+        self.user = user
+        self.firstName = user?.firstName
+    }
+}
