@@ -17,6 +17,7 @@ final class ShortcutsController: RouteCollection {
         shortcutsRoute.get("latest", use: latest)
         shortcutsRoute.post("/", use: create)
         shortcutsRoute.delete("/", Shortcut.parameter, use: delete)
+        shortcutsRoute.get("/", Shortcut.parameter, use: details)
     }
 
     func latest(_ req: Request) throws -> Future<QueryShortcutsResponse> {
@@ -24,6 +25,24 @@ final class ShortcutsController: RouteCollection {
 
         return query.map(to: QueryShortcutsResponse.self) { shortcuts in
             return QueryShortcutsResponse(results: shortcuts)
+        }
+    }
+
+    func details(_ req: Request) throws -> Future<ShortcutDetailsResponse> {
+        let shortcutParam = try req.parameters.next(Shortcut.self)
+
+        return shortcutParam.flatMap(to: ShortcutDetailsResponse.self) { shortcut in
+            let userQuery = shortcut.user.query(on: req).first()
+            
+            return userQuery.map(to: ShortcutDetailsResponse.self) { user in
+                guard let user = user else {
+                    throw Abort(.notFound)
+                }
+
+                return try ShortcutDetailsResponse(shortcut: shortcut, user: user)
+            }
+        }.thenIfErrorThrowing { _ in
+            throw Abort(.notFound)
         }
     }
 
@@ -159,3 +178,17 @@ struct QueryShortcutsResponse: Codable {
 }
 
 extension QueryShortcutsResponse: Content { }
+
+struct ShortcutDetailsResponse: Codable {
+    let shortcut: Shortcut
+    let user: UserResponse
+    let deepLink: URL
+
+    init(shortcut: Shortcut, user: User) throws {
+        self.shortcut = shortcut
+        self.user = UserResponse(user)
+        self.deepLink = try shortcut.generateDeepLinkURL()
+    }
+}
+
+extension ShortcutDetailsResponse: Content { }

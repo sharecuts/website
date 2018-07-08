@@ -27,7 +27,7 @@ extension Shortcut {
         }
     }
 
-    func generateDownloadURL() throws -> URL {
+    func generateDeepLinkURL() throws -> URL {
         guard let identifier = self.id else { throw GenerateURLError.missingID }
 
         let downloadURL = "https://sharecuts.app/download/\(identifier).shortcut"

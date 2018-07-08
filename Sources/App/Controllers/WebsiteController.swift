@@ -125,7 +125,7 @@ struct ShortcutCard: Codable {
 
         self.creator = user
 
-        self.deepLink = try shortcut.generateDownloadURL().absoluteString
+        self.deepLink = try shortcut.generateDeepLinkURL().absoluteString
     }
 }
 
