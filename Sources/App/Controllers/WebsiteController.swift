@@ -42,7 +42,7 @@ final class WebsiteController: RouteCollection {
         }
     }
 
-    private static let forceWorkflowExtension = true
+    private static let forceWorkflowExtension = false
 
     func download(_ req: Request) throws -> Future<Response> {
         let identifier = req.http.url.deletingPathExtension().lastPathComponent
