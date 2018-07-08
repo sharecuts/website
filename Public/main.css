@@ -91,7 +91,6 @@ ul#shortcuts-list li div {
 }
 
 ul#shortcuts-list li div a {
-    display: block;
     padding: 16px;
     height: calc(100% - 2 * 16px);
 }
@@ -107,7 +106,13 @@ h2.shortcut-title {
     margin-bottom:16px;
 }
 
-p.shortcut-summary {
+div.shortcut-card a {
+    display: flex;
+    flex-direction: column;
+}
+
+div.shortcut-card p.shortcut-summary {
+    flex-grow: 1;
     font-size:14px;
     color:#4C4C4C;
     margin-bottom:16px;
