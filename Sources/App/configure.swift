@@ -52,7 +52,8 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: User.self, database: .psql)
     services.register(migrations)
 
-    services.register(CloudFlareClient.self) { _ in
-        return CloudFlareClient(env: env)
+    services.register(CloudFlareClient.self) { (container: Container) -> CloudFlareClient in
+        let logger = try container.make(Logger.self)
+        return CloudFlareClient(env: env, logger: logger)
     }
 }
