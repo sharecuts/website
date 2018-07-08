@@ -27,10 +27,18 @@ extension Shortcut {
         }
     }
 
-    func generateDeepLinkURL() throws -> URL {
+    func generateDownloadURL() throws -> URL {
         guard let identifier = self.id else { throw GenerateURLError.missingID }
 
-        let downloadURL = "https://sharecuts.app/download/\(identifier).shortcut"
+        guard let url = URL(string: "https://sharecuts.app/download/\(identifier).shortcut") else {
+            throw GenerateURLError.generateURL
+        }
+
+        return url
+    }
+
+    func generateDeepLinkURL() throws -> URL {
+        let downloadURL = try generateDownloadURL().absoluteString
 
         guard var deepLinkComponents = URLComponents(string: "shortcuts://import-workflow") else {
             throw GenerateURLError.parseURL

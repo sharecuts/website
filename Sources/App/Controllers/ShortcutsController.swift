@@ -183,11 +183,13 @@ struct ShortcutDetailsResponse: Codable {
     let shortcut: Shortcut
     let user: UserResponse
     let deepLink: URL
+    let download: URL
 
     init(shortcut: Shortcut, user: User) throws {
         self.shortcut = shortcut
         self.user = UserResponse(user)
         self.deepLink = try shortcut.generateDeepLinkURL()
+        self.download = try shortcut.generateDownloadURL()
     }
 }
 
