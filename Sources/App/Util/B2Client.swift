@@ -192,6 +192,21 @@ final class B2Client {
         return promise.futureResult
     }
 
+    func fetchFileData(from url: URL, on req: Request) -> Future<Data?> {
+        let promise: EventLoopPromise<Data?> = req.eventLoop.newPromise()
+
+        URLSession.shared.dataTask(with: url, completionHandler: { data, _, error in
+            if let error = error {
+                promise.fail(error: error)
+                return
+            }
+
+            promise.succeed(result: data)
+        }).resume()
+
+        return promise.futureResult
+    }
+
 }
 
 struct B2UploadResult: Codable {

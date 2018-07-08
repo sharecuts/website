@@ -22,7 +22,7 @@ final class WebsiteController: RouteCollection {
 
     func boot(router: Router) throws {
         router.get(use: index)
-        router.get("download", Shortcut.parameter, use: download)
+        router.get("download", String.parameter, use: download)
         router.get("upload", use: upload)
         router.get("about", use: about)
     }
@@ -42,14 +42,44 @@ final class WebsiteController: RouteCollection {
         }
     }
 
-    func download(_ req: Request) throws -> Future<Response> {
-        let shortcutQuery = try req.parameters.next(Shortcut.self)
+    private static let forceWorkflowExtension = true
 
-        return shortcutQuery.map(to: Response.self) { shortcut in
+    func download(_ req: Request) throws -> Future<Response> {
+        let identifier = req.http.url.deletingPathExtension().lastPathComponent
+
+        guard let id = UUID(uuidString: identifier) else {
+            throw Abort(.badRequest)
+        }
+
+        let shortcutQuery = Shortcut.find(id, on: req)
+
+        return shortcutQuery.flatMap(to: Response.self) { shortcut in
+            guard let shortcut = shortcut else {
+                throw Abort(.notFound)
+            }
+
             let url = self.downloadsBaseURL.appendingPathComponent(shortcut.filePath)
 
-            let headers = HTTPHeaders([("Location",url.absoluteString)])
-            return req.makeResponse(http: HTTPResponse(status: HTTPResponseStatus(statusCode: 302), headers: headers))
+            let download = B2Client.shared.fetchFileData(from: url, on: req)
+
+            return download.map(to: Response.self) { data in
+                guard let data = data else {
+                    throw Abort(.notFound)
+                }
+
+                let ext = WebsiteController.forceWorkflowExtension ? "wflow" : "shortcut"
+
+                let disposition = "attachment; filename=\"\(shortcut.title).\(ext)\""
+
+                let status = HTTPResponseStatus(statusCode: 200)
+                let headers = HTTPHeaders([
+                    ("Content-Type","application/octet-stream"),
+                    ("Content-Length", String(data.count)),
+                    ("Content-Disposition", disposition)
+                ])
+
+                return req.makeResponse(http: HTTPResponse(status: status, headers: headers, body: data))
+            }
         }
     }
 
