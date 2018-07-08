@@ -9,7 +9,11 @@
             <button type="submit">Upload</button>
         </form>   
     } else {
-        <p>To keep a good quality of service at this early stage, uploading is currently limited to people who have been invited. If you have been invited, follow the instructions you received to upload your shortcuts.</p>
+        <article>
+            <p>To keep a good quality of service at this early stage, uploading is currently limited to people who have been invited. If you have been invited, follow the instructions you received to upload your shortcuts.</p>
+            
+            <p>If you'd like to contribute, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">register here</a> and you'll get an invitation when possible.</p>
+        </article>
     }
 }
 
