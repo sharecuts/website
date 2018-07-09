@@ -10,7 +10,13 @@ Live at [sharecuts.app][1]
 
 ## Contributing
 
-[Check out this guide](./CONTRIB.md) if you'd like to contribute to the project.
+### Suggestions and Ideas
+
+If you have any suggestions or ideas please [Add An Issue](https://github.com/insidegui/Sharecuts/issues/new). Please be sure to check first that no one else has already offered the same.
+
+### Development
+
+[Development Setup](https://github.com/insidegui/Sharecuts/wiki) - Read this guide if you'd like to contribute to the project.
 
 ## API
 
