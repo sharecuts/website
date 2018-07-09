@@ -39,20 +39,29 @@ header#master-header h1 a:hover {
     color:#0076FF;
 }
 header#master-header h1 {
-    float:left;
+    float: left;
 }
 
 header#master-header ul {
-    float:right;
+    float: right;
 }
 
 header#master-header ul li {
-    float:left;
-    margin:0 20px 0 0;
+    display: inline;
+    margin-right: 20px;
 }
 
 header#master-header ul li a {
     font-weight:500;
+}
+
+@media only screen and (max-width: 600px) {
+    
+    header#master-header h1,
+    header#master-header ul {
+        float: none;
+    }
+    
 }
 
 ul#shortcuts-list {
@@ -60,6 +69,7 @@ ul#shortcuts-list {
     grid-template-columns: repeat(auto-fill, 290px);
     grid-auto-rows: auto;
     grid-gap: 1rem;
+    justify-content: space-evenly;
 }
 
 ul#shortcuts-list li {
@@ -81,7 +91,6 @@ ul#shortcuts-list li div {
 }
 
 ul#shortcuts-list li div a {
-    display: block;
     padding: 16px;
     height: calc(100% - 2 * 16px);
 }
@@ -97,7 +106,13 @@ h2.shortcut-title {
     margin-bottom:16px;
 }
 
-p.shortcut-summary {
+div.shortcut-card a {
+    display: flex;
+    flex-direction: column;
+}
+
+div.shortcut-card p.shortcut-summary {
+    flex-grow: 1;
     font-size:14px;
     color:#4C4C4C;
     margin-bottom:16px;
@@ -105,7 +120,7 @@ p.shortcut-summary {
 
 div.shortcut-card p.shortcut-details {
     font-size:13px;
-    color:#4C4C4C;
+    color: #6C6C6C;
 }
 
 footer#master-footer {
