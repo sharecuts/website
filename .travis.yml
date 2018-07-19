@@ -1,0 +1,21 @@
+os:
+    - osx
+language: generic
+sudo: required
+dist: trusty
+
+osx_image: xcode9.4
+before_install:
+    - if [ $TRAVIS_OS_NAME == "osx" ]; then
+            brew update;
+            brew tap vapor/tap;
+            brew update;
+            brew install vapor;
+        else
+            eval "$(curl -sL https://apt.vapor.sh)";
+            sudo apt-get install vapor;
+            sudo chmod -R a+rx /usr/;
+        fi
+
+script:
+    - vapor test
