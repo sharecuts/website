@@ -16,6 +16,14 @@ final class User: Codable {
     var url: URL
     var apiKey: String?
 
+    init(id: UUID?, name: String, username: String, url: URL, apiKey: String?) {
+        self.id = id
+        self.name = name
+        self.username = username
+        self.url = url
+        self.apiKey = apiKey
+    }
+
     var shortcuts: Children<User, Shortcut> {
         return children(\.userID)
     }
