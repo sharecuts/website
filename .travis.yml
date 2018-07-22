@@ -18,4 +18,5 @@ before_install:
         fi
 
 script:
-    - vapor test
+    - swift build -c release
+    - swift test
