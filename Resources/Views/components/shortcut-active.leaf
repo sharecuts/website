@@ -1,0 +1,67 @@
+<!--
+    TODO:
+    - This is a minimalist version of an active card.
+
+    1. Make sure all info, as available, is here.
+    2. Consider how to "activate" item.
+    3. Consider whether information should always be in-code or acquire upon user activation.
+-->
+
+<div class="shortcut shortcut-active">
+
+    <nav class="nav nav-actions">
+        <!-- Start: Close Button -->
+        <div class="nav-item float-left">
+            <button class="nav-link close">
+                Back
+            </button>
+        </div>
+        <!-- End: Close Button -->
+        <!-- Start: Share/Report/Etc -->
+        <div class="nav-item float-right">
+            <button type="button" class="nav-link" data-toggle="dropdown">
+                ...
+            </button>
+            <div class="dropdown-menu">
+                <div class="dropdown-item">
+                    <a href="#" class="dropdown-link">
+                        Share URL
+                    </a>
+                </div>
+                <div class="dropdown-item">
+                    <a href="#" class="dropdown-link">
+                        Twitter
+                    </a>
+                </div>
+                <div class="dropdown-item dropdown-divider"></div>
+                <div class="dropdown-item">
+                    <a href="#" class="dropdown-link">
+                        Report an Issue
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- End: Share/Report/Etc -->
+
+    </nav>
+    <!-- End: Shortcut:Active -->
+
+    <div class="shortcut-categories">
+        <a href="#" class="btn btn-category">
+            Productivity
+        </a>
+    </div>
+
+    <div class="shortcut-title">
+        Find Videos On Page Findero Photo By Break
+
+        <div class="shortcut-warning"></div>
+    </div>
+
+    <div class="shortcut-description">
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliter homines, aliter philoso loqui putas oportere?</p>
+
+        <p>Cum id quoque, ut cupiebat, audivisset, evelli iussit eam.  <a href="#" class="text-underline">More</a></p>
+    </div>
+
+</div>

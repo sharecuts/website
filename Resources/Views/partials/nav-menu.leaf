@@ -1,0 +1,30 @@
+<div class="mr-2 mr-md-0 ml-auto ml-md-0 align-self-center">
+
+    <nav class="nav nav-main-menu flex-row flex-md-column font-weight-medium">
+        <div class="nav-item d-none d-md-block">
+            <a href="/" class="nav-link active" title="Sharecuts Home">
+                Home
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/about" class="nav-link text-center text-md-left" title="About Sharecuts &amp; Shortcuts">
+                <span class="d-block d-md-none mb-2">embed("../../public/assets/img/i-info.svg")></span>
+                <span class="d-block">About<span class="sr-only"> Sharecuts</span></span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/upload" class="nav-link text-center text-md-left" title="Upload Your Own Shortcut">
+                <span class="d-block d-md-none mb-2"><?php include('./assets/public/img/i-upload.svg'); ?></span>
+                <span class="d-block">Upload<span class="sr-only"> a Shortcut</span></span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/search" class="nav-link text-center text-md-left" title="Search Sharecuts">
+                <!-- Negative margin makes search icon appear more centered -->
+                <span class="d-block d-md-none mb-2" style="margin-left: -1px;"><?php include('./assets/public/img/i-search.svg'); ?></span>
+                <span class="d-block">Search<span class="sr-only"> Sharecuts</span></span>
+            </a>
+        </div>
+    </nav>
+
+</div>

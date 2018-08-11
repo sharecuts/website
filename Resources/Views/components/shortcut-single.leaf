@@ -1,0 +1,182 @@
+#for(card in cards) {
+  #/* 
+    .card-wrapper is used to wrap card margin and ensure the whole slide/carousel area is draggable. Otherwise empty space would give poor UX.
+  */
+  <div class="card-wrapper mb-3 mb-xl-4">
+    #/*
+      There are many card-bg's already set up:
+
+      .card-bg-purple
+      .card-bg-blue
+      .card-bg-pink
+      .card-bg-green
+      .card-bg-red
+      .card-bg-orange
+
+      These are in CSS for easy reference, caching and easy updating.
+
+    */ 
+    <div class="card card-shortcut card-dark card-bg-blue" data-shortcut="#(shortcut.id)" data-shortcut-url="#(card.deepLink)">
+      <div class="card-header d-flex">
+        <div class="card-title mb-auto mb-1 h5">
+          #(card.shortcut.title)
+        </div>
+      </div>
+      <div class="card-body py-2">
+        <div class="card-excerpt">
+          #// TODO: rename CSS class from 'excerpt' -> 'summary' to maintain consistency.
+        
+          #(card.shortcut.summary)
+        </div>
+      </div>
+      <div class="card-footer d-flex flex-grow-0 mt-auto small">
+        <div class="card-info">
+          <div class="card-actions font-weight-bold">
+            <span class="card-actions-amount">#(card.shortcut.actionCount)</span> <span class="card-actions-label">actions</span>
+          </div>
+          <div class="card-author" title="Shortcut created by #(card.creator.name)">
+            #(card.creator.name)
+          </div>
+        </div>
+        <div class="card-like align-self-end ml-auto">
+          <button type="button" class="btn btn-link btn-sm btn-like py-2 pr-0 font-weight-medium" data-toggle="tooltip" title="Like This Sharecut">
+            <span class="card-like-icon emoji">👌</span> <span class="card-like-label">184</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
+<div class="card-wrapper" data-shortcut="#(shortcut.id)">
+  #/*
+    There are many card-bg's already set up:
+
+    .card-bg-purple
+    .card-bg-blue
+    .card-bg-pink
+    .card-bg-green
+    .card-bg-red
+    .card-bg-orange
+
+    These are in CSS for easy reference, caching and easy updating.
+
+  */ 
+  <div class="card card-shortcut card-dark card-bg-blue">
+    <div class="card-header d-flex">
+      <div class="card-title mb-auto mb-1 h5">
+        #(card.shortcut.title)
+      </div>
+    </div>
+    <div class="card-body py-2">
+      <div class="card-excerpt">
+        #// TODO: rename css class to summary to maintain consistency.
+
+        #(card.shortcut.summary)
+      </div>
+    </div>
+    <div class="card-footer d-flex flex-grow-0 mt-auto small">
+      <div class="card-info">
+        <div class="card-actions font-weight-bold">
+          <span class="card-actions-amount">#(card.shortcut.actionCount)</span> <span class="card-actions-label">actions</span>
+        </div>
+        <div class="card-author" title="Shortcut created by #(card.creator.name)">
+          #(card.creator.name)
+        </div>
+      </div>
+      <div class="card-like align-self-end ml-auto">
+        <button type="button" class="btn btn-link btn-sm btn-like py-2 pr-0 font-weight-medium" data-toggle="tooltip" title="Like This Sharecut">
+          <span class="card-like-icon emoji">👌</span> <span class="card-like-label">184</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card-wrapper" data-shortcut="#(shortcut.id)">
+  #/*
+    There are many card-bg's already set up:
+
+    .card-bg-purple
+    .card-bg-blue
+    .card-bg-pink
+    .card-bg-green
+    .card-bg-red
+    .card-bg-orange
+
+    These are in CSS for easy reference, caching and easy updating.
+
+  */ 
+  <div class="card card-shortcut card-dark card-bg-blue">
+    <div class="card-header d-flex">
+      <div class="card-title mb-auto mb-1 h5">
+        #(card.shortcut.title)
+      </div>
+    </div>
+    <div class="card-body py-2">
+      <div class="card-excerpt">
+        #// TODO: rename css class to summary to maintain consistency.
+
+        #(card.shortcut.summary)
+      </div>
+    </div>
+    <div class="card-footer d-flex flex-grow-0 mt-auto small">
+      <div class="card-info">
+        <div class="card-actions font-weight-bold">
+          <span class="card-actions-amount">#(card.shortcut.actionCount)</span> <span class="card-actions-label">actions</span>
+        </div>
+        <div class="card-author" title="Shortcut created by #(card.creator.name)">
+          #(card.creator.name)
+        </div>
+      </div>
+      <div class="card-like align-self-end ml-auto">
+        <button type="button" class="btn btn-link btn-sm btn-like py-2 pr-0 font-weight-medium" data-toggle="tooltip" title="Like This Sharecut">
+          <span class="card-like-icon emoji">👌</span> <span class="card-like-label">184</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card-wrapper" data-shortcut="#(shortcut.id)">
+  #/*
+    There are many card-bg's already set up:
+
+    .card-bg-purple
+    .card-bg-blue
+    .card-bg-pink
+    .card-bg-green
+    .card-bg-red
+    .card-bg-orange
+
+    These are in CSS for easy reference, caching and easy updating.
+
+  */ 
+  <div class="card card-shortcut card-dark card-bg-blue">
+    <div class="card-header d-flex">
+      <div class="card-title mb-auto mb-1 h5">
+        #(card.shortcut.title)
+      </div>
+    </div>
+    <div class="card-body py-2">
+      <div class="card-excerpt">
+        #// TODO: rename css class to summary to maintain consistency.
+
+        #(card.shortcut.summary)
+      </div>
+    </div>
+    <div class="card-footer d-flex flex-grow-0 mt-auto small">
+      <div class="card-info">
+        <div class="card-actions font-weight-bold">
+          <span class="card-actions-amount">#(card.shortcut.actionCount)</span> <span class="card-actions-label">actions</span>
+        </div>
+        <div class="card-author" title="Shortcut created by #(card.creator.name)">
+          #(card.creator.name)
+        </div>
+      </div>
+      <div class="card-like align-self-end ml-auto">
+        <button type="button" class="btn btn-link btn-sm btn-like py-2 pr-0 font-weight-medium" data-toggle="tooltip" title="Like This Sharecut">
+          <span class="card-like-icon emoji">👌</span> <span class="card-like-label">184</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,89 @@
+//----
+// Navigation Elements
+//----
+
+// Header (Small-) / Sidebar (Medium+)
+
+.nav-main {
+  position: relative;
+
+  @include media-breakpoint-up(lg) {
+    position: sticky;
+    top: 0;
+    max-width: 336px;
+    height: 100vh;
+  }
+
+  .nav-link {
+    padding: .5rem .75rem;
+
+    @include media-breakpoint-down(sm) {
+      padding: .5rem;
+      color: $gray-500;
+      font-size: 10px;
+      letter-spacing: .25px;
+      // text-transform: uppercase;
+
+      &.active {
+
+        path {
+          fill: $primary;
+        }
+      }
+
+      svg {
+        height: 22px;
+      }
+
+      path {
+        fill: $gray-600;
+      }
+    }
+
+    &.active,
+    &:active {
+      color: $gray-800;
+    }
+  }
+}
+
+.nav-logo {
+  @include media-breakpoint-up(lg) {
+    width: 100%;
+  }
+}
+
+.nav-img-logo {
+  max-width: 130px;
+
+  @include media-breakpoint-up(lg) {
+    max-width: none;
+  }
+}
+
+.filters {
+  background: $gray-100;
+
+  @include media-breakpoint-down(md) {
+    // width: 100%;
+    // overflow-x: auto;
+    // overflow-y: hidden;
+    white-space: nowrap;
+
+    -webkit-scroll-snap-type: mandatory;
+    scroll-snap-type: x mandatory;
+    -webkit-scroll-snap-destination: 1rem 0%;
+    scroll-snap-destination: 1rem 0%;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding: 0 0 0 1rem;
+  }
+}
+
+.btn-filter {
+
+  @include media-breakpoint-down(md) {
+    // -webkit-scroll-snap-coordinate: 0% 50%;
+    // scroll-snap-coordinate: 0% 50%;
+    scroll-snap-align: start none;
+  }
+}
