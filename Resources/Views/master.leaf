@@ -9,7 +9,7 @@
 
       #embed("partials/nav")
 
-      <main class="main py-4 pt-lg-4 pl-lg-4 pt-xl-5 pl-xl-5 d-flex flex-wrap" role="main">
+      <main class="main px-3 py-4 pt-lg-4 pl-lg-4 pt-xl-5 pl-xl-5 d-flex flex-wrap" role="main">
 
         #get(content)
 
@@ -17,8 +17,6 @@
 
       </main>
     </div>
-
-    
 
     #embed("partials/foot")
 

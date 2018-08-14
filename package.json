@@ -18,7 +18,9 @@
     "moment": "^2.22.2"
   },
   "devDependencies": {
+    "gulp-rename": "^1.4.0",
     "gulp-sass": "^4.0.1",
+    "gulp-svg-symbols": "^3.2.0",
     "gulp-svgo": "^1.5.4"
   },
   "scripts": {

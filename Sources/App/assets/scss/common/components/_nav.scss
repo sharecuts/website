@@ -10,16 +10,20 @@
   @include media-breakpoint-up(lg) {
     position: sticky;
     top: 0;
-    max-width: 336px;
+    max-width: 240px;
     height: 100vh;
+  }
+
+  @include media-breakpoint-up(xl) {
+    max-width: 336px;
   }
 
   .nav-link {
     padding: .5rem .75rem;
 
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       padding: .5rem;
-      color: $gray-500;
+      color: $gray-600;
       font-size: 10px;
       letter-spacing: .25px;
       // text-transform: uppercase;
@@ -36,7 +40,7 @@
       }
 
       path {
-        fill: $gray-600;
+        fill: $gray-700;
       }
     }
 
@@ -48,42 +52,64 @@
 }
 
 .nav-logo {
+  max-width: 150px;
+
+  @include media-breakpoint-up(sm) {
+    max-width: none;
+  }
+
   @include media-breakpoint-up(lg) {
     width: 100%;
   }
 }
 
-.nav-img-logo {
-  max-width: 130px;
+// .nav-img-logo {
+//   max-width: 130px;
+//   max-height: 30px;
 
-  @include media-breakpoint-up(lg) {
-    max-width: none;
-  }
-}
+//   @include media-breakpoint-up(lg) {
+//     max-width: 184px;
+//     max-height: 46px;
+//   }
+// }
 
 .filters {
   background: $gray-100;
 
-  @include media-breakpoint-down(md) {
+  @include media-breakpoint-down(lg) {
     // width: 100%;
-    // overflow-x: auto;
+    overflow-x: auto;
     // overflow-y: hidden;
     white-space: nowrap;
 
     -webkit-scroll-snap-type: mandatory;
-    scroll-snap-type: x mandatory;
-    -webkit-scroll-snap-destination: 1rem 0%;
-    scroll-snap-destination: 1rem 0%;
-    -webkit-overflow-scrolling: touch;
-    scroll-padding: 0 0 0 1rem;
+    scroll-snap-type: mandatory;
+    -webkit-scroll-snap-destination: 50% 50%;
+    scroll-snap-destination: 50% 50%;
+    scroll-padding: 0 6px;
   }
 }
 
 .btn-filter {
+  background: $white;
+  color: $primary;
+  font-size: 12px;
 
-  @include media-breakpoint-down(md) {
-    // -webkit-scroll-snap-coordinate: 0% 50%;
-    // scroll-snap-coordinate: 0% 50%;
-    scroll-snap-align: start none;
+  @include media-breakpoint-down(lg) {
+    scroll-snap-align: start;
+  }
+
+  @include media-breakpoint-up(lg) {
+    font-size: 13px; // increase for accessibility
+  }
+
+  &:hover,
+  &:focus {
+    color: $gray-800;
+  }
+
+  &.active {
+    background: $primary;
+    color: $white;
   }
 }

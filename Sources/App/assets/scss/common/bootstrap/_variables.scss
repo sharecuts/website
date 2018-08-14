@@ -182,7 +182,7 @@ $link-hover-decoration:     underline !default;
 //
 // Style p element.
 
-$paragraph-margin-bottom:   1rem !default;
+$paragraph-margin-bottom:   1.5rem !default;
 
 
 // Grid breakpoints
@@ -280,7 +280,7 @@ $h4-font-size:                $font-size-base * 1.5 !default;
 $h5-font-size:                $font-size-base * 1.25 !default;
 $h6-font-size:                $font-size-base !default;
 
-$headings-margin-bottom:      ($spacer / 2) !default;
+$headings-margin-bottom:      $spacer !default;
 $headings-font-family:        inherit !default;
 $headings-font-weight:        700 !default;
 $headings-line-height:        1.2 !default;

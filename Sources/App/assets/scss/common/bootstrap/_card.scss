@@ -27,10 +27,11 @@
   // Enable `flex-grow: 1` for decks and groups so that card blocks take up
   // as much space as possible, ensuring footers are aligned to the bottom.
   // flex: 1 1 auto;
-  padding: 1rem $card-spacer-x;
+  padding: 1rem ($card-spacer-x * .75);
   font-size: 12px;
 
   @include media-breakpoint-up(md) {
+    padding: 1rem $card-spacer-x;
     font-size: 13px;
   }
 
@@ -76,17 +77,27 @@
 
 .card-header {
   // flex-grow: 1;
-  height: 4.4rem; // TODO: Decide - 2 Lines or 3?
-  padding: $card-spacer-y $card-spacer-x 0 $card-spacer-x;
+  height: 4.25rem; // TODO: Decide - 2 Lines or 3?
+  padding: $card-spacer-y ($card-spacer-x * .75) 0 ($card-spacer-x * .75);
   margin-bottom: 0; // Removes the default margin-bottom of <hN>
   // background-color: $card-cap-bg;
   // border-bottom: $card-border-width solid $card-border-color;
+
+  @include media-breakpoint-up(md) {
+
+    padding: $card-spacer-y $card-spacer-x 0 $card-spacer-x;
+  }
 }
 
 .card-footer {
-  padding: $card-spacer-y $card-spacer-x;
+  padding: ($card-spacer-y * .75) ($card-spacer-x * .75);
   // background-color: $card-cap-bg;
   // border-top: $card-border-width solid $card-border-color;
+
+  @include media-breakpoint-up(md) {
+
+    padding: $card-spacer-y $card-spacer-x;
+  }
 }
 
 // Card deck
@@ -98,9 +109,15 @@
   // align-items: center;
   flex: 1 100%;
   flex-wrap: wrap;
+  margin-right: -6px;
+  margin-left: -6px;
 
   .card {
-    margin: 0 $card-deck-margin;
+    margin: 0 ($card-deck-margin / 2);
+
+    @include media-breakpoint-up(lg) {
+      margin: 0 $card-deck-margin;
+    }
   }
 
   @include media-breakpoint-up(md) {
@@ -153,8 +170,16 @@
 
 // Shortcuts
 
+.card-wrapper {
+  width: 50%;
+
+  @include media-breakpoint-up(md) {
+    width: auto;
+  }
+}
+
 .card-shortcut {
-  width: 260px;
+  // width: 260px;
   height: 100%;
   // flex: 1 100%;
   box-shadow: 0 8px 20px -10px rgba($black, 0);

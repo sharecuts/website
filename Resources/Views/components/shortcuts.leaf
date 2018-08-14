@@ -1,12 +1,12 @@
 <section class="section py-1">
-  <header class="section-header px-3 px-md-0">
-    <h2 class="section-heading h4 mb-0">
-      <span class="emoji d-inline-block mr-1">👌</span> [Section Title]
-    </h2>
+  <header class="section-header px-3 px-md-0 d-none" role="header">
+    <h1 class="section-heading h4 mb-0">
+      <span class="emoji d-inline-block mr-1">👌</span> Find Cool Shortcuts
+    </h1>
   </header>
-  <div class="section-content py-4 pb-lg-5">
+  <div class="section-content pb-4 pb-lg-5">
 
-    <div class="card-deck">
+    <div class="card-deck justify-content-center justify-content-md-start">
 
       #embed("components/shortcut-single")
       

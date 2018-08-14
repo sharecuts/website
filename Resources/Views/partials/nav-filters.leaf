@@ -1,8 +1,8 @@
-<div class="nav-main-filters pt-2 pt-md-0 pb-md-0 pl-md-3 align-self-md-end" style="overflow: hidden;">
-  <div class="filters-heading ml-4 ml-md-0 mb-2 text-gray font-weight-bold text-uppercase text-muted small d-none d-md-block">Filter By:</div>
+<div class="nav-main-filters w-100 pt-1 pt-md-0 pb-md-0 pl-md-3 align-self-md-end" style="overflow: hidden;">
+  <div class="filters-heading ml-4 ml-md-0 mb-2 text-gray font-weight-bold text-uppercase text-muted small d-none d-lg-block">Filter By:</div>
 
   <div class="filter-wrap d-inline-flex flex-md-wrap" style="max-width: 100%; overflow-x: scroll;">
-    <div class="filters d-flex pb-3 pb-md-0 px-2 px-md-0 flex-md-wrap">
+    <div class="filters d-flex py-1 pb-2 pb-md-0 px-2 px-md-0 flex-md-wrap">
       #// Add .active when filter is applied.
       <button type="button" class="btn btn-sm btn-round btn-filter font-weight-medium small mr-1 mb-2 px-2"><span class="emoji d-inline-block mr-1 small">👌</span> Popular</button>
       <button type="button" class="btn btn-sm btn-round btn-filter font-weight-medium small mr-1 mb-2 px-2"><span class="emoji d-inline-block mr-1 small">🎮</span> Fun</button>
@@ -10,6 +10,7 @@
       <button type="button" class="btn btn-sm btn-round btn-filter font-weight-medium small mr-1 mb-2 px-2"><span class="emoji d-inline-block mr-1 small">📸</span> Photo &amp;  Video</button>
       <button type="button" class="btn btn-sm btn-round btn-filter font-weight-medium small mr-1 mb-2 px-2"><span class="emoji d-inline-block mr-1 small">⌨️</span> Developer</button>
       <button type="button" class="btn btn-sm btn-round btn-filter font-weight-medium small mr-1 mb-2 px-2"><span class="emoji d-inline-block mr-1 small">🗞</span> News</button>
+      <div class="btn-filter px-4" style="visibility: hidden;"></div>
     </div>
   </div>
 
