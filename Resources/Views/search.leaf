@@ -1,0 +1,13 @@
+#set("content") {
+
+  <article class="article">
+    <h1 class="mb-3 mb-lg-4">Search Results</h1>
+
+    <hr class="mb-4 mb-lg-5">
+
+    <p class="lead">Coming Soon...</p>
+  </article>
+
+}
+
+#embed("master")

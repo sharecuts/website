@@ -25,6 +25,7 @@ final class WebsiteController: RouteCollection {
         router.get("download", String.parameter, use: download)
         router.get("upload", use: upload)
         router.get("about", use: about)
+        router.get("search", use: search)
     }
 
     func index(_ req: Request) throws -> Future<View> {
@@ -107,6 +108,10 @@ final class WebsiteController: RouteCollection {
 
     func about(_ req: Request) throws -> Future<View> {
         return try req.view().render("about")
+    }
+
+    func search(_ req: Request) throws -> Future<View> {
+        return try req.view().render("search")
     }
 
 }
