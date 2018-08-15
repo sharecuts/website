@@ -97,7 +97,6 @@ gulp.task('images', function() {
 });
 
 // Optimize SVG (https://github.com/corneliusio/gulp-svgo)
-// - *** Unnecessary when utilizing svgSymbols
 gulp.task('svg', function () {
   return gulp.src(config.srcImg + '/**/*.svg')
     .pipe(svgo({ 
@@ -111,39 +110,27 @@ gulp.task('svg', function () {
     .pipe(gulp.dest('./Resources/Views/svg'));
 });
 
-// Create SVG Symbols - https://github.com/Hiswe/gulp-svg-symbols
-gulp.task('svgSymbols', function () {
-  return gulp.src(config.srcImg + '/**/*.svg')
-    .pipe(svgSymbols({
-      templates: ['default-svg'] // only save svg file (no css)
-    }))
-    .pipe(rename('svg.leaf')) // rename to .leaf so we can embed in template
-    .pipe(gulp.dest('./Resources/Views/components')); // .leaf templates must be within /Views
-});
-
 // Synchronized Browser Testing
 // - Automatically update browser on file changes.
-gulp.task('browserSync', function() {
-  browserSync.init({
-    // local vhost url
-    proxy: 'sharecuts.test:8080',
-    // inject if any of these files are changed
-    files: [
-      config.pub + '/**/*.*', './views/**/*.*'
-    ],
-    // Don't open URL automatically
-    open: false
-  });
-});
+// gulp.task('browserSync', function() {
+//   browserSync.init({
+//     // local vhost url
+//     proxy: 'sharecuts.test:8080',
+//     // inject if any of these files are changed
+//     files: [
+//       config.pub + '/**/*.*', './views/**/*.*'
+//     ],
+//     // Don't open URL automatically
+//     open: false
+//   });
+// });
 
 // Watch
 // - Watch files/directories for changes, run tasks and update browser.
-gulp.task('watch', ['browserSync', 'scss:common'], function () {
-  gulp.watch(config.srcScss + '/common/**/*.scss', ['scss:common']).on('change', browserSync.reload);
-  gulp.watch(config.srcScss + '/font/*.scss', ['scss:font']).on('change', browserSync.reload);
-  gulp.watch(config.srcJS + '/**/*.js', ['js:app']).on('change', browserSync.reload);
-  gulp.watch(config.srcImg + '/*.{jpg,png,gif}', ['images']).on('change', browserSync.reload);
-  gulp.watch(config.srcImg + '/*.svg', ['svg', 'svgSymbols']).on('change', browserSync.reload);
-
-  gulp.watch('**/*.php').on('change', browserSync.reload);
+gulp.task('watch', ['scss:common'], function () {
+  gulp.watch(config.srcScss + '/common/**/*.scss', ['scss:common']);
+  gulp.watch(config.srcScss + '/font/*.scss', ['scss:font']);
+  gulp.watch(config.srcJS + '/**/*.js', ['js:app']);
+  gulp.watch(config.srcImg + '/*.{jpg,png,gif}', ['images']);
+  gulp.watch(config.srcImg + '/*.svg', ['svg', 'svgSymbols']);
 });

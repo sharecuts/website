@@ -21,6 +21,9 @@
         <div class="card-title mb-auto mb-1 h5">
           #(card.shortcut.title)
         </div>
+        <div class="card-download d-flex justify-content-center align-items-center ml-auto svg svg-download">
+          #embed("svg/i-download")
+        </div>
       </div>
       <div class="card-body py-2">
         <div class="card-excerpt">

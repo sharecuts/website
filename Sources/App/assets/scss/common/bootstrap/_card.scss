@@ -208,20 +208,63 @@
   }
 
   &:focus,
-  &:focus:hover {
+  &:focus:hover,
+  &:active,
+  &:active:hover, {
     box-shadow: 0 8px 20px -8px rgba($black, .26);
     color: $white;
     outline: none; // we change appearance enough, outline isn't necessary.
-    text-decoration: none;
+    text-decoration: none !important;
     transform: scale(.956);
+
+    .card-download {
+      opacity: 1;
+      visibility: visible;
+
+      path {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
   }
 
-  @media (any-hover: hover) {
-    &:hover {
-      box-shadow: 0 20px 56px -12px rgba($black, .26);
-      color: $white;
-      text-decoration: none;
-      transform: scale(1.044);
+  &:hover {
+    box-shadow: 0 20px 56px -12px rgba($black, .26);
+    color: $white;
+    text-decoration: none;
+    transform: scale(1.044);
+
+    .card-download {
+      opacity: 1;
+      visibility: visible;
+
+      path {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .card-download {
+    width: 25px;
+    height: 25px;
+
+    background: rgba($black, .25);
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .2s ease-in-out;
+
+    path {
+
+      fill: $white;
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: all .2s ease-in-out;
+      transition-delay: .2s;
     }
   }
 }
