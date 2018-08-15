@@ -3,10 +3,10 @@ body {
 }
 
 .main {
-  height: 100vh;
   background: $white;
 
   @include media-breakpoint-up(lg) {
+    height: 100vh;
     overflow: scroll;
   }
 }
