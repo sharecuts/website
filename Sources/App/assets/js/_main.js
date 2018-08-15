@@ -2,6 +2,8 @@
 
 $(function() {
 
+  ScrollReveal({ container: '.main' }).reveal('.card');
+
   // $('.card-deck').slick({
   //   arrows: true,
   //   prevArrow: '<button class="slick-prev slick-arrow" aria-label="Previous" type="button"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="#{$gray-800}" d="M14.41,18.16L8.75,12.5L14.41,6.84L15.11,7.55L10.16,12.5L15.11,17.45L14.41,18.16Z"></path></svg></button>',
