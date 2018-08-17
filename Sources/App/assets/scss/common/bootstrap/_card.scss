@@ -223,7 +223,7 @@
 
       path {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateY(0) scale(1);
       }
     }
   }
@@ -237,6 +237,7 @@
     .card-download {
       opacity: 1;
       visibility: visible;
+      transform: scale(1);
 
       path {
         opacity: 1;
@@ -256,7 +257,8 @@
 
     opacity: 0;
     visibility: hidden;
-    transition: opacity .2s ease-in-out;
+    transform: scale(.75);
+    transition: all .2s ease-in-out;
 
     path {
 
