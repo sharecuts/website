@@ -18,7 +18,6 @@ var rename        = require('gulp-rename');
 var moment        = require('moment');
 var notify        = require('gulp-notify');
 var svgo          = require('gulp-svgo');
-var svgSymbols    = require('gulp-svg-symbols');
 var browserSync   = require('browser-sync').create();
 var newer         = require('gulp-newer');
 var imagemin      = require('gulp-imagemin');
