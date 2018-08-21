@@ -250,7 +250,7 @@
     width: 25px;
     height: 25px;
 
-    background: rgba($black, .25);
+    background: rgba($black, .2);
     border-radius: 25px;
 
     overflow: hidden;
@@ -258,15 +258,15 @@
     opacity: 0;
     visibility: hidden;
     transform: scale(.75);
-    transition: all .2s ease-in-out;
+    transition: all .3s ease-in-out;
+    transition-delay: .2s;
 
     path {
-
       fill: $white;
       opacity: 0;
-      transform: translateY(-20px);
-      transition: all .2s ease-in-out;
-      transition-delay: .2s;
+      transform: translateY(-14px);
+      transition: all .4s ease-in-out;
+      transition-delay: .5s;
     }
   }
 }

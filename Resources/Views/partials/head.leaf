@@ -15,7 +15,7 @@
   <link rel="apple-touch-icon" href="/assets/img/sharecuts-ios-icon.png">
   <!-- <meta name="apple-touch-fullscreen" content="yes"> -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#c8c8c8">
 
   <!-- CSS - Font -->
   <!-- Web Font Loader -- https://github.com/typekit/webfontloader -->
