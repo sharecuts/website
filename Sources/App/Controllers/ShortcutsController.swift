@@ -21,7 +21,7 @@ final class ShortcutsController: RouteCollection {
     }
 
     func latest(_ req: Request) throws -> Future<QueryShortcutsResponse> {
-        let query = Shortcut.query(on: req).range(0...20).sort(\.createdAt, .descending).all()
+        let query = Shortcut.query(on: req).range(0...30).sort(\.createdAt, .descending).all()
 
         return query.map(to: QueryShortcutsResponse.self) { shortcuts in
             return QueryShortcutsResponse(results: shortcuts)

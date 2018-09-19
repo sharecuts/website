@@ -12,7 +12,7 @@ Live at [sharecuts.app][1]
 
 ### Suggestions and Ideas
 
-If you have any suggestions or ideas please [Add An Issue](https://github.com/insidegui/Sharecuts/issues/new). Please be sure to check first that no one else has already offered the same.
+If you have any suggestions or ideas please [Add An Issue](https://github.com/insidegui/Sharecuts/issues/new). Please be sure to check first that no one else has already offered the same. Also keep in mind that this repository is for the development of the Sharecuts platform itself, issues about Shortcuts (how to create them, shortcut requests, etc) will be closed.
 
 ### Development
 
