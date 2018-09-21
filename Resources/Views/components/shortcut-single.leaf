@@ -35,7 +35,7 @@
       <div class="card-footer d-flex flex-grow-0 mt-auto small">
         <div class="card-info">
           <div class="card-actions font-weight-bold">
-            <span class="card-actions-amount">#(card.shortcut.actionCount)</span> <span class="card-actions-label">actions</span>
+            <span class="card-actions-amount">#(card.shortcut.actionCount)</span> <span class="card-actions-label">#(card.actionCountSuffix)</span>
           </div>
           <div class="card-author" title="Shortcut created by #(card.creator.name)">
             #(card.creator.name)
