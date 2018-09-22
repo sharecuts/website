@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import FluentPostgreSQL
+import Crypto
 
 final class User: Codable {
     var id: UUID?
@@ -120,6 +121,7 @@ extension User: Migration {
 
 }
 
+/// Adds password and rawLevel fields to the User table
 struct AddIndigoFieldsToUser: PostgreSQLMigration {
 
     static func prepare(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
@@ -140,6 +142,32 @@ struct AddIndigoFieldsToUser: PostgreSQLMigration {
             builder.deleteField(for: \.rawLevel)
             builder.deleteUnique(from: \.username)
         }
+    }
+
+}
+
+/// Hashes existing api keys in the User table
+struct MigrateExistingUsersToIndigo: PostgreSQLMigration {
+
+    static func prepare(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        let updateUsers = User.query(on: conn).all().flatMap { users -> EventLoopFuture<[User]> in
+            users.forEach { user in
+                guard let key = user.apiKey else { return }
+
+                let keyHash = try! BCrypt.hash(key)
+                user.apiKey = keyHash
+            }
+
+            return users.map({ $0.save(on: conn) }).flatten(on: conn)
+        }
+
+        return updateUsers.map(to: Void.self, { users -> Void in
+            return
+        })
+    }
+
+    static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Future.map(on: conn, { })
     }
 
 }
