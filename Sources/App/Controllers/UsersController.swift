@@ -22,6 +22,7 @@ final class UsersController: RouteCollection {
         let usersRoute = router.grouped("api", "users")
         usersRoute.post(User.CreateRequest.self, use: create)
         usersRoute.get(User.parameter, use: get)
+        usersRoute.patch(User.parameter, use: update)
     }
 
     func get(_ req: Request) throws -> Future<User.Public> {
@@ -71,6 +72,65 @@ final class UsersController: RouteCollection {
             }
 
             return newUser.save(on: req).map { $0.publicView }
+        }
+    }
+
+    func update(_ req: Request) throws -> Future<User.Public> {
+        let masterKey = req.http.headers["X-ShortcutSharing-Master-Key"].first
+        let isAuthenticatedAsMaster = (masterKey == self.masterKey)
+
+        let queryKey = try? req.query.get(String.self, at: ["apiKey"])
+        let apiKey = req.http.headers["X-Shortcuts-Key"].first ?? queryKey
+
+        var userKey = ""
+
+        if !isAuthenticatedAsMaster {
+            guard let apiKey = apiKey else {
+                throw Abort(.forbidden)
+            }
+
+            userKey = apiKey
+        }
+
+        do {
+            let fetchUser = try req.parameters.next(User.self)
+
+            return fetchUser.flatMap { user in
+                if !isAuthenticatedAsMaster {
+                    guard let userApiKey = user.apiKey else {
+                        throw Abort(.forbidden)
+                    }
+
+                    let authSuccessful = try BCrypt.verify(userKey, created: userApiKey)
+
+                    guard authSuccessful else {
+                        throw Abort(.forbidden)
+                    }
+                }
+
+                if !user.password.isEmpty {
+                    let currentPassword = try req.content.syncGet(String.self, at: ["currentPassword"])
+
+                    let existingPasswordMatches = try BCrypt.verify(currentPassword, created: user.password)
+
+                    guard existingPasswordMatches else {
+                        throw Abort(.forbidden)
+                    }
+                }
+
+                let newPassword = try req.content.syncGet(String.self, at: ["password"])
+                let passwordConfirmation = try req.content.syncGet(String.self, at: ["passwordConfirmation"])
+
+                guard newPassword == passwordConfirmation else {
+                    throw Abort(.badRequest)
+                }
+
+                user.password = try BCrypt.hash(newPassword)
+
+                return user.save(on: req).map { $0.publicView }
+            }
+        } catch {
+            throw Abort(.notFound)
         }
     }
 
