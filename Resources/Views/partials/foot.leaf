@@ -14,3 +14,6 @@
 
 <!-- Appwide JS -->
 <script src="/assets/js/app.min.js"></script>
+
+<!-- JS app extensions -->
+<script src="/sharecuts.js"></script>
