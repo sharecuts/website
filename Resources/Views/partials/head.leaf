@@ -1,0 +1,48 @@
+<head>
+  <!-- Global Meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta charset="utf-8">
+
+  <!-- Page Meta -->
+  <title>Sharecuts</title>
+
+  <meta name="author" content="name">
+  <meta name="description" content="description here">
+  <meta name="keywords" content="keywords,here">
+
+  <!-- App Styling -->
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/img/favicon.ico?v=1">
+  <link rel="apple-touch-icon" href="/assets/img/sharecuts-ios-icon.png">
+  <!-- <meta name="apple-touch-fullscreen" content="yes"> -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#c8c8c8">
+
+  <!-- CSS - Font -->
+  <!-- Web Font Loader -- https://github.com/typekit/webfontloader -->
+  <!-- - Note: Should we provide a local backup? -->
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+  <script>
+    WebFont.load({
+      custom: {
+        families: ['Inter UI'],
+        urls: ['/assets/css/inter-ui.css']
+      }
+    });
+  </script>
+
+  <!-- CSS - Common -->
+  <!-- Todo: Add cache busting -->
+  <link rel="stylesheet" media="all" href="/assets/css/common.css">
+
+  <!-- Open Graph -- http://ogp.me/ -->
+  <meta property="og:site_name" content="Sharecuts">
+  <meta property="og:title" content="Sharecuts">
+  <meta property="og:url" content="https://sharecuts.app">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="A public repository of shortcuts for the Shortcuts app.">
+
+  <!-- Twiiter -- https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html -->
+  <meta name="twitter:card" content="A public repository of shortcuts for the Shortcuts app.">
+  <meta name="twitter:site" content="@sharecuts">
+  <meta name="twitter:creator" content="@_inside">
+</head>

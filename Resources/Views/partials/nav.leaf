@@ -1,0 +1,9 @@
+<nav class="nav-main pt-2 pt-lg-3 px-lg-3 py-xl-4 d-flex flex-wrap flex-shrink-0">
+
+  #embed("partials/nav-logo")
+
+  #embed("partials/nav-menu")
+
+  #embed("partials/nav-filters")
+
+</nav>

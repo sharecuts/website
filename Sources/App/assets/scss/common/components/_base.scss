@@ -1,0 +1,52 @@
+body {
+  background: rgba($gray-100, .95);
+}
+
+.main {
+  background: $white;
+
+  @include media-breakpoint-up(lg) {
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
+  }
+}
+
+.nav-main {
+  background: $gray-100;
+
+  @include media-breakpoint-up(md) {
+    // min-width: 276px;
+  }
+
+  @include media-breakpoint-up(xl) {
+    // min-width: 336px;
+  }
+}
+
+.nav-main-menu {
+  @include media-breakpoint-up(lg) {
+    width: 100%;
+  }
+}
+
+.nav-menu {
+
+  .nav-item {
+
+  }
+
+  .nav-link {
+    color: $gray-700;
+
+    &:hover,
+    &:focus,
+    &.active {
+      color: $primary;
+    }
+  }
+}
+
+.section-heading {
+  letter-spacing: -.5px;
+}

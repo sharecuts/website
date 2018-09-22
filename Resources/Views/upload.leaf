@@ -1,26 +1,34 @@
 #set("content") {
-    <h2 class="bottom-space">Upload a Shortcut</h2>
+
+  <article class="article">
+    <h1 class="mb-3 mb-lg-4">Upload a Shortcut</h1>
+
+    <hr class="mb-4 mb-lg-5">
 
     #if(user != nil) {
-        <h3 class="bottom-space">Hello #(firstName)!</h3>
+      <h2 class="h3">Hello #(firstName)!</h2>
 
-        <p class="bottom-space">You can upload a shortcut using the form below or using the "Send to Sharecuts" shortcut,
-        please be careful about personal data such as logins or API keys in shortcuts, check your shortcuts for
-        personal information before uploading.</p>
+      <p>You can upload a shortcut using the form below or using the "Send to Sharecuts" shortcut,
+      please be careful about personal data such as logins or API keys in shortcuts, check your shortcuts for
+      personal information before uploading.</p>
 
-        <form id="upload" action="/api/shortcuts?apiKey=#(user.apiKey)" method="post" enctype="multipart/form-data">
-            <label><input type="text" name="title" placeholder="Title"></label>
-            <label><input type="text" name="summary" placeholder="Description"></label>
-            <label><input type="file" name="shortcut" placeholder="Upload your .shortcut file"></label>
-            <button type="submit">Upload</button>
-        </form>   
+      <form id="upload" action="/api/shortcuts?apiKey=#(user.apiKey)" method="post" enctype="multipart/form-data">
+        <label><input type="text" name="title" placeholder="Title"></label>
+        <label><input type="text" name="summary" placeholder="Description"></label>
+        <label><input type="file" name="shortcut" placeholder="Upload your .shortcut file"></label>
+        <button type="submit">Upload</button>
+      </form>   
+
     } else {
-        <article>
-            <p>To keep a good quality of service at this early stage, uploading is currently limited to people who have been invited. If you have been invited, follow the instructions you received to upload your shortcuts.</p>
 
-            <p>If you'd like to contribute, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">register here</a> and you'll get an invitation when possible.</p>
-        </article>
+      <p class="lead">To keep a good quality of service at this early stage, uploading is currently limited to people who have been invited. If you have been invited, follow the instructions you received to upload your shortcuts.</p>
+
+      <p>If you'd like to contribute, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">register here</a> and you'll get an invitation when possible.</p>
+
     }
+  
+  </article>
+    
 }
 
 #embed("master")

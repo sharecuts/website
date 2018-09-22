@@ -1,0 +1,5 @@
+<footer id="main-footer" class="main-footer w-100 mt-5 align-self-end small text-black-50" role="contentinfo">
+  <p>
+    Powered by Swift. Proudly hosted on <a href="https://macstadium.com" rel="external" rel="nofollow">MacStadium</a>. Created by <a href="https://twitter.com/_inside" rel="external" rel="nofollow">Guilherme Rambo</a>. <a href="https://github.com/insidegui/Sharecuts" rel="external" rel="nofollow">Open Source</a>
+  </p>
+</footer>

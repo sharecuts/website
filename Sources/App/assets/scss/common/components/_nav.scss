@@ -1,0 +1,115 @@
+//----
+// Navigation Elements
+//----
+
+// Header (Small-) / Sidebar (Medium+)
+
+.nav-main {
+  position: relative;
+
+  @include media-breakpoint-up(lg) {
+    position: sticky;
+    top: 0;
+    max-width: 240px;
+    height: 100vh;
+  }
+
+  @include media-breakpoint-up(xl) {
+    max-width: 336px;
+  }
+
+  .nav-link {
+    padding: .5rem .75rem;
+
+    @include media-breakpoint-down(md) {
+      padding: .5rem;
+      color: $gray-600;
+      font-size: 10px;
+      letter-spacing: .25px;
+      // text-transform: uppercase;
+
+      &.active {
+
+        path {
+          fill: $primary;
+        }
+      }
+
+      svg {
+        height: 22px;
+      }
+
+      path {
+        fill: $gray-700;
+      }
+    }
+
+    &.active,
+    &:active {
+      color: $gray-800;
+    }
+  }
+}
+
+.nav-logo {
+  max-width: 150px;
+
+  @include media-breakpoint-up(sm) {
+    max-width: none;
+  }
+
+  @include media-breakpoint-up(lg) {
+    width: 100%;
+  }
+}
+
+// .nav-img-logo {
+//   max-width: 130px;
+//   max-height: 30px;
+
+//   @include media-breakpoint-up(lg) {
+//     max-width: 184px;
+//     max-height: 46px;
+//   }
+// }
+
+.filters {
+  background: $gray-100;
+
+  @include media-breakpoint-down(lg) {
+    // width: 100%;
+    overflow-x: auto;
+    // overflow-y: hidden;
+    white-space: nowrap;
+
+    -webkit-scroll-snap-type: mandatory;
+    scroll-snap-type: mandatory;
+    -webkit-scroll-snap-destination: 50% 50%;
+    scroll-snap-destination: 50% 50%;
+    scroll-padding: 0 6px;
+  }
+}
+
+.btn-filter {
+  background: $white;
+  color: $primary;
+  font-size: 12px;
+
+  @include media-breakpoint-down(lg) {
+    scroll-snap-align: start;
+  }
+
+  @include media-breakpoint-up(lg) {
+    font-size: 13px; // increase for accessibility
+  }
+
+  &:hover,
+  &:focus {
+    color: $gray-800;
+  }
+
+  &.active {
+    background: $primary;
+    color: $white;
+  }
+}

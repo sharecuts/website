@@ -1,11 +1,5 @@
 #set("content") {
-	<ul id="shortcuts-list" class="clearfix">
-
-	#for(card in cards) {
-		<li>#embed("shortcutcard")</li>
-	}
-
-	<ul>
+	#embed("components/shortcuts")
 }
 
 #embed("master")

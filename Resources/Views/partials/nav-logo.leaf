@@ -1,0 +1,6 @@
+<div class="nav nav-logo">
+  <a href="/" class="nav-link-logo d-block mr-auto p-0 pl-3">
+    <span class="sr-only">Home</span>
+    <span class="svg svg-logo-shortcuts d-inline-block">#embed("svg/logo-sharecuts")</span>
+  </a>
+</div>

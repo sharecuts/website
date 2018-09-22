@@ -1,0 +1,13 @@
+# editorconfig.org
+
+root = true
+
+[*]
+indent_size = 2
+indent_style = space
+
+[*.{html}]
+indent_size = 4
+
+[*.{js,scss,css}]
+ident_size = 2

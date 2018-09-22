@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="22px" viewBox="0 0 22 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 51.1 (57501) - http://www.bohemiancoding.com/sketch -->
+    <title>i-search</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Layout-mobile" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="home" transform="translate(-329.000000, -127.000000)" fill="#4A4A4A" fill-rule="nonzero">
+            <g id="Group-2" transform="translate(0.000000, 97.000000)">
+                <g id="bt-buscar" transform="translate(327.000000, 28.000000)">
+                    <path d="M19.753509,18.3158009 C19.763214,18.3247745 19.7727843,18.3339757 19.7822131,18.3434046 L23.6102437,22.1714351 C24.0007679,22.5619594 24.0007679,23.1951243 23.6102437,23.5856486 C23.2197194,23.9761729 22.5865544,23.9761729 22.1960301,23.5856486 L18.3679996,19.7576181 C18.3593937,19.7490122 18.3509774,19.7402885 18.3427508,19.7314521 C16.6168156,21.1490364 14.4077844,22 12,22 C6.4771525,22 2,17.5228475 2,12 C2,6.4771525 6.4771525,2 12,2 C17.5228475,2 22,6.4771525 22,12 C22,14.3952704 21.1578589,16.5938481 19.753509,18.3158009 Z M12,20 C16.418278,20 20,16.418278 20,12 C20,7.581722 16.418278,4 12,4 C7.581722,4 4,7.581722 4,12 C4,16.418278 7.581722,20 12,20 Z" id="i-search"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

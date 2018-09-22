@@ -1,38 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Sharecuts</title>
-	<meta charset="utf-8">
-    <link rel="stylesheet" href="/main.css">
-    <script src="/sharecuts.js"></script>
-    <meta name="viewport" content="width=device-width">
-    <meta property="og:site_name" content="Sharecuts"/>
-    <meta property="og:title" content="Sharecuts"/>
-    <meta property="og:url" content="https://sharecuts.app"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:description" content="A public repository of shortcuts for the Shortcuts app."/>
-</head>
-<body>
+<!doctype html>
+<html lang="en" dir="ltr">
 
-    <header id="master-header">
-        <h1><a href="/">Sharecuts</a></h1>
-        <ul id="master-menu">
-            <li><a href="/">HOME</a></li>
-            <li><a href="/about">ABOUT</a></li>
-            <li><a href="/upload">UPLOAD</a></li>
-        </ul>
-    </header>
+  #embed("partials/head")
 
-    <section id="master-content">
+  <body>
+
+    <div class="page-wrap d-flex flex-column flex-lg-row">
+
+      #embed("partials/nav")
+
+      <main class="main px-3 py-4 pt-lg-4 pl-lg-4 pt-xl-5 pl-xl-5 d-flex flex-wrap" role="main">
+
         #get(content)
-    </section>
 
-    <footer id="master-footer">
-        <p>Powered by Swift</p>
-        <p>Proudly hosted on <a href="https://macstadium.com" rel="external">MacStadium</a></p>
-        <p>Created by <a href="https://twitter.com/_inside" rel="external">Guilherme Rambo</a></p>
-        <p><a href="https://github.com/insidegui/Sharecuts" rel="external">Open Source</a></p>
-    </footer>
+        #embed("partials/footer")
 
-</body>
+      </main>
+    </div>
+
+    #embed("partials/foot")
+
+  </body>
 </html>

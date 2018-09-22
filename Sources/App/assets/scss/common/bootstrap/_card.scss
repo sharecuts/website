@@ -1,0 +1,272 @@
+//
+// Base styles
+//
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: $card-bg;
+  background-clip: border-box;
+  // border: $card-border-width solid $card-border-color;
+  @include border-radius($card-border-radius);
+}
+
+.card-dark {
+
+  &,
+  .card-title,
+  .btn-like {
+    color: $white;
+  }
+}
+
+.card-body {
+  // Enable `flex-grow: 1` for decks and groups so that card blocks take up
+  // as much space as possible, ensuring footers are aligned to the bottom.
+  // flex: 1 1 auto;
+  padding: 1rem ($card-spacer-x * .75);
+  font-size: 12px;
+
+  @include media-breakpoint-up(md) {
+    padding: 1rem $card-spacer-x;
+    font-size: 13px;
+  }
+
+  @include media-breakpoint-up(lg) {
+    font-size: 14px;
+  }
+}
+
+.card-excerpt {
+  // height: 5.25rem; TODO - Set Maximum Excerpt Height
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-title {
+  // margin-bottom: $card-spacer-y;
+  letter-spacing: -.5px;
+  text-transform: capitalize;
+}
+
+// .card-subtitle {
+//   margin-top: -($card-spacer-y / 2);
+//   margin-bottom: 0;
+// }
+
+// .card-text:last-child {
+//   margin-bottom: 0;
+// }
+
+// .card-link {
+//   @include hover {
+//     text-decoration: none;
+//   }
+
+//   + .card-link {
+//     margin-left: $card-spacer-x;
+//   }
+// }
+
+//
+// Optional textual caps
+//
+
+.card-header {
+  // flex-grow: 1;
+  height: 4.25rem; // TODO: Decide - 2 Lines or 3?
+  padding: $card-spacer-y ($card-spacer-x * .75) 0 ($card-spacer-x * .75);
+  margin-bottom: 0; // Removes the default margin-bottom of <hN>
+  // background-color: $card-cap-bg;
+  // border-bottom: $card-border-width solid $card-border-color;
+
+  @include media-breakpoint-up(md) {
+
+    padding: $card-spacer-y $card-spacer-x 0 $card-spacer-x;
+  }
+}
+
+.card-footer {
+  padding: ($card-spacer-y * .75) ($card-spacer-x * .75);
+  // background-color: $card-cap-bg;
+  // border-top: $card-border-width solid $card-border-color;
+
+  @include media-breakpoint-up(md) {
+
+    padding: $card-spacer-y $card-spacer-x;
+  }
+}
+
+// Card deck
+
+.card-deck {
+  display: flex;
+  // min-width: min-content;
+  // justify-content: center;
+  // align-items: center;
+  flex: 1 100%;
+  flex-wrap: wrap;
+  margin-right: -6px;
+  margin-left: -6px;
+
+  .card {
+    margin: 0 ($card-deck-margin / 2);
+
+    @include media-breakpoint-up(lg) {
+      margin: 0 $card-deck-margin;
+    }
+  }
+
+  @include media-breakpoint-up(md) {
+    flex-flow: row wrap;
+    // margin: 0;
+    // margin-right: -$card-deck-margin;
+    // margin-left: -$card-deck-margin;
+
+    .card {
+      display: flex;
+      // Flexbugs #4: https://github.com/philipwalton/flexbugs#flexbug-4
+      // flex: 1 100%;
+      // flex-direction: column;
+      margin-right: $card-deck-margin;
+      margin-bottom: 0; // Override the default
+      margin-left: $card-deck-margin;
+    }
+  }
+}
+
+//----
+// Custom Additions
+//----
+
+// Backgrounds
+
+.card-bg-purple {
+  background: linear-gradient(to bottom right, #af4eff, #5914f5);
+}
+
+.card-bg-blue {
+  background: linear-gradient(to bottom right, #2e88ff, #5315de);
+}
+
+.card-bg-pink {
+  background: linear-gradient(to bottom right, #e12baa, #bb0334);
+}
+
+.card-bg-green {
+  background: linear-gradient(to bottom right, #03c35c, #009498);
+}
+
+.card-bg-red {
+  background: linear-gradient(to bottom right, #f32a36, #bb0469);
+}
+
+.card-bg-orange {
+  background: linear-gradient(to bottom right, #ff7e1d, #dd1648);
+}
+
+// Shortcuts
+
+.card-wrapper {
+  width: 50%;
+
+  @include media-breakpoint-up(md) {
+    width: auto;
+  }
+}
+
+.card-shortcut {
+  // width: 260px;
+  height: 100%;
+  // flex: 1 100%;
+  box-shadow: 0 8px 20px -10px rgba($black, 0);
+  cursor: pointer;
+  // opacity: 0;
+  transition: all .4s cubic-bezier(.68, -.6, .265, 2.2);
+
+  @include media-breakpoint-up(md) {
+    width: 300px;
+  }
+
+  // Shortcut Description Excerpt (within grid)
+  .card-excerpt {
+    padding: 0;
+  }
+
+  //  Shortcut Information
+  .card-info {
+    opacity: .8;
+    transition: opacity .4s ease-in-out;
+
+    .card:hover &,
+    .card:focus & {
+      opacity: 1;
+    }
+  }
+
+  &:focus,
+  &:focus:hover,
+  &:active,
+  &:active:hover, {
+    box-shadow: 0 8px 20px -8px rgba($black, .26);
+    color: $white;
+    outline: none; // we change appearance enough, outline isn't necessary.
+    text-decoration: none !important;
+    transform: scale(.956);
+
+    .card-download {
+      opacity: 1;
+      visibility: visible;
+
+      path {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 20px 56px -12px rgba($black, .26);
+    color: $white;
+    text-decoration: none;
+    transform: scale(1.044);
+
+    .card-download {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+
+      path {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .card-download {
+    width: 25px;
+    height: 25px;
+
+    background: rgba($black, .2);
+    border-radius: 25px;
+
+    overflow: hidden;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(.75);
+    transition: all .3s ease-in-out;
+    transition-delay: .2s;
+
+    path {
+      fill: $white;
+      opacity: 0;
+      transform: translateY(-14px);
+      transition: all .4s ease-in-out;
+      transition-delay: .5s;
+    }
+  }
+}

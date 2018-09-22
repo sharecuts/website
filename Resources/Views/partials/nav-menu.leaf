@@ -1,0 +1,30 @@
+<div class="mr-2 mr-md-0 ml-auto ml-lg-0 align-self-center">
+
+    <nav class="nav nav-main-menu flex-row flex-lg-column font-weight-medium">
+        <div class="nav-item d-none d-lg-block">
+            <a href="/" class="nav-link #if(cards) {active}" title="Sharecuts Home">
+                Home
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/about" class="nav-link #if(about_page) {active} text-center text-md-left" title="About Sharecuts &amp; Shortcuts">
+                <span class="d-block d-lg-none mb-1 text-center"><span class="svg svg-info d-inline-block">#embed("svg/i-info")</span></span>
+                <span class="d-block">About<span class="sr-only"> Sharecuts</span></span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/upload" class="nav-link #if(upload_page) {active} text-center text-md-left" title="Upload Your Own Shortcut">
+                <span class="d-block d-lg-none mb-1 text-center"><span class="svg svg-upload d-inline-block">#embed("svg/i-upload")</span></span>
+                <span class="d-block">Upload<span class="sr-only"> a Shortcut</span></span>
+            </a>
+        </div>
+        <div class="nav-item">
+            <a href="/search" class="nav-link text-center text-md-left" title="Search Sharecuts">
+                <!-- Negative margin makes search icon appear more centered -->
+                <span class="d-block d-lg-none mb-1 text-center" style="margin-left: -1px;"><span class="svg svg-search d-inline-block">#embed("svg/i-search")</span></span>
+                <span class="d-block">Search<span class="sr-only"> Sharecuts</span></span>
+            </a>
+        </div>
+    </nav>
+
+</div>

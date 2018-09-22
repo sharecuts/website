@@ -25,10 +25,11 @@ final class WebsiteController: RouteCollection {
         router.get("download", String.parameter, use: download)
         router.get("upload", use: upload)
         router.get("about", use: about)
+        router.get("search", use: search)
     }
 
     func index(_ req: Request) throws -> Future<View> {
-        let query = Shortcut.query(on: req).range(0...20).sort(\.createdAt, .descending).all()
+        let query = Shortcut.query(on: req).range(0...50).sort(\.createdAt, .descending).all()
 
         return query.flatMap(to: View.self) { shortcuts in
             let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
@@ -109,12 +110,17 @@ final class WebsiteController: RouteCollection {
         return try req.view().render("about")
     }
 
+    func search(_ req: Request) throws -> Future<View> {
+        return try req.view().render("search")
+    }
+
 }
 
 struct ShortcutCard: Codable {
     let shortcut: Shortcut
     let creator: User
     let deepLink: String
+    let actionCountSuffix: String
 
     init(_ shortcut: Shortcut, users: [User]) throws {
         self.shortcut = shortcut
@@ -126,6 +132,7 @@ struct ShortcutCard: Codable {
         self.creator = user
 
         self.deepLink = try shortcut.generateDeepLinkURL().absoluteString
+        self.actionCountSuffix = shortcut.actionCount > 1 ? "actions" : "action"
     }
 }
 
