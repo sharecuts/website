@@ -181,13 +181,13 @@ extension QueryShortcutsResponse: Content { }
 
 struct ShortcutDetailsResponse: Codable {
     let shortcut: Shortcut
-    let user: UserResponse
+    let user: User.Public
     let deepLink: URL
     let download: URL
 
     init(shortcut: Shortcut, user: User) throws {
         self.shortcut = shortcut
-        self.user = UserResponse(user)
+        self.user = user.publicView
         self.deepLink = try shortcut.generateDeepLinkURL()
         self.download = try shortcut.generateDownloadURL()
     }

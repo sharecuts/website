@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import FluentPostgreSQL
+import Crypto
 
 final class UsersController: RouteCollection {
 
@@ -19,16 +20,16 @@ final class UsersController: RouteCollection {
 
     func boot(router: Router) throws {
         let usersRoute = router.grouped("api", "users")
-        usersRoute.post(User.self, use: create)
+        usersRoute.post(User.CreateRequest.self, use: create)
         usersRoute.get(User.parameter, use: get)
     }
 
-    func get(_ req: Request) throws -> Future<UserResponse> {
+    func get(_ req: Request) throws -> Future<User.Public> {
         do {
             let fetchUser = try req.parameters.next(User.self)
 
-            return fetchUser.map(to: UserResponse.self) { user in
-                return UserResponse(user)
+            return fetchUser.map(to: User.Public.self) { user in
+                return user.publicView
             }.thenIfErrorThrowing { _ in
                 throw Abort(.notFound)
             }
@@ -37,31 +38,40 @@ final class UsersController: RouteCollection {
         }
     }
 
-    func create(_ req: Request, user: User) throws -> Future<User> {
+    func create(_ req: Request, user: User.CreateRequest) throws -> Future<User.Public> {
         guard let masterKey = req.http.headers["X-ShortcutSharing-Master-Key"].first else {
             throw Abort(.forbidden)
         }
-        guard masterKey == self.masterKey else {
+
+        let isAuthenticatedAsMaster = (masterKey == self.masterKey)
+
+        guard isAuthenticatedAsMaster else {
             throw Abort(.forbidden)
         }
 
-        return user.save(on: req)
+        let createRequest = try req.content.decode(User.CreateRequest.self)
+
+        return createRequest.flatMap { data in
+            let passwordHash = try BCrypt.hash(data.password)
+            let keyHash = try BCrypt.hash(data.apiKey)
+
+            let newUser = User(
+                id: nil,
+                name: data.name,
+                username: data.username,
+                password: passwordHash,
+                url: data.url,
+                apiKey: keyHash
+            )
+
+            // I know this doesn't make sense currently, but in the future users will be able to
+            // register by themselves, but only master can set the level of a user
+            if isAuthenticatedAsMaster, let rawLevel = data.rawLevel {
+                newUser.rawLevel = rawLevel
+            }
+
+            return newUser.save(on: req).map { $0.publicView }
+        }
     }
 
 }
-
-struct UserResponse: Codable {
-    let id: User.ID?
-    let name: String
-    let username: String
-    let url: URL
-
-    init(_ user: User) {
-        self.id = user.id
-        self.name = user.name
-        self.username = user.username
-        self.url = user.url
-    }
-}
-
-extension UserResponse: Content { }
