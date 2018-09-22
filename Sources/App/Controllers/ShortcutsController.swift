@@ -8,6 +8,7 @@
 import Foundation
 import Vapor
 import FluentPostgreSQL
+import Crypto
 
 final class ShortcutsController: RouteCollection {
 
@@ -53,7 +54,9 @@ final class ShortcutsController: RouteCollection {
             throw Abort(.forbidden)
         }
 
-        let userQuery = User.query(on: req).filter(\.apiKey, .equal, apiKey).first()
+        let keyHash = try BCrypt.hash(apiKey)
+
+        let userQuery = User.query(on: req).filter(\.apiKey, .equal, keyHash).first()
 
         return userQuery.flatMap(to: Shortcut.self) { user in
             guard let userID = user?.id else {
@@ -100,7 +103,9 @@ final class ShortcutsController: RouteCollection {
             throw Abort(.forbidden)
         }
 
-        let userQuery = User.query(on: req).filter(\.apiKey, .equal, apiKey).first()
+        let keyHash = try BCrypt.hash(apiKey)
+
+        let userQuery = User.query(on: req).filter(\.apiKey, .equal, keyHash).first()
 
         return userQuery.flatMap(to: Shortcut.self) { user in
             guard let userID = user?.id else {
