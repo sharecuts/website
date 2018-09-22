@@ -54,6 +54,7 @@ final class ShortcutsController: RouteCollection {
             throw Abort(.forbidden)
         }
 
+        #error("This doesn't work, must use BCrypt.verify, but how do we fetch the User then? 🤔")
         let keyHash = try BCrypt.hash(apiKey)
 
         let userQuery = User.query(on: req).filter(\.apiKey, .equal, keyHash).first()
@@ -103,6 +104,7 @@ final class ShortcutsController: RouteCollection {
             throw Abort(.forbidden)
         }
 
+        #error("This doesn't work, must use BCrypt.verify, but how do we fetch the User then? 🤔")
         let keyHash = try BCrypt.hash(apiKey)
 
         let userQuery = User.query(on: req).filter(\.apiKey, .equal, keyHash).first()
