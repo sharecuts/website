@@ -47,6 +47,20 @@ body {
   }
 }
 
+.section {
+  // This pads layout for iPhone X
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
 .section-heading {
   letter-spacing: -.5px;
+}
+
+// Footer
+
+.main-footer {
+  // This pads layout for iPhone X
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
 }

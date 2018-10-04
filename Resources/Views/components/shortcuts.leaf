@@ -6,7 +6,7 @@
   </header>
   <div class="section-content pb-4 pb-lg-5">
 
-    <div class="card-deck justify-content-center justify-content-md-start">
+    <div class="card-deck justify-content-center justify-content-lg-start">
 
       #embed("components/shortcut-single")
       

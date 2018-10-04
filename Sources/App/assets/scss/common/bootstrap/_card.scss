@@ -40,8 +40,8 @@
   }
 }
 
-.card-excerpt {
-  // height: 5.25rem; TODO - Set Maximum Excerpt Height
+.card-summary {
+  // height: 5.25rem; TODO - Set Maximum Summary Height
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -191,8 +191,8 @@
     width: 300px;
   }
 
-  // Shortcut Description Excerpt (within grid)
-  .card-excerpt {
+  // Shortcut Description Summary (within grid)
+  .card-summary {
     padding: 0;
   }
 

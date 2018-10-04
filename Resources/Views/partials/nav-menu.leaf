@@ -1,6 +1,6 @@
 <div class="mr-2 mr-md-0 ml-auto ml-lg-0 align-self-center">
 
-    <nav class="nav nav-main-menu flex-row flex-lg-column font-weight-medium">
+    <nav class="nav nav-main-menu flex-row flex-lg-column pr-md-1 font-weight-medium">
         <div class="nav-item d-none d-lg-block">
             <a href="/" class="nav-link #if(cards) {active}" title="Sharecuts Home">
                 Home

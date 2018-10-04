@@ -1,6 +1,6 @@
 #for(card in cards) {
   #/* 
-    .card-wrapper is used to wrap card margin and ensure the whole slide/carousel area is draggable. Otherwise empty space would give poor UX.
+    .card-wrapper is used to ensure the whole slide/carousel area is draggable.
   */
   <div class="card-wrapper mb-3 mb-xl-4">
     #/*
@@ -26,9 +26,7 @@
         </div>
       </div>
       <div class="card-body py-2">
-        <div class="card-excerpt">
-          #// TODO: rename CSS class from 'excerpt' -> 'summary' to maintain consistency.
-        
+        <div class="card-summary">
           #(card.shortcut.summary)
         </div>
       </div>
