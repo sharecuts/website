@@ -77,6 +77,7 @@ final class ShortcutsController: RouteCollection {
             return upload.flatMap { result in
                 let shortcut = try Shortcut(
                     userID: user.requireID(),
+                    tagID: requestData.tagID,
                     title: requestData.title,
                     summary: requestData.summary,
                     filePath: result.fileName,
@@ -191,6 +192,7 @@ final class ShortcutsController: RouteCollection {
 }
 
 struct CreateShortcutRequest: Codable {
+    let tagID: UUID
     let title: String
     let summary: String
     let shortcut: File

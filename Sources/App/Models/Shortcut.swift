@@ -15,6 +15,7 @@ final class Shortcut: Codable {
     var createdAt: Date
     var updatedAt: Date
     var userID: User.ID
+    var tagID: Tag.ID
 
     var title: String
     var summary: String
@@ -28,8 +29,13 @@ final class Shortcut: Codable {
     var user: Parent<Shortcut, User> {
         return parent(\.userID)
     }
+    
+    var tag: Parent<Shortcut, Tag> {
+        return parent(\.tagID)
+    }
 
     init(userID: User.ID,
+         tagID: Tag.ID,
          title: String,
          summary: String,
          filePath: String,
@@ -41,6 +47,7 @@ final class Shortcut: Codable {
         self.createdAt = Date()
         self.updatedAt = Date()
         self.userID = userID
+        self.tagID = tagID
         self.title = title
         self.summary = summary
         self.filePath = filePath
@@ -69,6 +76,22 @@ struct AddIndigoFieldsToShortcut: PostgreSQLMigration {
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
         return Database.update(Shortcut.self, on: conn) { builder in
             builder.deleteField(for: \.votes)
+        }
+    }
+    
+}
+
+struct AddTagToShortcut: PostgreSQLMigration {
+    
+    static func prepare(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.field(for: \.tagID, type: .uuid, .default(.literal("2F46B7B4-A9FC-45F6-BA23-717CEF56CE74")))
+        }
+    }
+    
+    static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.deleteField(for: \.tagID)
         }
     }
     

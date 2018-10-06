@@ -44,19 +44,35 @@ final class WebsiteController: RouteCollection {
         let protectedRoutes = authSessionRoutes.grouped(redirect)
      
         protectedRoutes.get("upload", use: upload)
+        
+        let tagRoutes = authSessionRoutes.grouped("tags")
+        
+        tagRoutes.get(String.parameter, use: tag)
+    }
+    
+    private func navigationContext(in req: Request, with tag: Tag? = nil) -> Future<NavigationContext> {
+        let query = Tag.query(on: req).sort(\.name, .ascending).all()
+        
+        return query.map(to: NavigationContext.self) { tags in
+            return NavigationContext(tags: tags, activeTag: tag)
+        }
     }
 
     func index(_ req: Request) throws -> Future<View> {
         let query = Shortcut.query(on: req).range(0...50).sort(\.createdAt, .descending).all()
 
-        return query.flatMap(to: View.self) { shortcuts in
-            let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
-
-            return userFutures.flatMap(to: View.self, on: req) { users in
-                let unwrappedUsers = users.compactMap({ $0 })
-                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers, req: req) })
-
-                return try req.view().render("index", ["cards": cards])
+        return navigationContext(in: req).flatMap(to: View.self) { navContext in
+            return query.flatMap(to: View.self) { shortcuts in
+                let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
+                
+                return userFutures.flatMap(to: View.self, on: req) { users in
+                    let unwrappedUsers = users.compactMap({ $0 })
+                    let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers, req: req) })
+                    
+                    let context = HomeContext(navigation: navContext, cards: cards)
+                    
+                    return try req.view().render("index", context)
+                }
             }
         }
     }
@@ -159,12 +175,14 @@ final class WebsiteController: RouteCollection {
             
             let shortcuts = try user.shortcuts.query(on: req).all()
             
-            return shortcuts.flatMap(to: View.self) { shortcuts in
-                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: [user], req: req) })
-                
-                let context = UserDetailsContext(user: user, cards: cards)
+            return self.navigationContext(in: req).flatMap(to: View.self) { navContext in
+                return shortcuts.flatMap(to: View.self) { shortcuts in
+                    let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: [user], req: req) })
+                    
+                    let context = UserDetailsContext(navigation: navContext, user: user, cards: cards)
 
-                return try req.view().render("users/details", context)
+                    return try req.view().render("users/details", context)
+                }
             }
         }
     }
@@ -200,6 +218,37 @@ final class WebsiteController: RouteCollection {
         try req.unauthenticateSession(User.self)
         
         return req.redirect(to: "/")
+    }
+    
+    // MARK: - Tag routes
+    
+    func tag(_ req: Request) throws -> Future<View> {
+        let tagSlug = try req.parameters.next(String.self)
+        
+        let tagQuery = Tag.query(on: req).filter(\.slug, .equal, tagSlug).first()
+        
+        return tagQuery.flatMap { tag in
+            guard let tag = tag else {
+                throw Abort(.notFound)
+            }
+            
+            let shortcuts = try tag.shortcuts.query(on: req).all()
+            
+            return self.navigationContext(in: req, with: tag).flatMap(to: View.self) { navContext in
+                return shortcuts.flatMap(to: View.self) { shortcuts in
+                    let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
+                    
+                    return userFutures.flatMap(to: View.self, on: req) { users in
+                        let unwrappedUsers = users.compactMap({ $0 })
+                        let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers, req: req) })
+                        
+                        let context = TagDetailsContext(navigation: navContext, tag: tag, cards: cards)
+                        
+                        return try req.view().render("tag", context)
+                    }
+                }
+            }
+        }
     }
 
 }

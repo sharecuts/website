@@ -1,5 +1,5 @@
 //
-//  UserDetailsContext.swift
+//  TagDetailsContext.swift
 //  App
 //
 //  Created by Guilherme Rambo on 06/10/18.
@@ -8,14 +8,16 @@
 import Foundation
 import Vapor
 
-struct UserDetailsContext: Codable {
+struct TagDetailsContext: Codable {
     let navigation: NavigationContext
-    let user: User
+    let tag: Tag
     let cards: [ShortcutCard]
+    let cardCount: Int
     
-    init(navigation: NavigationContext, user: User, cards: [ShortcutCard]) {
+    init(navigation: NavigationContext, tag: Tag, cards: [ShortcutCard]) {
         self.navigation = navigation
-        self.user = user
+        self.tag = tag
         self.cards = cards
+        self.cardCount = cards.count
     }
 }
