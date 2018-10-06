@@ -130,9 +130,37 @@ final class ShortcutsController: RouteCollection {
         }
     }
     
+    private let useExternalServiceForVoting = false
+    
     func vote(_ req: Request) throws -> Future<VotingResponse> {
+        guard !useExternalServiceForVoting else {
+            return try voteUsingExternalService(req)
+        }
+        
         let shortcutParam = try req.parameters.next(Shortcut.self)
-
+        
+        return shortcutParam.flatMap { shortcut in
+            let mutableShortcut = shortcut
+            
+            mutableShortcut.votes += 1
+            
+            return mutableShortcut.save(on: req).map(to: VotingResponse.self) { updatedShortcut in
+                return try VotingResponse(shortcut: updatedShortcut)
+            }
+        }
+    }
+    
+    func votes(_ req: Request) throws -> Future<VotingResponse> {
+        let shortcutParam = try req.parameters.next(Shortcut.self)
+        
+        return shortcutParam.map(to: VotingResponse.self) { shortcut in
+            return try VotingResponse(shortcut: shortcut)
+        }
+    }
+    
+    func voteUsingExternalService(_ req: Request) throws -> Future<VotingResponse> {
+        let shortcutParam = try req.parameters.next(Shortcut.self)
+        
         let client = try req.make(VotingClient.self)
         
         return shortcutParam.flatMap { shortcut in
@@ -140,7 +168,7 @@ final class ShortcutsController: RouteCollection {
         }
     }
     
-    func votes(_ req: Request) throws -> Future<VotingResponse> {
+    func fetchVotesUsingExternalService(_ req: Request) throws -> Future<VotingResponse> {
         let shortcutParam = try req.parameters.next(Shortcut.self)
         
         let client = try req.make(VotingClient.self)

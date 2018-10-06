@@ -61,6 +61,8 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     migrations.add(migration: AddIndigoFieldsToUser.self, database: .psql)
     migrations.add(migration: MigrateExistingUsersToIndigo.self, database: .psql)
+    
+    migrations.add(migration: AddIndigoFieldsToShortcut.self, database: .psql)
 
     services.register(migrations)
 

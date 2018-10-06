@@ -23,6 +23,7 @@ final class Shortcut: Codable {
     var fileID: String
     var actionCount: Int
     var actionIdentifiers: [String]
+    var votes: Int
 
     var user: Parent<Shortcut, User> {
         return parent(\.userID)
@@ -34,7 +35,8 @@ final class Shortcut: Codable {
          filePath: String,
          fileID: String,
          actionCount: Int,
-         actionIdentifiers: [String])
+         actionIdentifiers: [String],
+         votes: Int = 0)
     {
         self.createdAt = Date()
         self.updatedAt = Date()
@@ -45,6 +47,7 @@ final class Shortcut: Codable {
         self.fileID = fileID
         self.actionCount = actionCount
         self.actionIdentifiers = actionIdentifiers
+        self.votes = votes
     }
 }
 
@@ -54,3 +57,19 @@ extension Shortcut: Migration { }
 extension Shortcut: Parameter { }
 
 extension Shortcut: OwnedByUser { }
+
+struct AddIndigoFieldsToShortcut: PostgreSQLMigration {
+    
+    static func prepare(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.field(for: \.votes, type: .int, .default(.literal(0)))
+        }
+    }
+    
+    static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.deleteField(for: \.votes)
+        }
+    }
+    
+}

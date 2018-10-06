@@ -100,6 +100,11 @@ extension VotingClient: Service { }
 struct VotingResponse: Codable {
     let id: UUID
     let rating: Int
+    
+    init(shortcut: Shortcut) throws {
+        self.id = try shortcut.requireID()
+        self.rating = shortcut.votes
+    }
 }
 
 extension VotingResponse: Content { }
