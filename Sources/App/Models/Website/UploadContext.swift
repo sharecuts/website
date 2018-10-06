@@ -9,11 +9,11 @@ import Foundation
 import Vapor
 
 struct UploadContext: Codable {
-    let user: User?
+    let user: User
     let firstName: String?
     
-    init(_ user: User?) {
+    init(_ user: User) {
         self.user = user
-        self.firstName = user?.firstName
+        self.firstName = user.firstName
     }
 }

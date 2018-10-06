@@ -7,7 +7,7 @@
 
     <p>Welcome! Login to manage your shortcuts.</p>
 
-    <p>Account creation is currently invitation-only, if you'd like to register to get invited in the future, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">please use this form</a>.</p>
+    <p>Account creation is currently closed, if you'd like to register to be invited in the future, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">please use this form</a>.</p>
 
     #if(isError) {
       <div class="error">Wrong username and/or password. Try again.</div>

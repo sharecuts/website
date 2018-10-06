@@ -15,14 +15,16 @@ final class ShortcutsController: RouteCollection {
 
     func boot(router: Router) throws {
         let tokenAuth = User.tokenAuthMiddleware()
+        let sessionAuth = User.authSessionsMiddleware()
         let guardAuth = User.guardAuthMiddleware()
         
         let shortcutsRoutes = router.grouped("api", "shortcuts")
         
-        let protected = shortcutsRoutes.grouped(tokenAuth, guardAuth)
+        let protectedByTokenOnly = shortcutsRoutes.grouped(tokenAuth, guardAuth)
+        let protectedBySessionAndToken = shortcutsRoutes.grouped(tokenAuth, sessionAuth, guardAuth)
 
-        protected.post("/", use: create)
-        protected.delete("/", Shortcut.parameter, use: delete)
+        protectedBySessionAndToken.post("/", use: create)
+        protectedByTokenOnly.delete("/", Shortcut.parameter, use: delete)
 
         shortcutsRoutes.get("latest", use: latest)
         shortcutsRoutes.get("/", Shortcut.parameter, use: details)
@@ -54,12 +56,12 @@ final class ShortcutsController: RouteCollection {
         }
     }
 
-    func create(_ req: Request) throws -> Future<ModifyShortcutResponse> {
+    func create(_ req: Request) throws -> Future<Response> {
         let user = try req.requireAuthenticated(User.self)
 
         let request = try req.content.decode(CreateShortcutRequest.self)
         
-        return request.flatMap(to: Shortcut.self) { requestData in
+        let shortcutCreation = request.flatMap(to: Shortcut.self) { requestData in
             let decoder = PropertyListDecoder()
             let shortcutFile = try decoder.decode(ShortcutFile.self, from: requestData.shortcut.data)
             
@@ -86,8 +88,18 @@ final class ShortcutsController: RouteCollection {
                 
                 return shortcut.save(on: req)
             }
-        }.map(to: ModifyShortcutResponse.self) { shortcut in
-            return ModifyShortcutResponse(id: shortcut.id)
+        }
+        
+        if req.isWebsiteRequest {
+            return shortcutCreation.map(to: Response.self) { _ in
+                return req.redirect(to: "/")
+            }
+        } else {
+            let apiResponse = shortcutCreation.map(to: ModifyShortcutResponse.self) { shortcut in
+                return ModifyShortcutResponse(id: shortcut.id)
+            }
+            
+            return apiResponse.map(to: Response.self, { try Response(contents: $0, in: req) })
         }
     }
 
@@ -177,3 +189,13 @@ struct ShortcutDetailsResponse: Codable {
 }
 
 extension ShortcutDetailsResponse: Content { }
+
+extension Request {
+    
+    var isWebsiteRequest: Bool {
+        let acceptedTypes = http.headers["accept"]
+        
+        return acceptedTypes.contains(where: { $0.lowercased().contains("text/html") })
+    }
+    
+}

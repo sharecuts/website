@@ -22,16 +22,27 @@ final class WebsiteController: RouteCollection {
     }
 
     func boot(router: Router) throws {
-        router.get(use: index)
-        router.get("download", String.parameter, use: download)
-        router.get("upload", use: upload)
-        router.get("about", use: about)
-        router.get("search", use: search)
+        let authSessionRoutes = router.grouped(User.authSessionsMiddleware())
         
-        let userRoutes = router.grouped("users")
+        authSessionRoutes.get(use: index)
+        authSessionRoutes.get("download", String.parameter, use: download)
+        authSessionRoutes.get("about", use: about)
+        authSessionRoutes.get("search", use: search)
+        
+        let redirect = RedirectMiddleware<User>(path: "/users/login")
+
+        let userRoutes = authSessionRoutes.grouped("users")
         
         userRoutes.get("login", use: loginForm)
         userRoutes.post(LoginRequest.self, at: "login", use: performLogin)
+        
+        let protectedUserRoutes = userRoutes.grouped(redirect)
+        
+        protectedUserRoutes.post("logout", use: logout)
+        
+        let protectedRoutes = authSessionRoutes.grouped(redirect)
+     
+        protectedRoutes.get("upload", use: upload)
     }
 
     func index(_ req: Request) throws -> Future<View> {
@@ -91,25 +102,11 @@ final class WebsiteController: RouteCollection {
     }
 
     func upload(_ req: Request) throws -> Future<View> {
-        let apiKey = try? req.query.get(String.self, at: ["apiKey"])
+        let user = try req.requireAuthenticated(User.self)
 
-        let userQuery = User.query(on: req).filter(\.apiKey, .equal, apiKey).first()
-
-        return userQuery.flatMap(to: View.self) { user in
-            var context: UploadContext
-
-            if (apiKey != nil && apiKey?.isEmpty != true) {
-                guard let user = user else {
-                    throw Abort(.forbidden)
-                }
-
-                context = UploadContext(user)
-            } else {
-                context = UploadContext(nil)
-            }
-
-            return try req.view().render("upload", context)
-        }
+        let context = UploadContext(user)
+        
+        return try req.view().render("upload", context)
     }
 
     func about(_ req: Request) throws -> Future<View> {
@@ -147,6 +144,12 @@ final class WebsiteController: RouteCollection {
             
             return req.redirect(to: "/")
         }
+    }
+    
+    func logout(_ req: Request) throws -> Response {
+        try req.unauthenticateSession(User.self)
+        
+        return req.redirect(to: "/")
     }
 
 }
