@@ -9,6 +9,10 @@
 
     <p>Account creation is currently invitation-only, if you'd like to register to get invited in the future, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">please use this form</a>.</p>
 
+    #if(isError) {
+      <div class="error">Wrong username and/or password. Try again.</div>
+    }
+
     <form id="upload" action="/users/login" method="post">
       <label><input type="text" name="username" placeholder="Username"></label>
       <label><input type="password" name="password" placeholder="Password"></label>

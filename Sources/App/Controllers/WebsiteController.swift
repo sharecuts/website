@@ -11,6 +11,7 @@ import Foundation
 import Vapor
 import FluentPostgreSQL
 import Leaf
+import Authentication
 
 final class WebsiteController: RouteCollection {
 
@@ -30,7 +31,7 @@ final class WebsiteController: RouteCollection {
         let userRoutes = router.grouped("users")
         
         userRoutes.get("login", use: loginForm)
-        userRoutes.post("login", use: performLogin)
+        userRoutes.post(LoginRequest.self, at: "login", use: performLogin)
     }
 
     func index(_ req: Request) throws -> Future<View> {
@@ -95,16 +96,16 @@ final class WebsiteController: RouteCollection {
         let userQuery = User.query(on: req).filter(\.apiKey, .equal, apiKey).first()
 
         return userQuery.flatMap(to: View.self) { user in
-            var context: UploadPageContext
+            var context: UploadContext
 
             if (apiKey != nil && apiKey?.isEmpty != true) {
                 guard let user = user else {
                     throw Abort(.forbidden)
                 }
 
-                context = UploadPageContext(user)
+                context = UploadContext(user)
             } else {
-                context = UploadPageContext(nil)
+                context = UploadContext(nil)
             }
 
             return try req.view().render("upload", context)
@@ -122,43 +123,30 @@ final class WebsiteController: RouteCollection {
     // MARK: - User routes
     
     func loginForm(_ req: Request) throws -> Future<View> {
-        return try req.view().render("users/login")
+        let hasError = req.query[Bool.self, at: "error"] != nil
+        
+        let context = LoginContext(error: hasError)
+        
+        return try req.view().render("users/login", context)
     }
     
-    func performLogin(_ req: Request) throws -> Future<View> {
-        return try req.view().render("users/login")
-    }
-
-}
-
-struct ShortcutCard: Codable {
-    let shortcut: Shortcut
-    let creator: User
-    let deepLink: String
-    let actionCountSuffix: String
-
-    init(_ shortcut: Shortcut, users: [User]) throws {
-        self.shortcut = shortcut
-
-        guard let user = users.first(where: { $0.id == shortcut.userID }) else {
-            throw Abort(.notFound)
+    func performLogin(_ req: Request, login: LoginRequest) throws -> Future<Response> {
+        let auth = User.authenticate(
+            username: login.username,
+            password: login.password,
+            using: BCryptDigest(),
+            on: req
+        )
+        
+        return auth.map(to: Response.self) { user in
+            guard let user = user else {
+                return req.redirect(to: "/users/login?error=1")
+            }
+            
+            try req.authenticateSession(user)
+            
+            return req.redirect(to: "/")
         }
-
-        self.creator = user
-
-        self.deepLink = try shortcut.generateDeepLinkURL().absoluteString
-        self.actionCountSuffix = shortcut.actionCount > 1 ? "actions" : "action"
     }
-}
 
-extension ShortcutCard: Content { }
-
-struct UploadPageContext: Codable {
-    let user: User?
-    let firstName: String?
-
-    init(_ user: User?) {
-        self.user = user
-        self.firstName = user?.firstName
-    }
 }

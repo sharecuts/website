@@ -119,6 +119,9 @@ extension User: TokenAuthenticatable {
     typealias TokenType = Token
 }
 
+extension User: PasswordAuthenticatable {}
+extension User: SessionAuthenticatable {}
+
 // MARK: - Migrations
 
 extension User: Migration {
