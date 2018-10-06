@@ -4,7 +4,7 @@ public func routes(_ router: Router, masterKey: String, downloadsBaseURL: URL) t
     let usersController = UsersController(masterKey: masterKey)
     try router.register(collection: usersController)
 
-    let shortcutsController = ShortcutsController()
+    let shortcutsController = ShortcutsController(masterKey: masterKey)
     try router.register(collection: shortcutsController)
 
     let websiteController = WebsiteController(downloadsBaseURL: downloadsBaseURL)

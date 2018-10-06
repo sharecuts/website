@@ -16,6 +16,8 @@ final class UsersController: RouteCollection {
     let masterKey: String
 
     init(masterKey: String) {
+        assert(!masterKey.isEmpty)
+
         self.masterKey = masterKey
     }
 

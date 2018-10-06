@@ -12,7 +12,15 @@ import Crypto
 import Authentication
 
 final class ShortcutsController: RouteCollection {
-
+    
+    let masterKey: String
+    
+    init(masterKey: String) {
+        assert(!masterKey.isEmpty)
+        
+        self.masterKey = masterKey
+    }
+    
     func boot(router: Router) throws {
         let tokenAuth = User.tokenAuthMiddleware()
         let sessionAuth = User.authSessionsMiddleware()
@@ -31,6 +39,8 @@ final class ShortcutsController: RouteCollection {
         
         shortcutsRoutes.put(Shortcut.parameter, "vote", use: vote)
         shortcutsRoutes.get(Shortcut.parameter, "votes", use: votes)
+        
+        shortcutsRoutes.patch(Shortcut.parameter, "tag", use: assignTag)
     }
 
     func latest(_ req: Request) throws -> Future<QueryShortcutsResponse> {
@@ -188,6 +198,40 @@ final class ShortcutsController: RouteCollection {
             return try client.getVotes(for: shortcut.requireID())
         }
     }
+    
+    // MARK: - Tags
+    
+    func assignTag(_ req: Request) throws -> Future<Shortcut> {
+        guard let masterKey = req.http.headers["X-ShortcutSharing-Master-Key"].first else {
+            throw Abort(.forbidden)
+        }
+        
+        let isAuthenticatedAsMaster = (masterKey == self.masterKey)
+        
+        guard isAuthenticatedAsMaster else {
+            throw Abort(.forbidden)
+        }
+        
+        let shortcut = try req.parameters.next(Shortcut.self)
+        
+        return shortcut.flatMap { shortcut in
+            let changeTagReq = try req.content.decode(ChangeTagRequest.self)
+            
+            return changeTagReq.flatMap(to: Shortcut.self) { changeTag in
+                let query = Tag.query(on: req).filter(\.slug, .equal, changeTag.tag).first()
+                
+                return query.flatMap(to: Shortcut.self) { tag in
+                    guard let tag = tag else {
+                        throw Abort(.notFound)
+                    }
+                    
+                    shortcut.tagID = try tag.requireID()
+                    
+                    return shortcut.save(on: req)
+                }
+            }
+        }
+    }
 
 }
 
@@ -252,6 +296,12 @@ struct ShortcutDetailsResponse: Codable {
 }
 
 extension ShortcutDetailsResponse: Content { }
+
+struct ChangeTagRequest: Codable {
+    let tag: String
+}
+
+extension ChangeTagRequest: Content { }
 
 extension Request {
     
