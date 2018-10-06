@@ -54,7 +54,7 @@ final class WebsiteController: RouteCollection {
 
             return userFutures.flatMap(to: View.self, on: req) { users in
                 let unwrappedUsers = users.compactMap({ $0 })
-                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers) })
+                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers, req: req) })
 
                 return try req.view().render("index", ["cards": cards])
             }
@@ -138,7 +138,7 @@ final class WebsiteController: RouteCollection {
             
             return userFutures.flatMap(to: View.self, on: req) { users in
                 let unwrappedUsers = users.compactMap({ $0 })
-                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers) })
+                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers, req: req) })
                 
                 return try req.view().render("search", ["cards": cards])
             }
@@ -160,7 +160,7 @@ final class WebsiteController: RouteCollection {
             let shortcuts = try user.shortcuts.query(on: req).all()
             
             return shortcuts.flatMap(to: View.self) { shortcuts in
-                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: [user]) })
+                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: [user], req: req) })
                 
                 let context = UserDetailsContext(user: user, cards: cards)
 

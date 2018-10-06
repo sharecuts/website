@@ -13,8 +13,9 @@ struct ShortcutCard: Codable {
     let creator: User
     let deepLink: String
     let actionCountSuffix: String
+    let voted: Bool
     
-    init(_ shortcut: Shortcut, users: [User]) throws {
+    init(_ shortcut: Shortcut, users: [User], req: Request) throws {
         self.shortcut = shortcut
         
         guard let user = users.first(where: { $0.id == shortcut.userID }) else {
@@ -25,6 +26,7 @@ struct ShortcutCard: Codable {
         
         self.deepLink = try shortcut.generateDeepLinkURL().absoluteString
         self.actionCountSuffix = shortcut.actionCount > 1 ? "actions" : "action"
+        self.voted = try shortcut.isInVotingCookie(with: req)
     }
 }
 

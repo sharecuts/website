@@ -130,6 +130,8 @@ final class ShortcutsController: RouteCollection {
         }
     }
     
+    // MARK: - Voting
+    
     private let useExternalServiceForVoting = false
     
     func vote(_ req: Request) throws -> Future<VotingResponse> {
@@ -140,11 +142,19 @@ final class ShortcutsController: RouteCollection {
         let shortcutParam = try req.parameters.next(Shortcut.self)
         
         return shortcutParam.flatMap { shortcut in
+            let voted = try shortcut.isInVotingCookie(with: req)
+            
+            guard !voted else {
+                throw Abort(.forbidden)
+            }
+
             let mutableShortcut = shortcut
             
             mutableShortcut.votes += 1
             
             return mutableShortcut.save(on: req).map(to: VotingResponse.self) { updatedShortcut in
+                try shortcut.addToVotingCookie(with: req)
+
                 return try VotingResponse(shortcut: updatedShortcut)
             }
         }
