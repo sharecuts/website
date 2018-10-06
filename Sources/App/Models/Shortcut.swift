@@ -52,3 +52,5 @@ extension Shortcut: PostgreSQLUUIDModel { }
 extension Shortcut: Content { }
 extension Shortcut: Migration { }
 extension Shortcut: Parameter { }
+
+extension Shortcut: OwnedByUser { }

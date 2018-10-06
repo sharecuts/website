@@ -10,6 +10,7 @@ import DotEnv
 
 struct B2Config {
 
+    let fake: Bool
     let infoPath: String
     let executablePath: String
     let bucketName: String
@@ -25,6 +26,7 @@ struct B2Config {
         let baseURLStr = env.get("B2_BUCKET_BASE_URL") ?? defaultUrl
         let url = URL(string: baseURLStr)!
 
+        self.fake = env.getAsInt("B2_FAKE") == 1
         self.infoPath = env.get("B2_INFO_PATH") ?? defaultInfoPath
         self.executablePath = path
         self.bucketName = env.get("B2_BUCKET_NAME") ?? defaultName

@@ -1,0 +1,23 @@
+#set("content") {
+
+  <article class="article">
+    <h1 class="mb-3 mb-lg-4">Login</h1>
+
+    <hr class="mb-4 mb-lg-5">
+
+    <p>Welcome! Login to manage your shortcuts.</p>
+
+    <p>Account creation is currently invitation-only, if you'd like to register to get invited in the future, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">please use this form</a>.</p>
+
+    <form id="upload" action="/users/login" method="post">
+      <label><input type="text" name="username" placeholder="Username"></label>
+      <label><input type="password" name="password" placeholder="Password"></label>
+      <button type="submit">Login</button>
+    </form>
+
+    <p><small>If you're having trouble logging in, please <a href="https://twitter.com/messages/compose?recipient_id=1016005669663764480" rel="external nofollow" target="_blank">contact us on Twitter</a>.</small></p>
+  </article>
+    
+}
+
+#embed("master")

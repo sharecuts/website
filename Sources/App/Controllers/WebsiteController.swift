@@ -26,6 +26,11 @@ final class WebsiteController: RouteCollection {
         router.get("upload", use: upload)
         router.get("about", use: about)
         router.get("search", use: search)
+        
+        let userRoutes = router.grouped("users")
+        
+        userRoutes.get("login", use: loginForm)
+        userRoutes.post("login", use: performLogin)
     }
 
     func index(_ req: Request) throws -> Future<View> {
@@ -79,7 +84,7 @@ final class WebsiteController: RouteCollection {
                     ("Content-Disposition", disposition)
                 ])
 
-                return req.makeResponse(http: HTTPResponse(status: status, headers: headers, body: data))
+                return req.response(http: HTTPResponse(status: status, headers: headers, body: data))
             }
         }
     }
@@ -112,6 +117,16 @@ final class WebsiteController: RouteCollection {
 
     func search(_ req: Request) throws -> Future<View> {
         return try req.view().render("search")
+    }
+    
+    // MARK: - User routes
+    
+    func loginForm(_ req: Request) throws -> Future<View> {
+        return try req.view().render("users/login")
+    }
+    
+    func performLogin(_ req: Request) throws -> Future<View> {
+        return try req.view().render("users/login")
     }
 
 }

@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "Auth",
+        "repositoryURL": "https://github.com/vapor/auth.git",
+        "state": {
+          "branch": null,
+          "revision": "90868627c7587ea207c0b6d4054265e68f6a33ef",
+          "version": "2.0.1"
+        }
+      },
+      {
         "package": "Console",
         "repositoryURL": "https://github.com/vapor/console.git",
         "state": {
@@ -15,8 +24,8 @@
         "repositoryURL": "https://github.com/vapor/core.git",
         "state": {
           "branch": null,
-          "revision": "eb876a758733166a4fb20f3f0a17b480c5ea563e",
-          "version": "3.4.3"
+          "revision": "96ce86ebf9198328795c4b9cb711489460be083c",
+          "version": "3.4.4"
         }
       },
       {
@@ -24,8 +33,8 @@
         "repositoryURL": "https://github.com/vapor/crypto.git",
         "state": {
           "branch": null,
-          "revision": "4b85405430df1892ee3aa1554bdb477e96cf46ad",
-          "version": "3.2.0"
+          "revision": "5605334590affd4785a5839806b4504407e054ac",
+          "version": "3.3.0"
         }
       },
       {
@@ -60,8 +69,8 @@
         "repositoryURL": "https://github.com/vapor/http.git",
         "state": {
           "branch": null,
-          "revision": "9e3eff9dfa4df7fc282bf27f801c72b3ffbfd984",
-          "version": "3.1.4"
+          "revision": "272b22be8cb3364e42a4701c2e0676e37480ec5a",
+          "version": "3.1.5"
         }
       },
       {

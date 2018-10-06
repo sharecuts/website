@@ -7,13 +7,13 @@ function Sharecuts() {
     }
     
     this.install = function(e) {
-        document.querySelector("a.card-shortcut").addEventListener("click", function(e){
+        $("a.card-shortcut").click(function(e){
             if (self.canOpenShortcutsDeepLinks()) return;
-            
+                
             e.preventDefault();
 
             alert("To download Shortcuts, open sharecuts.app on an iOS device with the Shortcuts app installed.");
-        }, false);
+        });
     }
 
 }

@@ -9,6 +9,7 @@ import Foundation
 import Vapor
 import FluentPostgreSQL
 import Crypto
+import Authentication
 
 final class User: Codable {
     var id: UUID?
@@ -107,6 +108,15 @@ extension User {
         return Public(id: id, name: name, username: username, url: url)
     }
 
+}
+
+extension User: BasicAuthenticatable {
+    static var usernameKey: WritableKeyPath<User, String> = \.username
+    static var passwordKey: WritableKeyPath<User, String> = \.password
+}
+
+extension User: TokenAuthenticatable {
+    typealias TokenType = Token
 }
 
 // MARK: - Migrations

@@ -9,16 +9,23 @@ import Foundation
 import Vapor
 import FluentPostgreSQL
 import Crypto
+import Authentication
 
 final class ShortcutsController: RouteCollection {
 
     func boot(router: Router) throws {
-        let shortcutsRoute = router.grouped("api", "shortcuts")
+        let tokenAuth = User.tokenAuthMiddleware()
+        let guardAuth = User.guardAuthMiddleware()
+        
+        let shortcutsRoutes = router.grouped("api", "shortcuts")
+        
+        let protected = shortcutsRoutes.grouped(tokenAuth, guardAuth)
 
-        shortcutsRoute.get("latest", use: latest)
-        shortcutsRoute.post("/", use: create)
-        shortcutsRoute.delete("/", Shortcut.parameter, use: delete)
-        shortcutsRoute.get("/", Shortcut.parameter, use: details)
+        protected.post("/", use: create)
+        protected.delete("/", Shortcut.parameter, use: delete)
+
+        shortcutsRoutes.get("latest", use: latest)
+        shortcutsRoutes.get("/", Shortcut.parameter, use: details)
     }
 
     func latest(_ req: Request) throws -> Future<QueryShortcutsResponse> {
@@ -48,51 +55,36 @@ final class ShortcutsController: RouteCollection {
     }
 
     func create(_ req: Request) throws -> Future<ModifyShortcutResponse> {
-        let queryKey = try? req.query.get(String.self, at: ["apiKey"])
+        let user = try req.requireAuthenticated(User.self)
 
-        guard let apiKey = req.http.headers["X-Shortcuts-Key"].first ?? queryKey else {
-            throw Abort(.forbidden)
-        }
-
-        #error("This doesn't work, must use BCrypt.verify, but how do we fetch the User then? 🤔")
-        let keyHash = try BCrypt.hash(apiKey)
-
-        let userQuery = User.query(on: req).filter(\.apiKey, .equal, keyHash).first()
-
-        return userQuery.flatMap(to: Shortcut.self) { user in
-            guard let userID = user?.id else {
-                throw Abort(.forbidden)
+        let request = try req.content.decode(CreateShortcutRequest.self)
+        
+        return request.flatMap(to: Shortcut.self) { requestData in
+            let decoder = PropertyListDecoder()
+            let shortcutFile = try decoder.decode(ShortcutFile.self, from: requestData.shortcut.data)
+            
+            guard shortcutFile.isValid else {
+                throw Abort(.badRequest)
             }
-
-            let request = try req.content.decode(CreateShortcutRequest.self)
-
-            return request.flatMap(to: Shortcut.self) { requestData in
-                let decoder = PropertyListDecoder()
-                let shortcutFile = try decoder.decode(ShortcutFile.self, from: requestData.shortcut.data)
-
-                guard shortcutFile.isValid else {
-                    throw Abort(.badRequest)
-                }
-
-                let upload = B2Client.shared.upload(on: req, file: requestData.shortcut, info: shortcutFile)
-
-                return upload.flatMap { result in
-                    let shortcut = Shortcut(
-                        userID: userID,
-                        title: requestData.title,
-                        summary: requestData.summary,
-                        filePath: result.fileName,
-                        fileID: result.fileId,
-                        actionCount: shortcutFile.actions.count,
-                        actionIdentifiers: shortcutFile.actions.map({ $0.identifier })
-                    )
-
-                    // Purge homepage cache
-                    let cfClient = try req.make(CloudFlareClient.self)
-                    cfClient.purgeCache(at: "/")
-
-                    return shortcut.save(on: req)
-                }
+            
+            let upload = B2Client.shared.upload(on: req, file: requestData.shortcut, info: shortcutFile)
+            
+            return upload.flatMap { result in
+                let shortcut = try Shortcut(
+                    userID: user.requireID(),
+                    title: requestData.title,
+                    summary: requestData.summary,
+                    filePath: result.fileName,
+                    fileID: result.fileId,
+                    actionCount: shortcutFile.actions.count,
+                    actionIdentifiers: shortcutFile.actions.map({ $0.identifier })
+                )
+                
+                // Purge homepage cache
+                let cfClient = try req.make(CloudFlareClient.self)
+                cfClient.purgeCache(at: "/")
+                
+                return shortcut.save(on: req)
             }
         }.map(to: ModifyShortcutResponse.self) { shortcut in
             return ModifyShortcutResponse(id: shortcut.id)
@@ -100,33 +92,17 @@ final class ShortcutsController: RouteCollection {
     }
 
     func delete(_ req: Request) throws -> Future<ModifyShortcutResponse> {
-        guard let apiKey = req.http.headers["X-Shortcuts-Key"].first else {
-            throw Abort(.forbidden)
-        }
+        let user = try req.requireAuthenticated(User.self)
 
-        #error("This doesn't work, must use BCrypt.verify, but how do we fetch the User then? 🤔")
-        let keyHash = try BCrypt.hash(apiKey)
-
-        let userQuery = User.query(on: req).filter(\.apiKey, .equal, keyHash).first()
-
-        return userQuery.flatMap(to: Shortcut.self) { user in
-            guard let userID = user?.id else {
-                throw Abort(.forbidden)
+        let shortcutParam = try req.parameters.next(Shortcut.self)
+        
+        return shortcutParam.flatMap(to: ModifyShortcutResponse.self) { shortcut in
+            guard try shortcut.isOwned(by: user) else {
+                throw Abort(.unauthorized)
             }
-
-            let shortcutParam = try req.parameters.next(Shortcut.self)
-
-            return shortcutParam.map { shortcut in
-                guard shortcut.userID == userID else {
-                    throw Abort(.forbidden)
-                }
-
-                return shortcut
-            }.thenIfErrorThrowing { _ in
-                throw Abort(.notFound)
-            }
-        }.flatMap(to: ModifyShortcutResponse.self) { shortcut in
+            
             let deleteFromBucket = B2Client.shared.delete(on: req, shortcut: shortcut)
+            
             return deleteFromBucket.flatMap { _ in
                 return shortcut.delete(on: req).map(to: ModifyShortcutResponse.self) {
                     // Purge homepage cache

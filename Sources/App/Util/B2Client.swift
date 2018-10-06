@@ -42,6 +42,13 @@ final class B2Client {
 
     func delete(on req: Request, shortcut: Shortcut) -> Future<B2DeleteResult> {
         let promise: EventLoopPromise<B2DeleteResult> = req.eventLoop.newPromise()
+        
+        if config?.fake == true {
+            let fakeResult = B2DeleteResult(action: "DELETE", fileId: "123", fileName: "123")
+            promise.succeed(result: fakeResult)
+
+            return promise.futureResult
+        }
 
         queue.async { [weak self] in
             guard let `self` = self else { return }
@@ -106,6 +113,14 @@ final class B2Client {
 
     func upload(on req: Request, file: File, info: ShortcutFile) -> Future<B2UploadResult> {
         let promise: EventLoopPromise<B2UploadResult> = req.eventLoop.newPromise()
+
+        if config?.fake == true {
+            let fakeResult = B2UploadResult(action: "CREATE", fileId: "123", fileName: "123", size: 600, uploadTimestamp: Int(Date().timeIntervalSince1970))
+            
+            promise.succeed(result: fakeResult)
+            
+            return promise.futureResult
+        }
 
         queue.async { [weak self] in
             guard let `self` = self else { return }

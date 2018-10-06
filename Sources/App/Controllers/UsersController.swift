@@ -9,6 +9,7 @@ import Foundation
 import Vapor
 import FluentPostgreSQL
 import Crypto
+import Authentication
 
 final class UsersController: RouteCollection {
 
@@ -19,10 +20,28 @@ final class UsersController: RouteCollection {
     }
 
     func boot(router: Router) throws {
+        // REST API authentication call
+        
         let usersRoute = router.grouped("api", "users")
+
+        let basicAuth = User.basicAuthMiddleware(using: BCryptDigest())
+        
+        let basicAuthRoute = usersRoute.grouped(basicAuth)
+        basicAuthRoute.post("authenticate", use: authenticate)
+        
+        // General API calls
+        
         usersRoute.post(User.CreateRequest.self, use: create)
         usersRoute.get(User.parameter, use: get)
         usersRoute.patch(User.parameter, use: update)
+    }
+    
+    func authenticate(_ req: Request) throws -> Future<Token> {
+        let user = try req.requireAuthenticated(User.self)
+        
+        let token = try Token.generate(for: user)
+        
+        return token.save(on: req)
     }
 
     func get(_ req: Request) throws -> Future<User.Public> {

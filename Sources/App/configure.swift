@@ -2,6 +2,7 @@ import FluentPostgreSQL
 import Vapor
 import DotEnv
 import Leaf
+import Authentication
 
 /// Called before your application initializes.
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
@@ -29,6 +30,8 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     try services.register(LeafProvider())
     config.prefer(LeafRenderer.self, for: ViewRenderer.self)
+    
+    try services.register(AuthenticationProvider())
 
     let databaseHost = env.get("DB_HOST") ?? "localhost"
     let databasePort = env.getAsInt("DB_PORT") ?? 5432
@@ -51,6 +54,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     migrations.add(model: Shortcut.self, database: .psql)
     migrations.add(model: User.self, database: .psql)
+    migrations.add(model: Token.self, database: .psql)
 
     migrations.add(migration: AddIndigoFieldsToUser.self, database: .psql)
     migrations.add(migration: MigrateExistingUsersToIndigo.self, database: .psql)
