@@ -1,0 +1,17 @@
+#set("content") {
+
+  <article class="article">
+    <h2 class="mb-3 mb-lg-4">Shortcuts by <a href="/users/#(user.username)">#(user.name) (@#(user.username))</a></h1>
+
+    <hr class="mb-4 mb-lg-5">
+
+    #if(cards) {
+      #embed("components/shortcuts")
+    } else {
+      <p>It looks like #(user.name) hasn't submitted any shortcuts yet.</p>
+    }
+  </article>
+    
+}
+
+#embed("master")

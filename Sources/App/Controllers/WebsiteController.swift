@@ -35,6 +35,7 @@ final class WebsiteController: RouteCollection {
         
         userRoutes.get("login", use: loginForm)
         userRoutes.post(LoginRequest.self, at: "login", use: performLogin)
+        userRoutes.get(String.parameter, use: userPage)
         
         let protectedUserRoutes = userRoutes.grouped(redirect)
         
@@ -145,6 +146,28 @@ final class WebsiteController: RouteCollection {
     }
     
     // MARK: - User routes
+    
+    func userPage(_ req: Request) throws -> Future<View> {
+        let usernameParam = try req.parameters.next(String.self)
+        
+        let userQuery = User.query(on: req).filter(\.username, .equal, usernameParam).first()
+        
+        return userQuery.flatMap { user in
+            guard let user = user else {
+                throw Abort(.notFound)
+            }
+            
+            let shortcuts = try user.shortcuts.query(on: req).all()
+            
+            return shortcuts.flatMap(to: View.self) { shortcuts in
+                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: [user]) })
+                
+                let context = UserDetailsContext(user: user, cards: cards)
+
+                return try req.view().render("users/details", context)
+            }
+        }
+    }
     
     func loginForm(_ req: Request) throws -> Future<View> {
         let hasError = req.query[Bool.self, at: "error"] != nil

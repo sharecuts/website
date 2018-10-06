@@ -28,6 +28,9 @@ final class ShortcutsController: RouteCollection {
 
         shortcutsRoutes.get("latest", use: latest)
         shortcutsRoutes.get("/", Shortcut.parameter, use: details)
+        
+        shortcutsRoutes.put(Shortcut.parameter, "vote", use: vote)
+        shortcutsRoutes.get(Shortcut.parameter, "votes", use: votes)
     }
 
     func latest(_ req: Request) throws -> Future<QueryShortcutsResponse> {
@@ -124,6 +127,26 @@ final class ShortcutsController: RouteCollection {
                     return ModifyShortcutResponse(id: shortcut.id)
                 }
             }
+        }
+    }
+    
+    func vote(_ req: Request) throws -> Future<VotingResponse> {
+        let shortcutParam = try req.parameters.next(Shortcut.self)
+
+        let client = try req.make(VotingClient.self)
+        
+        return shortcutParam.flatMap { shortcut in
+            return try client.vote(for: shortcut.requireID())
+        }
+    }
+    
+    func votes(_ req: Request) throws -> Future<VotingResponse> {
+        let shortcutParam = try req.parameters.next(Shortcut.self)
+        
+        let client = try req.make(VotingClient.self)
+        
+        return shortcutParam.flatMap { shortcut in
+            return try client.getVotes(for: shortcut.requireID())
         }
     }
 

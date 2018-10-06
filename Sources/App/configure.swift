@@ -68,4 +68,8 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
         let logger = try container.make(Logger.self)
         return CloudFlareClient(env: env, logger: logger)
     }
+    
+    services.register(VotingClient.self) { (container: Container) -> VotingClient in
+        return try VotingClient(container: container)
+    }
 }
