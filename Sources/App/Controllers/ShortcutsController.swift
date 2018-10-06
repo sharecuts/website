@@ -41,10 +41,15 @@ final class ShortcutsController: RouteCollection {
         shortcutsRoutes.get(Shortcut.parameter, "votes", use: votes)
         
         shortcutsRoutes.patch(Shortcut.parameter, "tag", use: assignTag)
+        
+        let tagsRoutes = router.grouped("api", "tags")
+        
+        tagsRoutes.get("", use: tags)
+        tagsRoutes.get(String.parameter, use: tag)
     }
 
     func latest(_ req: Request) throws -> Future<QueryShortcutsResponse> {
-        let query = Shortcut.query(on: req).range(0...30).sort(\.createdAt, .descending).all()
+        let query = Shortcut.query(on: req).range(0...50).sort(\.createdAt, .descending).all()
 
         return query.map(to: QueryShortcutsResponse.self) { shortcuts in
             return QueryShortcutsResponse(results: shortcuts)
@@ -201,6 +206,28 @@ final class ShortcutsController: RouteCollection {
     
     // MARK: - Tags
     
+    func tags(_ req: Request) throws -> Future<TagsResponse> {
+        return Tag.query(on: req).sort(\.name).all().map(to: TagsResponse.self) { tags in
+            return TagsResponse(results: tags)
+        }
+    }
+    
+    func tag(_ req: Request) throws -> Future<QueryShortcutsResponse> {
+        let tagSlug = try req.parameters.next(String.self)
+        
+        let tagQuery = Tag.query(on: req).filter(\.slug, .equal, tagSlug).first()
+        
+        return tagQuery.flatMap { tag in
+            guard let tag = tag else {
+                throw Abort(.notFound)
+            }
+            
+            return try tag.shortcuts.query(on: req).all().map(to: QueryShortcutsResponse.self) { shortcuts in
+                return QueryShortcutsResponse(results: shortcuts)
+            }
+        }
+    }
+    
     func assignTag(_ req: Request) throws -> Future<Shortcut> {
         guard let masterKey = req.http.headers["X-ShortcutSharing-Master-Key"].first else {
             throw Abort(.forbidden)
@@ -234,74 +261,6 @@ final class ShortcutsController: RouteCollection {
     }
 
 }
-
-struct CreateShortcutRequest: Codable {
-    let tagID: UUID
-    let title: String
-    let summary: String
-    let shortcut: File
-}
-
-extension CreateShortcutRequest: Content { }
-
-struct ModifyShortcutResponse: Codable {
-    let id: Shortcut.ID?
-    let error: Bool
-    let reason: String?
-
-    init(error: Bool = false, id: Shortcut.ID?, reason: String? = nil) {
-        self.error = error
-        self.reason = reason
-        self.id = id
-    }
-}
-
-extension ModifyShortcutResponse: Content { }
-
-struct QueryShortcutsResponse: Codable {
-    let count: Int
-    let results: [Shortcut]
-    let error: Bool
-    let reason: String?
-
-    init(results: [Shortcut]) {
-        self.results = results
-        self.count = results.count
-        self.error = false
-        self.reason = nil
-    }
-
-    init(errorReason: String) {
-        self.error = true
-        self.reason = errorReason
-        self.count = 0
-        self.results = []
-    }
-}
-
-extension QueryShortcutsResponse: Content { }
-
-struct ShortcutDetailsResponse: Codable {
-    let shortcut: Shortcut
-    let user: User.Public
-    let deepLink: URL
-    let download: URL
-
-    init(shortcut: Shortcut, user: User) throws {
-        self.shortcut = shortcut
-        self.user = user.publicView
-        self.deepLink = try shortcut.generateDeepLinkURL()
-        self.download = try shortcut.generateDownloadURL()
-    }
-}
-
-extension ShortcutDetailsResponse: Content { }
-
-struct ChangeTagRequest: Codable {
-    let tag: String
-}
-
-extension ChangeTagRequest: Content { }
 
 extension Request {
     
