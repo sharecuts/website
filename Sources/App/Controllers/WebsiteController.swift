@@ -112,9 +112,36 @@ final class WebsiteController: RouteCollection {
     func about(_ req: Request) throws -> Future<View> {
         return try req.view().render("about")
     }
+    
+    // MARK: - Search
 
     func search(_ req: Request) throws -> Future<View> {
-        return try req.view().render("search")
+        let searchTerm = req.query[String.self, at: "query"]
+        
+        guard let term = searchTerm else {
+            return try req.view().render("search")
+        }
+        
+        guard term.count > 3 else {
+            return try req.view().render("search", ["error": true])
+        }
+        
+        let query = Shortcut.query(on: req)
+            .filter(\.title, PostgreSQLBinaryOperator.ilike, "%\(term)%")
+            .range(0...100)
+            .sort(\.createdAt, .descending)
+            .all()
+        
+        return query.flatMap(to: View.self) { shortcuts in
+            let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
+            
+            return userFutures.flatMap(to: View.self, on: req) { users in
+                let unwrappedUsers = users.compactMap({ $0 })
+                let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers) })
+                
+                return try req.view().render("search", ["cards": cards])
+            }
+        }
     }
     
     // MARK: - User routes

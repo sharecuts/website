@@ -1,11 +1,22 @@
 #set("content") {
 
   <article class="article">
-    <h1 class="mb-3 mb-lg-4">Search Results</h1>
+    <h1 class="mb-3 mb-lg-4">Search</h1>
+
+    #if(error) {
+      <div class="error">That search term is too short.</div>
+    }
+
+    <form id="search" action="/search" method="get">
+    <label><input type="search" id="search-field" name="query" placeholder="Search for shortcuts"></label>
+    </form>
 
     <hr class="mb-4 mb-lg-5">
 
-    <p class="lead">Coming Soon...</p>
+    #if(cards) {
+      #embed("components/shortcuts")
+    }
+    
   </article>
 
 }
