@@ -8,5 +8,8 @@ public func app(_ env: Environment) throws -> Application {
     try configure(&config, &env, &services)
     let app = try Application(config: config, environment: env, services: services)
     try boot(app)
+    
+    try JobScheduleManager.initialize(with: app)
+
     return app
 }
