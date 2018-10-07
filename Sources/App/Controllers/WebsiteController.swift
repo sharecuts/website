@@ -214,7 +214,7 @@ final class WebsiteController: RouteCollection {
             
             try req.authenticateSession(user)
             
-            return req.redirect(to: "/")
+            return req.redirect(to: "/upload")
         }
     }
     
@@ -327,9 +327,7 @@ final class WebsiteController: RouteCollection {
                 
                 return pwnageVerification.flatMap(to: Response.self) { pwnageResult in
                     if case .pwned(let count) = pwnageResult {
-                        #warning("I couldn't figure out how to return HTML from here...")
-//                        let learnMoreLink = "<a href=\"/pwned\" target=\"_blank\">What's this?</a>"
-                        let learnMoreLink = ""
+                        let learnMoreLink = "<a href=\"/pwned\" target=\"_blank\">What's this?</a>"
                         return makeRedir(with: "Sorry, this password has been found on \(count) security incidents, you need to choose a secure one. \(learnMoreLink)")
                     }
                     
