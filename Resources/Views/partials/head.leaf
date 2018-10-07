@@ -46,4 +46,8 @@
   <meta name="twitter:card" content="A public repository of shortcuts for the Shortcuts app.">
   <meta name="twitter:site" content="@sharecutsapp">
   <meta name="twitter:creator" content="@_inside">
+
+  <!-- Feeds -->
+  <link type="application/json" rel="alternate" href="/feed.json" title="Sharecuts">
+  <link type="application/rss+xml" rel="alternate" href="/feed.xml" title="Sharecuts">
 </head>
