@@ -22,6 +22,9 @@ final class WebsiteController: RouteCollection {
     }
 
     func boot(router: Router) throws {
+        router.get("/feed.xml", use: feedRSS)
+        router.get("/feed.json", use: feedJSON)
+        
         let authSessionRoutes = router.grouped(User.authSessionsMiddleware())
         
         authSessionRoutes.get(use: index)
@@ -61,23 +64,27 @@ final class WebsiteController: RouteCollection {
             return NavigationContext(tags: tags, activeTag: tag)
         }
     }
+    
+    private func homeContext(with req: Request, count: Int = 50) -> Future<HomeContext> {
+        let query = Shortcut.query(on: req).range(0...count).sort(\.createdAt, .descending).all()
 
-    func index(_ req: Request) throws -> Future<View> {
-        let query = Shortcut.query(on: req).range(0...50).sort(\.createdAt, .descending).all()
-
-        return navigationContext(in: req).flatMap(to: View.self) { navContext in
-            return query.flatMap(to: View.self) { shortcuts in
+        return navigationContext(in: req).flatMap(to: HomeContext.self) { navContext in
+            return query.flatMap(to: HomeContext.self) { shortcuts in
                 let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
                 
-                return userFutures.flatMap(to: View.self, on: req) { users in
+                return userFutures.map(to: HomeContext.self, on: req) { users in
                     let unwrappedUsers = users.compactMap({ $0 })
                     let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers, req: req) })
                     
-                    let context = HomeContext(navigation: navContext, cards: cards)
-                    
-                    return try req.view().render("index", context)
+                    return HomeContext(navigation: navContext, cards: cards)
                 }
             }
+        }
+    }
+
+    func index(_ req: Request) throws -> Future<View> {
+        return homeContext(with: req).flatMap(to: View.self) { context in
+            return try req.view().render("index", context)
         }
     }
 
@@ -355,6 +362,24 @@ final class WebsiteController: RouteCollection {
     
     func pwned(_ req: Request) throws -> Future<View> {
         return try req.view().render("pwned");
+    }
+    
+    // MARK: - Feed
+    
+    func feedRSS(_ req: Request) throws -> Future<Response> {
+        return homeContext(with: req, count: 100).flatMap(to: Response.self) { context in
+            let view = try req.view().render("feed.xml", context)
+            
+            return view.map(to: Response.self) { view in
+                return req.response(view.data, as: .xml)
+            }
+        }
+    }
+    
+    func feedJSON(_ req: Request) throws -> Future<JSONFeed> {
+        return homeContext(with: req, count: 100).map(to: JSONFeed.self) { context in
+            return try JSONFeed(cards: context.cards)
+        }
     }
 
 }
