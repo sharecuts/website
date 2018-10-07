@@ -2,11 +2,37 @@
 
 **NOTE: the service is currently in beta, expect the API to change frequently at this early stage. We'll try to keep the documentation up to date as much as possible.**
 
-TIP: If you'd like to explore the API, you can use the [Paw](https://paw.cloud) project [available here](./Sharecuts_PUBLIC.paw). Configure the environments with your credentials and start making some API calls.
+TIP: If you'd like to explore the API, you can use the [Paw][1] project [available here][2]. Configure the environments with your credentials and start making some API calls.
 
-TIP 2: If you're writing a client in Swift, you can grab the models from the `Models` folder and parse them using `JSONDecoder` 😉 
+TIP 2: If you're writing a client in Swift, you can grab the models from the `Models/API` folder and parse them using `JSONDecoder` 😉 
 
 **The base URL for the API is `https://sharecuts.app/api`.**
+
+## Authentication
+
+All API calls listed here with a 🔐 next to their title require authentication.
+
+To authenticate a user with the api, make a `POST` request to `users/authenticate`. This request should have an HTTP basic auth header containing the username and password of the user to be authenticated. The response will be `200` if the authentication was successful or `401` if the user couldn’t be authenticated.
+
+**Request**
+
+`POST https://sharecuts.app/api/users/authenticate`
+
+**Request headers**
+
+`Authorization: Basic (base64-encoded username:password)`
+
+**Response**
+
+```json
+{
+  "id": "3F5CCA64-4702-489A-ABC3-4E4FA588B0BA",
+  "token": "<authentication token will be here>",
+  "userID": "B9C79A2E-D778-4D77-AE26-D2DCB47E6530"
+}
+```
+
+After getting the authentication token, all authenticated requests should include the `Authorization` header with Bearer authentication, using the token.
 
 ## Shortcuts
 
@@ -99,17 +125,13 @@ Returns details for the shortcut specified, including full user profile, downloa
 ---
 ---
 
-### Upload a shortcut 🔐 
+### Upload a shortcut 🔐
 
-Uploads a shortcut to the service. Uploading requires an user API Key which we're giving to a limited number of users at the moment.
+Uploads a shortcut to the service. Uploading requires an authenticated user with upload permissions.
 
 **Request**
 
 `POST https://sharecuts.app/api/shortcuts`
-
-**Request headers**
-
-`X-Shortcuts-Key`: The user's API Key. Alternatively, this can be sent in the query parameter `apiKey`.
 
 **Request body**
 
@@ -225,6 +247,64 @@ This means the api key is missing or invalid, or the shortcut doesn't belong to 
 
 This means the shortcut with the provided ID can't be found.
 
+### List tags
+
+**Request**
+
+`GET https://sharecuts.app/api/tags`
+
+**Response**
+
+```json
+{
+  "count": 8,
+  "results": [
+    {
+      "id": "11A8CEDA-8625-407B-A9D3-1088BF550FA8",
+      "slug": "developer",
+      "emoji": "📲",
+      "name": "Developer"
+    },
+    ...
+  ]
+}
+```
+
+### Shortcuts by tag
+
+**Request**
+
+`GET https://sharecuts.app/api/tags/[tag_slug]`
+
+Example:  `GET https://sharecuts.app/api/tags/developer`
+
+**Response**
+
+```json
+{
+  "count": 1,
+  "results": [
+    {
+      "id": "B37997A2-18A0-4B6F-8B26-009EC99A4979",
+      "updatedAt": "2018-07-08T18:18:01Z",
+      "userID": "B9C79A2E-D778-4D77-AE26-D2DCB47E6530",
+      "tagID": "11A8CEDA-8625-407B-A9D3-1088BF550FA8",
+      "actionIdentifiers": [
+        "is.workflow.actions.runsshscript"
+      ],
+      "title": "Respring",
+      "summary": "Restart Springboard on a jailbroken iOS device",
+      "filePath": "respring13E5526C-9713-42F3-9D9D-2F1CE25AAF38.shortcut",
+      "actionCount": 1,
+      "fileID": "4_z775fd4fd45c276586c490e1f_f103c07e9d312640f_d20180708_m181801_c001_v0001093_t0029",
+      "createdAt": "2018-07-08T18:18:01Z",
+      "votes": 4
+    }
+  ],
+  "error": false
+}
+```
+
 ---
 ---
 ---
@@ -273,3 +353,6 @@ This means the shortcut with the provided ID can't be found.
 #### **`404`**: Not Found
 
 This means a user can't be found with the ID provided.
+
+[1]:	https://paw.cloud
+[2]:	./Sharecuts_PUBLIC.paw
