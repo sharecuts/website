@@ -1,13 +1,13 @@
 #set("content") {
 
-  <article class="article">
+  <article class="article" id="search">
     <h1 class="mb-3 mb-lg-4">Search</h1>
 
     #if(error) {
       <div class="error">That search term is too short.</div>
     }
 
-    <form id="search" action="/search" method="get">
+    <form id="search-form" action="/search" method="get">
     <label><input type="search" id="search-field" name="query" placeholder="Search for shortcuts"></label>
     </form>
 

@@ -26,6 +26,10 @@ input:focus, textarea:focus {
 	outline:0;
 }
 
+article#search {
+	width:100%!important;
+}
+
 form button {
 	border:none;
 	padding:6px 10px;
