@@ -79,6 +79,10 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
         return try VotingClient(container: container)
     }
     
+    services.register(PwnageVerifier.self) { (container: Container) -> PwnageVerifier in
+        return try PwnageVerifier(container: container)
+    }
+    
     services.register(JobScheduler.self) { (container: Container) -> JobScheduler in
         return JobScheduler()
     }

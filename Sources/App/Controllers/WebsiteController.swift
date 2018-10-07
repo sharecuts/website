@@ -320,10 +320,20 @@ final class WebsiteController: RouteCollection {
                     return makeRedir(with: "Invalid API key")
                 }
                 
-                user.password = try BCrypt.hash(migrationRequest.password)
+                let verifier = try req.make(PwnageVerifier.self)
                 
-                return user.save(on: req).map(to: Response.self) { _ in
-                    return req.redirect(to: "/")
+                let pwnageVerification = verifier.verify(password: migrationRequest.password)
+                
+                return pwnageVerification.flatMap(to: Response.self) { pwnageResult in
+                    if case .pwned(let count) = pwnageResult {
+                        return makeRedir(with: "Sorry, this password has been found on \(count) security incidents, you need to choose a secure one.")
+                    }
+                    
+                    user.password = try BCrypt.hash(migrationRequest.password)
+                    
+                    return user.save(on: req).map(to: Response.self) { _ in
+                        return req.redirect(to: "/")
+                    }
                 }
             }
         }
