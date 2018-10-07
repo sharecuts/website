@@ -46,6 +46,7 @@ final class ShortcutsController: RouteCollection {
         
         tagsRoutes.get("", use: tags)
         tagsRoutes.get(String.parameter, use: tag)
+        tagsRoutes.get(String.parameter, "info", use: singleTag)
     }
 
     func latest(_ req: Request) throws -> Future<QueryShortcutsResponse> {
@@ -213,6 +214,18 @@ final class ShortcutsController: RouteCollection {
     func tags(_ req: Request) throws -> Future<TagsResponse> {
         return Tag.query(on: req).sort(\.name).all().map(to: TagsResponse.self) { tags in
             return TagsResponse(results: tags)
+        }
+    }
+    
+    func singleTag(_ req: Request) throws -> Future<Tag> {
+        let slug = try req.parameters.next(String.self)
+        
+        return Tag.query(on: req).filter(\.slug, .equal, slug).first().map { tag in
+            guard let tag = tag else {
+                throw Abort(.notFound)
+            }
+            
+            return tag
         }
     }
     
