@@ -12,6 +12,7 @@ struct ShortcutCard: Codable {
     let shortcut: Shortcut
     let creator: User
     let deepLink: String
+    let downloadLink: String
     let actionCountSuffix: String
     let voted: Bool
     
@@ -25,6 +26,7 @@ struct ShortcutCard: Codable {
         self.creator = user
         
         self.deepLink = try shortcut.generateDeepLinkURL().absoluteString
+        self.downloadLink = try shortcut.generateDownloadURL().absoluteString
         self.actionCountSuffix = shortcut.actionCount > 1 ? "actions" : "action"
         self.voted = try shortcut.isInVotingCookie(with: req)
     }

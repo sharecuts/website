@@ -10,8 +10,15 @@ function Sharecuts() {
         if (self.canOpenShortcutsDeepLinks()) return;
                 
         e.preventDefault();
+        e.stopPropagation();
 
-        alert("To download Shortcuts, open sharecuts.app on an iOS device with the Shortcuts app installed.");
+        var downloadURL = $(this).data("downloadurl");
+
+        if (window.location.href.indexOf("indigo") !== -1) {
+            downloadURL.replace("sharecuts.app", "indigo.sharecuts.app");
+        }
+
+        window.location.href = downloadURL;
     }
 
     this.likeShortcut = async function(e) {
