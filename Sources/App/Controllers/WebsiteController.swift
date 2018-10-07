@@ -33,6 +33,9 @@ final class WebsiteController: RouteCollection {
 
         let userRoutes = authSessionRoutes.grouped("users")
         
+        userRoutes.get("migrateToIndigo", use: migrateUserToIndigo)
+        userRoutes.post("migrateToIndigo", use: performUserMigrationToIndigo)
+
         userRoutes.get("login", use: loginForm)
         userRoutes.post(LoginRequest.self, at: "login", use: performLogin)
         userRoutes.get(String.parameter, use: userPage)
@@ -246,6 +249,81 @@ final class WebsiteController: RouteCollection {
                         
                         return try req.view().render("tag", context)
                     }
+                }
+            }
+        }
+    }
+    
+    // MARK: - User migration
+    
+    func migrateUserToIndigo(_ req: Request) throws -> Future<View> {
+        let specificError = req.query[String.self, at: "error"]
+
+        guard let key = req.query[String.self, at: "apiKey"] else {
+            let ctx = IndigoMigrationContext(error: "You need to provide your API key")
+            return try req.view().render("users/indigo", ctx)
+        }
+        
+        guard let username = req.query[String.self, at: "username"] else {
+            let ctx = IndigoMigrationContext(error: "You need to provide your username. It's the same one you use on Twitter.")
+            return try req.view().render("users/indigo", ctx)
+        }
+        
+        let userQuery = User.query(on: req).filter(\.username, .equal, username).first()
+        
+        return userQuery.flatMap(to: View.self) { user in
+            guard let user = user, let userKey = user.apiKey else {
+                let ctx = IndigoMigrationContext(error: "User not found.")
+                return try req.view().render("users/indigo", ctx)
+            }
+            
+            guard try BCrypt.verify(key, created: userKey) else {
+                let ctx = IndigoMigrationContext(error: "Invalid API key.")
+                return try req.view().render("users/indigo", ctx)
+            }
+            
+            let ctx = IndigoMigrationContext(user: user, apiKey: key, error: specificError)
+
+            return try req.view().render("users/indigo", ctx)
+        }
+    }
+    
+    func performUserMigrationToIndigo(_ req: Request) throws -> Future<Response> {
+        let reqFuture = try req.content.decode(IndigoMigrationRequest.self)
+        
+        return reqFuture.flatMap(to: Response.self) { migrationRequest in
+            let redirect = "/users/migrateToIndigo?username=\(migrationRequest.username)&apiKey=\(migrationRequest.apiKey)"
+            
+            func makeRedir(with error: String) -> EventLoopFuture<Response> {
+                return Future.map(on: req) {
+                    let encodedError = error.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "Fatal"
+                    return req.redirect(to: redirect + "&error=\(encodedError)")
+                }
+            }
+            
+            let userQuery = User.query(on: req).filter(\.username, .equal, migrationRequest.username).first()
+            
+            return userQuery.flatMap(to: Response.self) { user in
+                guard let user = user, let userKey = user.apiKey else {
+                    return makeRedir(with: "User not found")
+                }
+                
+                guard migrationRequest.password.count >= 8 else {
+                    return makeRedir(with: "Your password must be at least 8 characters long")
+                }
+                
+                guard migrationRequest.password == migrationRequest.password2 else {
+                    return makeRedir(with: "Password confirmation must match the password")
+                }
+                
+                guard try BCrypt.verify(migrationRequest.apiKey, created: userKey) else {
+                    return makeRedir(with: "Invalid API key")
+                }
+                
+                user.password = try BCrypt.hash(migrationRequest.password)
+                
+                return user.save(on: req).map(to: Response.self) { _ in
+                    return req.redirect(to: "/")
                 }
             }
         }
