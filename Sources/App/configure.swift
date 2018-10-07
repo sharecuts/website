@@ -64,6 +64,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(migration: MigrateExistingUsersToIndigo.self, database: .psql)
     
     migrations.add(migration: AddIndigoFieldsToShortcut.self, database: .psql)
+    migrations.add(migration: AddColorAndDownloadsToShortcut.self, database: .psql)
 
     migrations.add(migration: CreateDefaultTags.self, database: .psql)
     migrations.add(migration: AddTagToShortcut.self, database: .psql)

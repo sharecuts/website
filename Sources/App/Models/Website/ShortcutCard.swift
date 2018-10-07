@@ -15,6 +15,7 @@ struct ShortcutCard: Codable {
     let downloadLink: String
     let actionCountSuffix: String
     let voted: Bool
+    let colorName: String
     
     init(_ shortcut: Shortcut, users: [User], req: Request) throws {
         self.shortcut = shortcut
@@ -29,6 +30,7 @@ struct ShortcutCard: Codable {
         self.downloadLink = try shortcut.generateDownloadURL().absoluteString
         self.actionCountSuffix = shortcut.actionCount > 1 ? "actions" : "action"
         self.voted = try shortcut.isInVotingCookie(with: req)
+        self.colorName = shortcut.effectiveColor.name
     }
 }
 

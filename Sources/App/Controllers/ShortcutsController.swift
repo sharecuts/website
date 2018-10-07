@@ -99,7 +99,10 @@ final class ShortcutsController: RouteCollection {
                     filePath: result.fileName,
                     fileID: result.fileId,
                     actionCount: shortcutFile.actions.count,
-                    actionIdentifiers: shortcutFile.actions.map({ $0.identifier })
+                    actionIdentifiers: shortcutFile.actions.map({ $0.identifier }),
+                    votes: 0,
+                    downloads: 0,
+                    color: shortcutFile.icon.color
                 )
                 
                 // Purge homepage cache
@@ -114,6 +117,9 @@ final class ShortcutsController: RouteCollection {
             return shortcutCreation.map(to: Response.self) { _ in
                 return req.redirect(to: "/")
             }.thenIfErrorThrowing { error in
+                let logger = try req.make(Logger.self)
+                logger.error("Upload error: \(error)")
+                
                 let error = "Make sure you have entered all the information required, including the category.".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
                     
                 return req.redirect(to: "/upload?error=\(error)")

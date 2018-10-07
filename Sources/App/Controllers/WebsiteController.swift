@@ -100,24 +100,30 @@ final class WebsiteController: RouteCollection {
             let url = self.downloadsBaseURL.appendingPathComponent(shortcut.filePath)
 
             let download = B2Client.shared.fetchFileData(from: url, on: req)
-
-            return download.map(to: Response.self) { data in
+            
+            shortcut.downloads += 1
+            
+            let downloadFuture = download.flatMap(to: Response.self) { data in
                 guard let data = data else {
                     throw Abort(.notFound)
                 }
-
+                
                 let ext = WebsiteController.forceWorkflowExtension ? "wflow" : "shortcut"
-
+                
                 let disposition = "attachment; filename=\"\(shortcut.title).\(ext)\""
-
+                
                 let status = HTTPResponseStatus(statusCode: 200)
                 let headers = HTTPHeaders([
                     ("Content-Type","application/octet-stream"),
                     ("Content-Length", String(data.count)),
                     ("Content-Disposition", disposition)
-                ])
-
-                return req.response(http: HTTPResponse(status: status, headers: headers, body: data))
+                    ])
+                
+                return Future.map(on: req) { req.response(http: HTTPResponse(status: status, headers: headers, body: data)) }
+            }
+            
+            return map(to: Response.self, shortcut.save(on: req), downloadFuture) { _, download in
+                return download
             }
         }
     }
