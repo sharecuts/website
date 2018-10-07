@@ -15,7 +15,7 @@ function Sharecuts() {
         var downloadURL = $(this).data("downloadurl");
 
         if (window.location.href.indexOf("indigo") !== -1) {
-            downloadURL.replace("sharecuts.app", "indigo.sharecuts.app");
+            downloadURL = downloadURL.replace("sharecuts.app", "indigo.sharecuts.app");
         }
 
         window.location.href = downloadURL;
