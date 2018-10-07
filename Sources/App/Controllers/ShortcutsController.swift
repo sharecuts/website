@@ -104,6 +104,8 @@ final class ShortcutsController: RouteCollection {
 
             let upload = B2Client.shared.upload(on: req, file: requestData.shortcut, info: shortcutFile)
             
+            let finalColor = Color.validColorOrRandom(from: shortcutFile.icon.color)
+            
             return dupeCheck.flatMap(to: Shortcut.self) { hashMatch in
                 if hashMatch > 0 {
                     throw Abort(.conflict)
@@ -122,7 +124,7 @@ final class ShortcutsController: RouteCollection {
                         fileHash: calculatedHash,
                         votes: 0,
                         downloads: 0,
-                        color: shortcutFile.icon.color
+                        color: finalColor
                     )
                     
                     // Purge homepage cache

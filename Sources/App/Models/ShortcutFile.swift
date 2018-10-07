@@ -45,7 +45,7 @@ struct ShortcutIcon: Codable {
     }
 }
 
-enum Color: Int, Hashable, Equatable, Codable {
+enum Color: Int, Hashable, Equatable, Codable, CaseIterable {
     case gray = 0xA9A9A9FF
     case yellow = 0xFEC418FF
     case red = 0xFF4351FF
@@ -56,6 +56,14 @@ enum Color: Int, Hashable, Equatable, Codable {
     case pink = 0xED4694FF
     case lightBlue = 0x1B9AF7FF
     case darkGray = 255
+    
+    static func validColorOrRandom(from color: Int) -> Int {
+        if Color(rawValue: color) != nil {
+            return color
+        } else {
+            return Color.allCases.shuffled()[0].rawValue
+        }
+    }
 }
 
 extension Color {
