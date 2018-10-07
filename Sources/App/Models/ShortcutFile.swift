@@ -54,6 +54,8 @@ enum Color: Int, Hashable, Equatable, Codable {
     case purple = 0xDB49D8FF
     case orange = 0xFE9949FF
     case pink = 0xED4694FF
+    case lightBlue = 0x1B9AF7FF
+    case darkGray = 255
 }
 
 extension Color {
@@ -67,6 +69,8 @@ extension Color {
         case .purple: return "purple"
         case .orange: return "orange"
         case .pink: return "pink"
+        case .lightBlue: return "lightBlue"
+        case .darkGray: return "darkGray"
         }
     }
 }
