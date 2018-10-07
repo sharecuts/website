@@ -16,7 +16,7 @@
         <div class="error">#(error)</div>
       }
 
-      <form id="upload" action="/api/shortcuts" method="post" enctype="multipart/form-data">
+      <form id="upload" action="/shortcuts" method="post" enctype="multipart/form-data">
         <label><input type="text" name="title" placeholder="Title"></label>
         <label>
           <select name="tagID">

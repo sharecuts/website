@@ -29,6 +29,8 @@ final class Shortcut: Codable {
     var downloads: Int
     
     var color: Int
+    
+    var fileHash: String
 
     var user: Parent<Shortcut, User> {
         return parent(\.userID)
@@ -46,6 +48,7 @@ final class Shortcut: Codable {
          fileID: String,
          actionCount: Int,
          actionIdentifiers: [String],
+         fileHash: String,
          votes: Int = 0,
          downloads: Int = 0,
          color: Int = 0)
@@ -60,6 +63,7 @@ final class Shortcut: Codable {
         self.fileID = fileID
         self.actionCount = actionCount
         self.actionIdentifiers = actionIdentifiers
+        self.fileHash = fileHash
         self.votes = votes
         self.downloads = downloads
         self.color = color
@@ -124,6 +128,22 @@ struct AddColorAndDownloadsToShortcut: PostgreSQLMigration {
         return Database.update(Shortcut.self, on: conn) { builder in
             builder.deleteField(for: \.color)
             builder.deleteField(for: \.downloads)
+        }
+    }
+    
+}
+
+struct AddFileHashToShortcut: PostgreSQLMigration {
+    
+    static func prepare(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.field(for: \.fileHash, type: .char(32), .default(.literal("")))
+        }
+    }
+    
+    static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.deleteField(for: \.fileHash)
         }
     }
     
