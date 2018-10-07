@@ -33,6 +33,7 @@
   <!-- CSS - Common -->
   <!-- Todo: Add cache busting -->
   <link rel="stylesheet" media="all" href="/assets/css/common.css">
+  <link rel="stylesheet" media="all" href="/indigo.css">
 
   <!-- Open Graph -- http://ogp.me/ -->
   <meta property="og:site_name" content="Sharecuts">
@@ -43,6 +44,6 @@
 
   <!-- Twiiter -- https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html -->
   <meta name="twitter:card" content="A public repository of shortcuts for the Shortcuts app.">
-  <meta name="twitter:site" content="@sharecuts">
+  <meta name="twitter:site" content="@sharecutsapp">
   <meta name="twitter:creator" content="@_inside">
 </head>

@@ -1,0 +1,57 @@
+div.error {
+    padding:8px 10px;
+    margin:20px 0;
+    border-radius: 10px;
+    background-color:#FFDBD2;
+    color:#D00;
+    border:1px solid #FFADB5;
+	font-size:0.94em;
+}
+
+form label {
+	display:block;
+}
+
+input, textarea {
+	border:1px solid #ddd;
+	border-radius:4px;
+	font:inherit;
+	padding:3px 6px;
+	width:100%;
+	transition:border-color .3s;
+}
+
+input:focus, textarea:focus {
+	border-color:#363CEC;
+	outline:0;
+}
+
+form button {
+	border:none;
+	padding:6px 10px;
+	text-transform:uppercase;
+	background-color:#363CEC;
+	color:white;
+	cursor:pointer;
+	border-radius:6px;
+	transition:background-color .3s, box-shadow .3s, transform .3s;
+}
+
+form button:hover {
+	background-color:#113CEC;
+	box-shadow:0px 0px 6px #363CEC;
+	transform:scale(1.05);
+}
+
+div.card-author {
+	border-radius:4px;
+	padding:2px 4px;
+	margin:-2px -4px;
+	transition:transform .3s, background-color .3s, color .3s;
+}
+
+div.card-author:hover {
+	background-color:rgba(255,255,255,0.9);
+	color:#363CEC;
+	transform:scale(1.05);
+}

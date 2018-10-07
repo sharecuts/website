@@ -36,10 +36,20 @@ function Sharecuts() {
 
         ratingContainer.text(response.rating);
     }
+	
+	this.navigateToUser = function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+
+        let username = $(this).data("username");
+		
+		window.location.href = `/users/${username}`;
+	}
     
     this.install = function(e) {
         $("a.card-shortcut").click(self.downloadShortcut);
         $("button.btn-like").click(self.likeShortcut);
+        $(".card-author").click(self.navigateToUser);
     }
 
 }
