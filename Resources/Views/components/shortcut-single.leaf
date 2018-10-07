@@ -12,6 +12,8 @@
       .card-bg-green
       .card-bg-red
       .card-bg-orange
+      .card-bg-yellow
+      .card-bg-gray
 
       These are in CSS for easy reference, caching and easy updating.
 
