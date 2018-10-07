@@ -112,6 +112,10 @@ final class ShortcutsController: RouteCollection {
         if req.isWebsiteRequest {
             return shortcutCreation.map(to: Response.self) { _ in
                 return req.redirect(to: "/")
+            }.thenIfErrorThrowing { error in
+                let error = "Make sure you have entered all the information required, including the category.".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                    
+                return req.redirect(to: "/upload?error=\(error)")
             }
         } else {
             let apiResponse = shortcutCreation.map(to: ModifyShortcutResponse.self) { shortcut in

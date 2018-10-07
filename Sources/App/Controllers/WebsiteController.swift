@@ -124,10 +124,16 @@ final class WebsiteController: RouteCollection {
 
     func upload(_ req: Request) throws -> Future<View> {
         let user = try req.requireAuthenticated(User.self)
-
-        let context = UploadContext(user)
         
-        return try req.view().render("upload", context)
+        let tags = Tag.query(on: req).sort(\.name).all()
+        
+        let error = req.query[String.self, at: "error"]
+
+        return tags.flatMap(to: View.self) { tags in
+            let context = UploadContext(user, tags: tags, error: error)
+            
+            return try req.view().render("upload", context)
+        }
     }
 
     func about(_ req: Request) throws -> Future<View> {
