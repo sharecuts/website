@@ -1,0 +1,15 @@
+#set("content") {
+
+  <article class="article">
+    <h1 class="mb-3 mb-lg-4">About Pwned Passwords</h1>
+
+    <hr class="mb-4 mb-lg-5">
+
+    <p class="lead">Sharecuts uses the <a href="https://haveibeenpwned.com/Passwords" rel="external nofollow">Pwned Passwords API</a> to verify passwords used on the service and make sure they are not vulnerable
+    by having been exposed in previous security breaches. If your password was flagged, you should change it not only on Sharecuts but everywhere else
+    you may be using the same password.</p>
+  </article>
+
+}
+
+#embed("master")

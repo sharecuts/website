@@ -28,6 +28,7 @@ final class WebsiteController: RouteCollection {
         authSessionRoutes.get("download", String.parameter, use: download)
         authSessionRoutes.get("about", use: about)
         authSessionRoutes.get("search", use: search)
+        authSessionRoutes.get("pwned", use: pwned)
         
         let redirect = RedirectMiddleware<User>(path: "/users/login")
 
@@ -326,7 +327,10 @@ final class WebsiteController: RouteCollection {
                 
                 return pwnageVerification.flatMap(to: Response.self) { pwnageResult in
                     if case .pwned(let count) = pwnageResult {
-                        return makeRedir(with: "Sorry, this password has been found on \(count) security incidents, you need to choose a secure one.")
+                        #warning("I couldn't figure out how to return HTML from here...")
+//                        let learnMoreLink = "<a href=\"/pwned\" target=\"_blank\">What's this?</a>"
+                        let learnMoreLink = ""
+                        return makeRedir(with: "Sorry, this password has been found on \(count) security incidents, you need to choose a secure one. \(learnMoreLink)")
                     }
                     
                     user.password = try BCrypt.hash(migrationRequest.password)
@@ -337,6 +341,10 @@ final class WebsiteController: RouteCollection {
                 }
             }
         }
+    }
+    
+    func pwned(_ req: Request) throws -> Future<View> {
+        return try req.view().render("pwned");
     }
 
 }
