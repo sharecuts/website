@@ -119,7 +119,7 @@ $google-plus:               #dd4b39 !default;
 $enable-caret:              true !default;
 $enable-rounded:            true !default;
 $enable-shadows:            false !default;
-$enable-gradients:          false !default;
+$enable-gradients:          true !default;
 $enable-transitions:        true !default;
 $enable-hover-media-query:  false !default; // Deprecated, no longer affects any compiled CSS
 $enable-grid-classes:       true !default;
@@ -357,7 +357,7 @@ $table-caption-color:         $text-muted !default;
 // Shared variables that are reassigned to `$input-` and `$btn-` specific variables.
 
 $input-btn-padding-y:         .375rem !default;
-$input-btn-padding-x:         .75rem !default;
+$input-btn-padding-x:         1rem !default;
 $input-btn-line-height:       $line-height-base !default;
 
 $input-btn-focus-width:       .2rem !default;
@@ -365,11 +365,11 @@ $input-btn-focus-color:       rgba($component-active-bg, .25) !default;
 $input-btn-focus-box-shadow:  0 0 0 $input-btn-focus-width $input-btn-focus-color !default;
 
 $input-btn-padding-y-sm:      .25rem !default;
-$input-btn-padding-x-sm:      .5rem !default;
+$input-btn-padding-x-sm:      .75rem !default;
 $input-btn-line-height-sm:    $line-height-sm !default;
 
 $input-btn-padding-y-lg:      .5rem !default;
-$input-btn-padding-x-lg:      1rem !default;
+$input-btn-padding-x-lg:      1.5rem !default;
 $input-btn-line-height-lg:    $line-height-lg !default;
 
 $input-btn-border-width:      $border-width !default;
@@ -405,8 +405,8 @@ $btn-link-disabled-color:     $gray-600 !default;
 $btn-block-spacing-y:         .5rem !default;
 
 // Allows for customizing button radius independently from global border radius
-$btn-border-radius:           $border-radius !default;
-$btn-border-radius-lg:        $border-radius-lg !default;
+$btn-border-radius:           $border-radius-sm !default;
+$btn-border-radius-lg:        $border-radius-sm !default;
 $btn-border-radius-sm:        $border-radius-sm !default;
 
 $btn-transition:              color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !default;
@@ -436,8 +436,8 @@ $input-border-color:                    $gray-400 !default;
 $input-border-width:                    $input-btn-border-width !default;
 $input-box-shadow:                      inset 0 1px 1px rgba($black, .075) !default;
 
-$input-border-radius:                   $border-radius !default;
-$input-border-radius-lg:                $border-radius-lg !default;
+$input-border-radius:                   $border-radius-sm !default;
+$input-border-radius-lg:                $border-radius-sm !default;
 $input-border-radius-sm:                $border-radius-sm !default;
 
 $input-focus-bg:                        $input-bg !default;
@@ -834,13 +834,13 @@ $modal-transition:                  transform .3s ease-out !default;
 $alert-padding-y:                   .75rem !default;
 $alert-padding-x:                   1.25rem !default;
 $alert-margin-bottom:               1rem !default;
-$alert-border-radius:               $border-radius !default;
+$alert-border-radius:               $border-radius-sm !default;
 $alert-link-font-weight:            $font-weight-bold !default;
 $alert-border-width:                $border-width !default;
 
-$alert-bg-level:                    -10 !default;
-$alert-border-level:                -9 !default;
-$alert-color-level:                 6 !default;
+$alert-bg-level:                    0 !default;
+$alert-border-level:                0 !default;
+$alert-color-level:                 -12 !default;
 
 
 // Progress bars

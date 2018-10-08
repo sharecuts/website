@@ -40,7 +40,7 @@
           </div>
         </div>
         <div class="card-like align-self-end ml-auto">
-          <button type="button" class="btn btn-link btn-sm btn-like py-2 pr-0 font-weight-medium" data-shortcut="#(card.shortcut.id)" title="Like This Sharecut"#if(card.voted) { disabled }>
+          <button type="button" class="btn btn-link btn-sm btn-like py-2 pr-0 font-weight-medium" data-shortcut="#(card.shortcut.id)" title="Like This Shortcut"#if(card.voted) { disabled }>
             <span class="card-like-icon emoji">👌</span> <span class="card-like-label">#(card.shortcut.votes)</span>
           </button>
         </div>

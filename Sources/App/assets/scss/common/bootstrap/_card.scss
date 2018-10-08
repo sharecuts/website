@@ -196,17 +196,6 @@
     padding: 0;
   }
 
-  //  Shortcut Information
-  .card-info {
-    opacity: .8;
-    transition: opacity .4s ease-in-out;
-
-    .card:hover &,
-    .card:focus & {
-      opacity: 1;
-    }
-  }
-
   &:focus,
   &:focus:hover,
   &:active,
@@ -268,5 +257,26 @@
       transition: all .4s ease-in-out;
       transition-delay: .5s;
     }
+  }
+}
+
+.card-info {
+  opacity: .8;
+  transition: opacity .25s ease-in-out;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.card-author {
+  margin: -2px -6px;
+  padding: 2px 6px;
+  border-radius: .25rem;
+  transition: background .25s ease-in-out;
+
+  &:hover {
+    background: rgba($black, .4);
+    color: $white;
   }
 }

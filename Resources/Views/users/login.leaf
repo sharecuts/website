@@ -5,21 +5,30 @@
 
     <hr class="mb-4 mb-lg-5">
 
-    <p>Welcome! Login to manage your shortcuts.</p>
+    <p class="lead">Welcome! Login to manage your shortcuts.</p>
 
     <p>Account creation is currently closed, if you'd like to register to be invited in the future, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">please use this form</a>.</p>
 
     #if(isError) {
-      <div class="error">Wrong username and/or password. Try again.</div>
+      <div class="alert alert-danger">Wrong username and/or password. Please try again.</div>
     }
 
-    <form id="upload" action="/users/login" method="post">
-      <label><input type="text" name="username" placeholder="Username"></label>
-      <label><input type="password" name="password" placeholder="Password"></label>
-      <button type="submit">Login</button>
+    <form id="upload" action="/users/login" method="post" style="max-width: 360px;">
+      <div class="form-group">
+        <label class="sr-only">Username</label>
+        <input class="form-control" type="text" name="username" placeholder="Username">
+      </div>
+      <div class="form-group">
+        <label class="sr-only">Password</label>
+        <input class="form-control" type="password" name="password" placeholder="Password">
+      </div>
+      
+      <p>
+        <button class="btn btn-primary btn-lg" type="submit">Login</button>
+      </p>
     </form>
 
-    <p><small>If you're having trouble logging in, please <a href="https://twitter.com/messages/compose?recipient_id=1016005669663764480" rel="external nofollow" target="_blank">contact us on Twitter</a>.</small></p>
+    <p><small>If you're having trouble logging in, please <a href="https://twitter.com/messages/compose?recipient_id=1016005669663764480" rel="external nofollow" target="_blank">Contact Us on Twitter</a>.</small></p>
   </article>
     
 }

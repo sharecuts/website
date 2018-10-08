@@ -1,7 +1,7 @@
 #set("content") {
 
-  <article class="article">
-    <h2 class="mb-3 mb-lg-4">Shortcuts by <a href="/users/#(user.username)">#(user.name) (@#(user.username))</a></h1>
+  <article class="article article--full-width">
+    <h2 class="mb-3 mb-lg-4">Shortcuts by <a href="/users/#(user.username)">#(user.name) <small class="text-black-50">@#(user.username)</small></a></h1>
 
     <hr class="mb-4 mb-lg-5">
 
