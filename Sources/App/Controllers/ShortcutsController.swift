@@ -143,7 +143,7 @@ final class ShortcutsController: RouteCollection {
                 let logger = try req.make(Logger.self)
                 logger.error("Upload error: \(error)")
                 
-                let error = "Make sure you have entered all the information required, including the category.".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                let error = "Make sure you have entered all the information required, including the category. Also make sure the same shortcut hasn't been uploaded before.".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
                     
                 return req.redirect(to: "/upload?error=\(error)")
             }
