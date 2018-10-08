@@ -16,6 +16,14 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
 
     /// Register providers first
     try services.register(FluentPostgreSQLProvider())
+    
+    services.register { container -> NIOServerConfig in
+        var def = NIOServerConfig.default()
+        
+        def.maxBodySize = 5_000_000
+        
+        return def
+    }
 
     /// Register routes to the router
     let router = EngineRouter.default()
