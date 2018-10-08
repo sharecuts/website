@@ -1,4 +1,8 @@
 #set("content") {
+  <h1 class="sr-only">
+    <span class="emoji">👌</span> Find Cool Shortcuts
+  </h1>
+
 	#embed("components/shortcuts")
 }
 

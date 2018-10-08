@@ -48,6 +48,8 @@ body {
 }
 
 .section {
+  width: 100%;
+
   // This pads layout for iPhone X
   padding-left: env(safe-area-inset-left);
   padding-right: env(safe-area-inset-right);
