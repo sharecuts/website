@@ -22,6 +22,9 @@ final class WebsiteController: RouteCollection {
     }
 
     func boot(router: Router) throws {
+        router.get("/feed.xml", use: feedRSS)
+        router.get("/feed.json", use: feedJSON)
+        
         let authSessionRoutes = router.grouped(User.authSessionsMiddleware())
         
         authSessionRoutes.get(use: index)
@@ -61,23 +64,27 @@ final class WebsiteController: RouteCollection {
             return NavigationContext(tags: tags, activeTag: tag)
         }
     }
+    
+    private func homeContext(with req: Request, count: Int = 50) -> Future<HomeContext> {
+        let query = Shortcut.query(on: req).range(0...count).sort(\.createdAt, .descending).all()
 
-    func index(_ req: Request) throws -> Future<View> {
-        let query = Shortcut.query(on: req).range(0...50).sort(\.createdAt, .descending).all()
-
-        return navigationContext(in: req).flatMap(to: View.self) { navContext in
-            return query.flatMap(to: View.self) { shortcuts in
+        return navigationContext(in: req).flatMap(to: HomeContext.self) { navContext in
+            return query.flatMap(to: HomeContext.self) { shortcuts in
                 let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
                 
-                return userFutures.flatMap(to: View.self, on: req) { users in
+                return userFutures.map(to: HomeContext.self, on: req) { users in
                     let unwrappedUsers = users.compactMap({ $0 })
                     let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers, req: req) })
                     
-                    let context = HomeContext(navigation: navContext, cards: cards)
-                    
-                    return try req.view().render("index", context)
+                    return HomeContext(navigation: navContext, cards: cards)
                 }
             }
+        }
+    }
+
+    func index(_ req: Request) throws -> Future<View> {
+        return homeContext(with: req).flatMap(to: View.self) { context in
+            return try req.view().render("index", context)
         }
     }
 
@@ -100,34 +107,46 @@ final class WebsiteController: RouteCollection {
             let url = self.downloadsBaseURL.appendingPathComponent(shortcut.filePath)
 
             let download = B2Client.shared.fetchFileData(from: url, on: req)
-
-            return download.map(to: Response.self) { data in
+            
+            shortcut.downloads += 1
+            
+            let downloadFuture = download.flatMap(to: Response.self) { data in
                 guard let data = data else {
                     throw Abort(.notFound)
                 }
-
+                
                 let ext = WebsiteController.forceWorkflowExtension ? "wflow" : "shortcut"
-
+                
                 let disposition = "attachment; filename=\"\(shortcut.title).\(ext)\""
-
+                
                 let status = HTTPResponseStatus(statusCode: 200)
                 let headers = HTTPHeaders([
                     ("Content-Type","application/octet-stream"),
                     ("Content-Length", String(data.count)),
                     ("Content-Disposition", disposition)
-                ])
-
-                return req.response(http: HTTPResponse(status: status, headers: headers, body: data))
+                    ])
+                
+                return Future.map(on: req) { req.response(http: HTTPResponse(status: status, headers: headers, body: data)) }
+            }
+            
+            return map(to: Response.self, shortcut.save(on: req), downloadFuture) { _, download in
+                return download
             }
         }
     }
 
     func upload(_ req: Request) throws -> Future<View> {
         let user = try req.requireAuthenticated(User.self)
-
-        let context = UploadContext(user)
         
-        return try req.view().render("upload", context)
+        let tags = Tag.query(on: req).sort(\.name).all()
+        
+        let error = req.query[String.self, at: "error"]
+
+        return tags.flatMap(to: View.self) { tags in
+            let context = UploadContext(user, tags: tags, error: error)
+            
+            return try req.view().render("upload", context)
+        }
     }
 
     func about(_ req: Request) throws -> Future<View> {
@@ -214,7 +233,7 @@ final class WebsiteController: RouteCollection {
             
             try req.authenticateSession(user)
             
-            return req.redirect(to: "/")
+            return req.redirect(to: "/upload")
         }
     }
     
@@ -327,9 +346,7 @@ final class WebsiteController: RouteCollection {
                 
                 return pwnageVerification.flatMap(to: Response.self) { pwnageResult in
                     if case .pwned(let count) = pwnageResult {
-                        #warning("I couldn't figure out how to return HTML from here...")
-//                        let learnMoreLink = "<a href=\"/pwned\" target=\"_blank\">What's this?</a>"
-                        let learnMoreLink = ""
+                        let learnMoreLink = "<a href=\"/pwned\" target=\"_blank\">What's this?</a>"
                         return makeRedir(with: "Sorry, this password has been found on \(count) security incidents, you need to choose a secure one. \(learnMoreLink)")
                     }
                     
@@ -345,6 +362,24 @@ final class WebsiteController: RouteCollection {
     
     func pwned(_ req: Request) throws -> Future<View> {
         return try req.view().render("pwned");
+    }
+    
+    // MARK: - Feed
+    
+    func feedRSS(_ req: Request) throws -> Future<Response> {
+        return homeContext(with: req, count: 100).flatMap(to: Response.self) { context in
+            let view = try req.view().render("feed.xml", context)
+            
+            return view.map(to: Response.self) { view in
+                return req.response(view.data, as: .xml)
+            }
+        }
+    }
+    
+    func feedJSON(_ req: Request) throws -> Future<JSONFeed> {
+        return homeContext(with: req, count: 100).map(to: JSONFeed.self) { context in
+            return try JSONFeed(cards: context.cards)
+        }
     }
 
 }

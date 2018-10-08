@@ -26,13 +26,22 @@ final class ShortcutsController: RouteCollection {
         let sessionAuth = User.authSessionsMiddleware()
         let guardAuth = User.guardAuthMiddleware()
         
+        // Website
+        
+        let websiteRoutes = router.grouped("shortcuts")
+        
+        let protectedBySession = websiteRoutes.grouped(sessionAuth, guardAuth)
+        
+        protectedBySession.post("/", use: create)
+        
+        // API
+        
         let shortcutsRoutes = router.grouped("api", "shortcuts")
         
-        let protectedByTokenOnly = shortcutsRoutes.grouped(tokenAuth, guardAuth)
-        let protectedBySessionAndToken = shortcutsRoutes.grouped(tokenAuth, sessionAuth, guardAuth)
+        let protectedByToken = shortcutsRoutes.grouped(tokenAuth, guardAuth)
 
-        protectedBySessionAndToken.post("/", use: create)
-        protectedByTokenOnly.delete("/", Shortcut.parameter, use: delete)
+        protectedByToken.post("/", use: create)
+        protectedByToken.delete("/", Shortcut.parameter, use: delete)
 
         shortcutsRoutes.get("latest", use: latest)
         shortcutsRoutes.get("/", Shortcut.parameter, use: details)
@@ -46,6 +55,7 @@ final class ShortcutsController: RouteCollection {
         
         tagsRoutes.get("", use: tags)
         tagsRoutes.get(String.parameter, use: tag)
+        tagsRoutes.get(String.parameter, "info", use: singleTag)
     }
 
     func latest(_ req: Request) throws -> Future<QueryShortcutsResponse> {
@@ -80,38 +90,62 @@ final class ShortcutsController: RouteCollection {
         let request = try req.content.decode(CreateShortcutRequest.self)
         
         let shortcutCreation = request.flatMap(to: Shortcut.self) { requestData in
+            let fileData = requestData.shortcut.data
             let decoder = PropertyListDecoder()
-            let shortcutFile = try decoder.decode(ShortcutFile.self, from: requestData.shortcut.data)
+            let shortcutFile = try decoder.decode(ShortcutFile.self, from: fileData)
+            
+            let calculatedHash = try Digest(algorithm: .md5).hash(fileData).hexEncodedString()
             
             guard shortcutFile.isValid else {
                 throw Abort(.badRequest)
             }
             
+            let dupeCheck = Shortcut.query(on: req).filter(\.fileHash, .equal, calculatedHash).count()
+
             let upload = B2Client.shared.upload(on: req, file: requestData.shortcut, info: shortcutFile)
             
-            return upload.flatMap { result in
-                let shortcut = try Shortcut(
-                    userID: user.requireID(),
-                    tagID: requestData.tagID,
-                    title: requestData.title,
-                    summary: requestData.summary,
-                    filePath: result.fileName,
-                    fileID: result.fileId,
-                    actionCount: shortcutFile.actions.count,
-                    actionIdentifiers: shortcutFile.actions.map({ $0.identifier })
-                )
+            let finalColor = Color.validColorOrRandom(from: shortcutFile.icon.color)
+            
+            return dupeCheck.flatMap(to: Shortcut.self) { hashMatch in
+                if hashMatch > 0 {
+                    throw Abort(.conflict)
+                }
                 
-                // Purge homepage cache
-                let cfClient = try req.make(CloudFlareClient.self)
-                cfClient.purgeCache(at: "/")
-                
-                return shortcut.save(on: req)
+                return upload.flatMap { result in
+                    let shortcut = try Shortcut(
+                        userID: user.requireID(),
+                        tagID: requestData.tagID,
+                        title: requestData.title,
+                        summary: requestData.summary,
+                        filePath: result.fileName,
+                        fileID: result.fileId,
+                        actionCount: shortcutFile.actions.count,
+                        actionIdentifiers: shortcutFile.actions.map({ $0.identifier }),
+                        fileHash: calculatedHash,
+                        votes: 0,
+                        downloads: 0,
+                        color: finalColor
+                    )
+                    
+                    // Purge homepage cache
+                    let cfClient = try req.make(CloudFlareClient.self)
+                    cfClient.purgeCache(at: "/")
+                    
+                    return shortcut.save(on: req)
+                }
             }
         }
         
         if req.isWebsiteRequest {
             return shortcutCreation.map(to: Response.self) { _ in
                 return req.redirect(to: "/")
+            }.thenIfErrorThrowing { error in
+                let logger = try req.make(Logger.self)
+                logger.error("Upload error: \(error)")
+                
+                let error = "Make sure you have entered all the information required, including the category.".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                    
+                return req.redirect(to: "/upload?error=\(error)")
             }
         } else {
             let apiResponse = shortcutCreation.map(to: ModifyShortcutResponse.self) { shortcut in
@@ -209,6 +243,18 @@ final class ShortcutsController: RouteCollection {
     func tags(_ req: Request) throws -> Future<TagsResponse> {
         return Tag.query(on: req).sort(\.name).all().map(to: TagsResponse.self) { tags in
             return TagsResponse(results: tags)
+        }
+    }
+    
+    func singleTag(_ req: Request) throws -> Future<Tag> {
+        let slug = try req.parameters.next(String.self)
+        
+        return Tag.query(on: req).filter(\.slug, .equal, slug).first().map { tag in
+            guard let tag = tag else {
+                throw Abort(.notFound)
+            }
+            
+            return tag
         }
     }
     

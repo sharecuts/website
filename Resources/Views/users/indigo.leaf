@@ -9,7 +9,7 @@
         <h2>Welcome #(user.name)!</h2>
 
         #if(error) {
-            <div class="error">#raw() { error }</div>
+            <div class="error">#get(error)</div>
         } else {
             <p>You've been one of the first people to be able to upload shortcuts to Sharecuts.app, congratulations!</p>
 

@@ -12,8 +12,20 @@
       please be careful about personal data such as logins or API keys in shortcuts, check your shortcuts for
       personal information before uploading.</p>
 
-      <form id="upload" action="/api/shortcuts?apiKey=#(user.apiKey)" method="post" enctype="multipart/form-data">
+      #if(error) {
+        <div class="error">#(error)</div>
+      }
+
+      <form id="upload" action="/shortcuts" method="post" enctype="multipart/form-data">
         <label><input type="text" name="title" placeholder="Title"></label>
+        <label>
+          <select name="tagID">
+            <option value="" selected="selected">Select a category</option>
+            #for(tag in tags) {
+              <option value="#(tag.id)">#(tag.emoji) #(tag.name)</option>
+            }
+          </select>
+        </label>
         <label><input type="text" name="summary" placeholder="Description"></label>
         <label><input type="file" name="shortcut" placeholder="Upload your .shortcut file"></label>
         <button type="submit">Upload</button>

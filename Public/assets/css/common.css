@@ -2022,6 +2022,18 @@ input[type="button"].btn-block {
 .card-bg-orange {
   background: linear-gradient(to bottom right, #ff7e1d, #dd1648); }
 
+.card-bg-yellow {
+  background: linear-gradient(to bottom right, #E48300, #F1BF00); }
+
+.card-bg-gray {
+  background: linear-gradient(to bottom right, #A3A39A, #7D7A69); }
+
+.card-bg-darkGray {
+  background: linear-gradient(to bottom right, #818289, #525558); }
+  
+.card-bg-lightBlue {
+  background: linear-gradient(to bottom right, #61B3F5, #0078DF); }
+
 .card-wrapper {
   width: 50%; }
   @media (min-width: 768px) {

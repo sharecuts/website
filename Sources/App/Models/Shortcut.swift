@@ -24,7 +24,13 @@ final class Shortcut: Codable {
     var fileID: String
     var actionCount: Int
     var actionIdentifiers: [String]
+    
     var votes: Int
+    var downloads: Int
+    
+    var color: Int
+    
+    var fileHash: String
 
     var user: Parent<Shortcut, User> {
         return parent(\.userID)
@@ -42,7 +48,10 @@ final class Shortcut: Codable {
          fileID: String,
          actionCount: Int,
          actionIdentifiers: [String],
-         votes: Int = 0)
+         fileHash: String,
+         votes: Int = 0,
+         downloads: Int = 0,
+         color: Int = 0)
     {
         self.createdAt = Date()
         self.updatedAt = Date()
@@ -54,7 +63,10 @@ final class Shortcut: Codable {
         self.fileID = fileID
         self.actionCount = actionCount
         self.actionIdentifiers = actionIdentifiers
+        self.fileHash = fileHash
         self.votes = votes
+        self.downloads = downloads
+        self.color = color
     }
 }
 
@@ -64,6 +76,12 @@ extension Shortcut: Migration { }
 extension Shortcut: Parameter { }
 
 extension Shortcut: OwnedByUser { }
+
+extension Shortcut {
+    var effectiveColor: Color {
+        return Color(rawValue: color) ?? .gray
+    }
+}
 
 struct AddIndigoFieldsToShortcut: PostgreSQLMigration {
     
@@ -92,6 +110,40 @@ struct AddTagToShortcut: PostgreSQLMigration {
     static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
         return Database.update(Shortcut.self, on: conn) { builder in
             builder.deleteField(for: \.tagID)
+        }
+    }
+    
+}
+
+struct AddColorAndDownloadsToShortcut: PostgreSQLMigration {
+    
+    static func prepare(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.field(for: \.color, type: .bigint, .default(.literal(0)))
+            builder.field(for: \.downloads, type: .bigint, .default(.literal(0)))
+        }
+    }
+    
+    static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.deleteField(for: \.color)
+            builder.deleteField(for: \.downloads)
+        }
+    }
+    
+}
+
+struct AddFileHashToShortcut: PostgreSQLMigration {
+    
+    static func prepare(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.field(for: \.fileHash, type: .char(32), .default(.literal("")))
+        }
+    }
+    
+    static func revert(on conn: PostgreSQLConnection) -> EventLoopFuture<Void> {
+        return Database.update(Shortcut.self, on: conn) { builder in
+            builder.deleteField(for: \.fileHash)
         }
     }
     

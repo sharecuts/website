@@ -12,11 +12,15 @@
       .card-bg-green
       .card-bg-red
       .card-bg-orange
+      .card-bg-yellow
+      .card-bg-gray
+      .card-bg-darkGray
+      .card-bg-lightBlue
 
       These are in CSS for easy reference, caching and easy updating.
 
     */ 
-    <a class="card card-shortcut card-dark card-bg-blue" data-shortcut="#(card.shortcut.id)" href="#(card.deepLink)">
+    <a class="card card-shortcut card-dark card-bg-#(card.colorName)" data-shortcut="#(card.shortcut.id)" data-downloadurl="#(card.downloadLink)" href="#(card.deepLink)">
       <div class="card-header d-flex">
         <div class="card-title mb-auto mb-1 h5">
           #(card.shortcut.title)
