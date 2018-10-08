@@ -173,11 +173,11 @@
 }
 
 .card-bg-gray {
-  background: linear-gradient(to bottom right, #A3A39A, #7D7A69);
+  background: linear-gradient(to bottom right, $gray-500, $gray-600);
 }
 
 .card-bg-darkGray {
-  background: linear-gradient(to bottom right, #818289, #525558); 
+  background: linear-gradient(to bottom right, $gray-600, $gray-700); 
 }
   
 .card-bg-lightBlue {
