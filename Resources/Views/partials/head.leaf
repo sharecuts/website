@@ -17,6 +17,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="#c8c8c8">
 
+  <!-- ScrollReveal - https://scrollrevealjs.org/ -->
+  <!-- Must remain in <head> -->
+  <script src="https://unpkg.com/scrollreveal@4.0.0/dist/scrollreveal.min.js"></script>
+
   <!-- CSS - Font -->
   <!-- Web Font Loader -- https://github.com/typekit/webfontloader -->
   <!-- - Note: Should we provide a local backup? -->
@@ -39,10 +43,10 @@
   <meta property="og:title" content="Sharecuts">
   <meta property="og:url" content="https://sharecuts.app">
   <meta property="og:type" content="website">
-  <meta property="og:description" content="A public repository of shortcuts for the Shortcuts app.">
+  <meta property="og:description" content="A public repository of shortcuts for the Apple &copy; Shortcuts app.">
 
   <!-- Twiiter -- https://developer.twitter.com/en/docs/tweets/optimize-with-cards/guides/getting-started.html -->
-  <meta name="twitter:card" content="A public repository of shortcuts for the Shortcuts app.">
+  <meta name="twitter:card" content="A public repository of shortcuts for the Apple &copy; Shortcuts app.">
   <meta name="twitter:site" content="@sharecutsapp">
   <meta name="twitter:creator" content="@_inside">
 

@@ -1,14 +1,14 @@
 #set("content") {
 
   <article class="article">
-    <h2 class="mb-3 mb-lg-4">#(tag.emoji) #(tag.name) shortcuts</h1>
+    <h2 class="mb-3 mb-lg-4"><span class="emoji d-inline-block mr-2">#(tag.emoji)</span> #(tag.name) Shortcuts</h1>
 
     <hr class="mb-4 mb-lg-5">
 
     #if(cardCount > 0) {
       #embed("components/shortcuts")
     } else {
-      <p>It looks like we don't carry any shortcuts in the #lowercase(tag.name) category yet.</p>
+      <p>It looks like no one has uploaded any shortcuts in the #lowercase(tag.name) category yet. <a href="/upload">Add Your Own!</a></p>
     }
   </article>
     

@@ -39,12 +39,12 @@
           <div class="card-actions font-weight-bold">
             <span class="card-actions-amount">#(card.shortcut.actionCount)</span> <span class="card-actions-label">#(card.actionCountSuffix)</span>
           </div>
-          <div class="card-author" title="Shortcut created by #(card.creator.name)" data-username="#(card.creator.username)">
+          <div class="card-author" title="View #(card.creator.name)'s Shortcuts" data-username="#(card.creator.username)" data-toggle="tooltip">
             #(card.creator.name)
           </div>
         </div>
         <div class="card-like align-self-end ml-auto">
-          <button type="button" class="btn btn-link btn-sm btn-like py-2 pr-0 font-weight-medium" data-shortcut="#(card.shortcut.id)" title="Like This Shortcut"#if(card.voted) { disabled }>
+          <button type="button" class="btn btn-link btn-sm btn-like py-2 pr-0 font-weight-medium" data-shortcut="#(card.shortcut.id)" data-toggle="tooltip" title="Like Shortcut"#if(card.voted) { disabled }>
             <span class="card-like-icon emoji">👌</span> <span class="card-like-label">#(card.shortcut.votes)</span>
           </button>
         </div>
