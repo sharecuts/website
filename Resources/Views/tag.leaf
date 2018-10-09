@@ -1,6 +1,6 @@
 #set("content") {
 
-  <article class="article">
+  <article class="article article--full-width">
     <h2 class="mb-3 mb-lg-4"><span class="emoji d-inline-block mr-2">#(tag.emoji)</span> #(tag.name) Shortcuts</h1>
 
     <hr class="mb-4 mb-lg-5">
