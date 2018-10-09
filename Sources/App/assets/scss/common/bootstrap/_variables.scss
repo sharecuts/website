@@ -425,7 +425,7 @@ $input-padding-x-sm:                    $input-btn-padding-x-sm !default;
 $input-line-height-sm:                  $input-btn-line-height-sm !default;
 
 $input-padding-y-lg:                    $input-btn-padding-y-lg !default;
-$input-padding-x-lg:                    $input-btn-padding-x-lg !default;
+$input-padding-x-lg:                    ($input-btn-padding-x-lg * .6) !default;
 $input-line-height-lg:                  $input-btn-line-height-lg !default;
 
 $input-bg:                              $white !default;
