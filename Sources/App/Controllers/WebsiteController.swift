@@ -37,6 +37,7 @@ final class WebsiteController: RouteCollection {
 
         let userRoutes = authSessionRoutes.grouped("users")
         
+        userRoutes.get("signup", use: signupForm)
         userRoutes.get("migrateToIndigo", use: migrateUserToIndigo)
         userRoutes.post("migrateToIndigo", use: performUserMigrationToIndigo)
 
@@ -362,6 +363,34 @@ final class WebsiteController: RouteCollection {
     
     func pwned(_ req: Request) throws -> Future<View> {
         return try req.view().render("pwned");
+    }
+    
+    func signupForm(_ req: Request) throws -> Future<View> {
+        let view = "users/signup"
+        
+        func inviteError(_ message: String = "You need an invite to register.") throws -> Future<View> {
+            let ctx = RegistrationContext(error: message, partialUser: nil)
+            return try req.view().render(view, ctx)
+        }
+        
+        guard let invite = req.query[String.self, at: "invite"] else {
+            return try inviteError()
+        }
+        
+        let inviteQuery = Invite.query(on: req).filter(\.code, .equal, invite).first()
+        
+        return inviteQuery.flatMap(to: View.self) { invite in
+            guard let invite = invite else {
+                return try inviteError()
+            }
+            guard invite.usedAt == nil else {
+                return try inviteError("This invite has already been used.")
+            }
+            
+            let context = RegistrationContext(error: nil, partialUser: nil, invite: invite)
+
+            return try req.view().render(view, context);
+        }
     }
     
     // MARK: - Feed
