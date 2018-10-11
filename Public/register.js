@@ -6,7 +6,7 @@ window.addEventListener("DOMContentLoaded", function(){
         return await response.json();
     };
 
-    $("input[name='username']").blur(async function(){
+    $("input#username").blur(async function(){
         let errorContainer = $(this).siblings("small");
 
         let username = $(this).val();
@@ -18,6 +18,8 @@ window.addEventListener("DOMContentLoaded", function(){
         }
 
         let result = await checkUsername(username);
+
+        console.log(result);
 
         if (!result.isAvailable) {
             $(this).removeClass("is-valid").addClass("is-invalid");

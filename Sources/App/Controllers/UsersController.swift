@@ -161,8 +161,10 @@ final class UsersController: RouteCollection {
             throw Abort(.badRequest)
         }
         
-        guard username.count >= 3 else {
-            return Future.map(on: req) { UsernameAvailabilityResponse(username: username, isAvailable: false, message: "Username must be at least 3 characters long.") }
+        let precheck = username.usernameAvaliability
+        
+        guard precheck.isAvailable else {
+            return req.future(precheck)
         }
         
         return User.query(on: req).filter(\.username, .equal, username).count().map(to: UsernameAvailabilityResponse.self) { count in

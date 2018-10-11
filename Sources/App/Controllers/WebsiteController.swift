@@ -317,10 +317,7 @@ final class WebsiteController: RouteCollection {
             let redirect = "/users/migrateToIndigo?username=\(migrationRequest.username)&apiKey=\(migrationRequest.apiKey)"
             
             func makeRedir(with error: String) -> EventLoopFuture<Response> {
-                return Future.map(on: req) {
-                    let encodedError = error.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? "Fatal"
-                    return req.redirect(to: redirect + "&error=\(encodedError)")
-                }
+                return req.redirect(to: redirect, with: error)
             }
             
             let userQuery = User.query(on: req).filter(\.username, .equal, migrationRequest.username).first()
@@ -341,15 +338,12 @@ final class WebsiteController: RouteCollection {
                 guard try BCrypt.verify(migrationRequest.apiKey, created: userKey) else {
                     return makeRedir(with: "Invalid API key")
                 }
+
+                let maybePwnedMessage = try req.checkPwnage(for: migrationRequest.password)
                 
-                let verifier = try req.make(PwnageVerifier.self)
-                
-                let pwnageVerification = verifier.verify(password: migrationRequest.password)
-                
-                return pwnageVerification.flatMap(to: Response.self) { pwnageResult in
-                    if case .pwned(let count) = pwnageResult {
-                        let learnMoreLink = "<a href=\"/pwned\" target=\"_blank\">What's this?</a>"
-                        return makeRedir(with: "Sorry, this password has been found on \(count) security incidents, you need to choose a secure one. \(learnMoreLink)")
+                return maybePwnedMessage.flatMap(to: Response.self) { pwnedMessage in
+                    if let message = pwnedMessage {
+                        return makeRedir(with: message)
                     }
                     
                     user.password = try BCrypt.hash(migrationRequest.password)
@@ -370,7 +364,7 @@ final class WebsiteController: RouteCollection {
         let view = "users/signup"
         
         func inviteError(_ message: String = "You need an invite to register.") throws -> Future<View> {
-            let ctx = RegistrationContext(error: message, partialUser: nil)
+            let ctx = SignUpContext(error: message, partialUser: nil)
             return try req.view().render(view, ctx)
         }
         
@@ -388,38 +382,62 @@ final class WebsiteController: RouteCollection {
                 return try inviteError("This invite has already been used.")
             }
             
-            let context = RegistrationContext(error: nil, partialUser: nil, invite: invite)
+            let message = req.query[String.self, at: "message"]
+            
+            let context = SignUpContext(
+                error: nil,
+                partialUser: nil,
+                invite: invite,
+                validationMessage: message
+            )
 
             return try req.view().render(view, context);
         }
     }
     
     func signup(_ req: Request, data: SignupData) throws -> Future<Response> {
+        let errors = data.validationErrors
+        
+        let redirect = "/users/signup?invite=\(data.invite)"
+        
+        guard errors.count == 0 else {
+            let messages = errors.joined(separator: "\n")
+            return req.redirect(to: redirect, with: messages, paramName: "message")
+        }
+
         let password = try BCrypt.hash(data.password)
         
-        let inviteQuery = Invite.query(on: req).filter(\.code, .equal, data.invite).first()
+        let maybePwnedMessage = try req.checkPwnage(for: data.password)
         
-        return inviteQuery.flatMap(to: Response.self) { invite in
-            guard let invite = invite else {
-                return Future.map(on: req) { req.redirect(to: "/users/signup?error=1") }
+        return maybePwnedMessage.flatMap(to: Response.self) { pwnedMessage in
+            if let message = pwnedMessage {
+                return req.redirect(to: redirect, with: message, paramName: "message")
             }
             
-            invite.usedAt = Date()
+            let inviteQuery = Invite.query(on: req).filter(\.code, .equal, data.invite).first()
             
-            return invite.save(on: req).flatMap { _ in
-                let user = User(
-                    id: nil,
-                    name: data.name,
-                    username: data.username,
-                    password: password,
-                    url: URL(string: data.url) ?? URL(string: "https://sharecuts.app")!,
-                    apiKey: nil
-                )
+            return inviteQuery.flatMap(to: Response.self) { invite in
+                guard let invite = invite else {
+                    return Future.map(on: req) { req.redirect(to: "/users/signup?error=1") }
+                }
                 
-                return user.save(on: req).map(to: Response.self) { user in
-                    try req.authenticateSession(user)
+                invite.usedAt = Date()
+                
+                return invite.save(on: req).flatMap { _ in
+                    let user = User(
+                        id: nil,
+                        name: data.name,
+                        username: data.username,
+                        password: password,
+                        url: URL(string: data.url) ?? URL(string: "https://sharecuts.app")!,
+                        apiKey: nil
+                    )
                     
-                    return req.redirect(to: "/")
+                    return user.save(on: req).map(to: Response.self) { user in
+                        try req.authenticateSession(user)
+                        
+                        return req.redirect(to: "/")
+                    }
                 }
             }
         }

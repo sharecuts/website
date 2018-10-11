@@ -10,15 +10,22 @@
         <p>Congratulations! You can now register as a publisher on Sharecuts.</p>
     }
 
+    #if(validationMessage) {
+      <div class="alert alert-danger" role="alert">
+        <strong>Please check the following:</strong><br />
+         #get(validationMessage)
+      </div>
+    }
+
     <form id="upload" action="/users/signup" method="post">
         <div class="form-group">
             <label class="sr-only">Full Name</label>
-            <input class="form-control" type="text" name="name" placeholder="Your full name" required minlength="3" maxlength="50" autofocus#if(error){disabled="disabled"}>
+            <input class="form-control" type="text" name="name" placeholder="Your full name" required minlength="3" maxlength="50" autofocus #if(error){disabled="disabled"}>
             <small></small>
         </div>
         <div class="form-group">
             <label class="sr-only">Username</label>
-            <input class="form-control" type="text" name="username" placeholder="Create an username" required minlength="3" maxlength="20" #if(error){disabled="disabled"}>
+            <input class="form-control" type="text" name="username" id="username" placeholder="Create an username" required minlength="3" maxlength="20" #if(error){disabled="disabled"}>
             <small></small>
         </div>
         <div class="form-group">
@@ -27,11 +34,11 @@
         </div>
         <div class="form-group">
             <label class="sr-only">Password</label>
-            <input class="form-control" type="password" name="password" placeholder="Create a password" autocomplete="new-password" required#if(error){disabled="disabled"}>
+            <input class="form-control" type="password" name="password" placeholder="Create a password" autocomplete="new-password" required #if(error){disabled="disabled"}>
         </div>
         <div class="form-group">
             <label class="sr-only">Confirm Password</label>
-            <input class="form-control" type="password" name="password2" placeholder="Confirm password" autocomplete="new-password" required#if(error){disabled="disabled"}>
+            <input class="form-control" type="password" name="password2" placeholder="Confirm password" autocomplete="new-password" required #if(error){disabled="disabled"}>
         </div>
         
         <input type="hidden" name="invite" value="#(invite.code)">

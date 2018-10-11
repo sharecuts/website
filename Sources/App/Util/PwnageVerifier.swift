@@ -162,3 +162,24 @@ public final class PwnageVerifier {
 }
 
 extension PwnageVerifier: Service { }
+
+// MARK: - Request Convenience
+
+extension Request {
+    
+    func checkPwnage(for password: String) throws -> Future<String?> {
+        let verifier = try make(PwnageVerifier.self)
+        
+        let pwnageVerification = verifier.verify(password: password)
+        
+        return pwnageVerification.map(to: String?.self) { pwnageResult in
+            if case .pwned(let count) = pwnageResult {
+                let learnMoreLink = "<a href=\"/pwned\" target=\"_blank\">What's this?</a>"
+                return "Sorry, this password has been found on \(count) security incidents, you need to choose a secure one. \(learnMoreLink)"
+            } else {
+                return nil
+            }
+        }
+    }
+    
+}
