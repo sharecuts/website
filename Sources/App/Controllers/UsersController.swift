@@ -36,6 +36,7 @@ final class UsersController: RouteCollection {
         usersRoute.post(User.CreateRequest.self, use: create)
         usersRoute.get(User.parameter, use: get)
         usersRoute.patch(User.parameter, use: update)
+        usersRoute.get("usernamecheck", use: checkUsernameAvailability)
     }
     
     func authenticate(_ req: Request) throws -> Future<Token> {
@@ -152,6 +153,27 @@ final class UsersController: RouteCollection {
             }
         } catch {
             throw Abort(.notFound)
+        }
+    }
+    
+    func checkUsernameAvailability(_ req: Request) throws -> Future<UsernameAvailabilityResponse> {
+        guard let username = req.query[String.self, at: "username"] else {
+            throw Abort(.badRequest)
+        }
+        
+        guard username.count >= 3 else {
+            return Future.map(on: req) { UsernameAvailabilityResponse(username: username, isAvailable: false, message: "Username must be at least 3 characters long.") }
+        }
+        
+        return User.query(on: req).filter(\.username, .equal, username).count().map(to: UsernameAvailabilityResponse.self) { count in
+            let available = (count == 0)
+            let message = available ? "" : "Sorry, that username has already been taken. Choose another one."
+            
+            return UsernameAvailabilityResponse(
+                username: username,
+                isAvailable: count == 0,
+                message: message
+            )
         }
     }
 

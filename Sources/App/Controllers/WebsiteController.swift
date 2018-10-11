@@ -38,6 +38,7 @@ final class WebsiteController: RouteCollection {
         let userRoutes = authSessionRoutes.grouped("users")
         
         userRoutes.get("signup", use: signupForm)
+        userRoutes.post(SignupData.self, at: "signup", use: signup)
         userRoutes.get("migrateToIndigo", use: migrateUserToIndigo)
         userRoutes.post("migrateToIndigo", use: performUserMigrationToIndigo)
 
@@ -390,6 +391,37 @@ final class WebsiteController: RouteCollection {
             let context = RegistrationContext(error: nil, partialUser: nil, invite: invite)
 
             return try req.view().render(view, context);
+        }
+    }
+    
+    func signup(_ req: Request, data: SignupData) throws -> Future<Response> {
+        let password = try BCrypt.hash(data.password)
+        
+        let inviteQuery = Invite.query(on: req).filter(\.code, .equal, data.invite).first()
+        
+        return inviteQuery.flatMap(to: Response.self) { invite in
+            guard let invite = invite else {
+                return Future.map(on: req) { req.redirect(to: "/users/signup?error=1") }
+            }
+            
+            invite.usedAt = Date()
+            
+            return invite.save(on: req).flatMap { _ in
+                let user = User(
+                    id: nil,
+                    name: data.name,
+                    username: data.username,
+                    password: password,
+                    url: URL(string: data.url) ?? URL(string: "https://sharecuts.app")!,
+                    apiKey: nil
+                )
+                
+                return user.save(on: req).map(to: Response.self) { user in
+                    try req.authenticateSession(user)
+                    
+                    return req.redirect(to: "/")
+                }
+            }
         }
     }
     
