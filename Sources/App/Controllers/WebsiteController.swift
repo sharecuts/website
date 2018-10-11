@@ -430,7 +430,8 @@ final class WebsiteController: RouteCollection {
                         username: data.username,
                         password: password,
                         url: URL(string: data.url) ?? URL(string: "https://sharecuts.app")!,
-                        apiKey: nil
+                        apiKey: nil,
+                        level: .publisher
                     )
                     
                     return user.save(on: req).map(to: Response.self) { user in

@@ -20,7 +20,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     services.register { container -> NIOServerConfig in
         var def = NIOServerConfig.default()
         
-        def.maxBodySize = 5_000_000
+        def.maxBodySize = 50_000_000
         
         return def
     }

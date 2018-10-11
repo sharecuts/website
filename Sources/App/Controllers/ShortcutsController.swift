@@ -89,8 +89,19 @@ final class ShortcutsController: RouteCollection {
 
         let request = try req.content.decode(CreateShortcutRequest.self)
         
+        guard let sizeStr = req.http.headers["content-length"].first, let size = Int(sizeStr) else {
+            throw Abort(.badRequest)
+        }
+        
+        guard size <= user.level.maxUploadSize else {
+            // filesize is over user's allowance
+            let error = user.level.allowanceExplanation
+            return req.redirect(to: "/upload", with: error)
+        }
+        
         let shortcutCreation = request.flatMap(to: Shortcut.self) { requestData in
             let fileData = requestData.shortcut.data
+            
             let decoder = PropertyListDecoder()
             let shortcutFile = try decoder.decode(ShortcutFile.self, from: fileData)
             
