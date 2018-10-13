@@ -1,0 +1,62 @@
+.has-float-label {
+  position: relative;
+}
+
+.has-float-label label {
+  position: absolute;
+  cursor: text;
+  font-size: 75%;
+  opacity: 1;
+  transition: all .2s ease-in-out;
+  top: -.5em;
+  left: 1rem;
+  z-index: 3;
+  line-height: 1;
+  padding: 0 1px;
+}
+
+.has-float-label label::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  background: $white;
+  height: 2px;
+  top: 50%;
+  left: -.2em;
+  right: -.2em;
+  z-index: -1;
+}
+
+.has-float-label .form-control::-webkit-input-placeholder {
+  opacity: 1;
+  transition: all .2s ease-in-out;
+}
+
+.has-float-label .form-control:placeholder-shown:not(:focus)::-webkit-input-placeholder {
+  opacity: 0;
+}
+
+.has-float-label .form-control:placeholder-shown:not(:focus)+label {
+  font-size: 1rem;
+  opacity: .55;
+  top: .75em;
+}
+
+.input-group .has-float-label {
+  display: table-cell;
+}
+
+.input-group .has-float-label .form-control {
+  border-radius: .25rem;
+}
+
+.input-group .has-float-label:not(:last-child) .form-control {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.input-group .has-float-label:not(:first-child) .form-control {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+  margin-left: -1px;
+}

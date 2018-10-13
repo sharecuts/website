@@ -17,25 +17,35 @@
       }
 
       <form id="upload" action="/shortcuts" method="post" enctype="multipart/form-data">
+
         <div class="form-group">
-          <label class="sr-only">Title</label>
-          <input class="form-control form-control-lg" type="text" name="title" placeholder="Title">
+          <div class="has-float-label">
+            <input id="title" class="form-control" type="text" name="title" placeholder="Title">
+            <label for="title">Title</label>
+          </div>
         </div>
+
         <div class="form-group">
-          <label class="sr-only">Select a Category</label>
-          <select class="form-control" name="tagID">
-            <option value="" selected="selected">Select a category</option>
-            #for(tag in tags) {
-              <option value="#(tag.id)">#(tag.emoji) #(tag.name)</option>
-            }
-          </select>
+          <div class="has-float-label">
+            <select id="tagID" class="form-control" name="tagID">
+              <option value="" selected="selected">Select a Category</option>
+              #for(tag in tags) {
+                <option value="#(tag.id)">#(tag.emoji) #(tag.name)</option>
+              }
+            </select>
+            <label for="tagID">Select a Category</label>
+          </div>
         </div>
+
         <div class="form-group">
-          <label class="sr-only">Description</label>
-          <input class="form-control form-control-lg" type="text" name="summary" placeholder="Description">
+          <div class="has-float-label">
+            <textarea id="summary" class="form-control" name="summary" placeholder="Description"></textarea>
+            <label for="summary">Description</label>
+          </div>
         </div>
+
         <div class="form-group">
-          <label class="sr-only">Upload Shortcut</label>
+          <label>Upload Shortcut</label>
           <input class="form-control-file" type="file" name="shortcut" placeholder="Upload your .shortcut file">
         </div>
         

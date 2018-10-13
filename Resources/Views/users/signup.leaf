@@ -18,27 +18,40 @@
     }
 
     <form id="upload" action="/users/signup" method="post">
+
         <div class="form-group">
-            <label class="sr-only">Full Name</label>
-            <input class="form-control" type="text" name="name" placeholder="Your full name" required minlength="3" maxlength="50" autofocus #if(error){disabled="disabled"}>
-            <small></small>
+          <div class="has-float-label">
+            <input id="name" class="form-control" type="text" name="name" placeholder="Your Full Name" required minlength="3" maxlength="50" autofocus #if(error){disabled="disabled"}>
+            <label for="name">Full Name</label>
+          </div>
         </div>
+
         <div class="form-group">
-            <label class="sr-only">Username</label>
-            <input class="form-control" type="text" name="username" id="username" placeholder="Create an username" required minlength="3" maxlength="20" #if(error){disabled="disabled"}>
-            <small></small>
+          <div class="has-float-label">
+            <input id="username" class="form-control" type="text" name="username" id="username" placeholder="Create a Username" required minlength="3" maxlength="20" #if(error){disabled="disabled"}>
+            <label for="username">Username</label>
+          </div>
         </div>
+
         <div class="form-group">
-            <label class="sr-only">Website</label>
-            <input class="form-control" type="url" name="url" placeholder="Your website, Twitter, or any other URL" value="https://" #if(error){disabled="disabled"}>
+          <div class="has-float-label">
+            <input id="url" class="form-control" type="url" name="url" placeholder="Your Website, Twitter, or Any Other URL" value="https://" #if(error){disabled="disabled"}>
+            <label for="url">Website</label>
+          </div>
         </div>
+
         <div class="form-group">
-            <label class="sr-only">Password</label>
-            <input class="form-control" type="password" name="password" placeholder="Create a password" autocomplete="new-password" required #if(error){disabled="disabled"}>
+          <div class="has-float-label">
+            <input id="password" class="form-control" type="password" name="password" placeholder="Create a Password" autocomplete="new-password" required #if(error){disabled="disabled"}>
+            <label for="password">Password</label>
+          </div>
         </div>
+
         <div class="form-group">
-            <label class="sr-only">Confirm Password</label>
-            <input class="form-control" type="password" name="password2" placeholder="Confirm password" autocomplete="new-password" required #if(error){disabled="disabled"}>
+          <div class="has-float-label">
+            <input id="password2" class="form-control" type="password" name="password2" placeholder="Confirm Password" autocomplete="new-password" required #if(error){disabled="disabled"}>
+            <label for="password2">Confirm Password</label>
+          </div>
         </div>
         
         <input type="hidden" name="invite" value="#(invite.code)">
@@ -48,7 +61,7 @@
         </p>
     </form>
 
-    <p><small>If you're having any issues, please <a href="https://twitter.com/messages/compose?recipient_id=1016005669663764480" rel="external nofollow" target="_blank">contact us on Twitter</a>.</small></p>
+    <p><small>If you're having any issues, please <a href="https://twitter.com/messages/compose?recipient_id=1016005669663764480" rel="external nofollow" target="_blank">Contact Us on Twitter</a>.</small></p>
   </article>
     
 }
