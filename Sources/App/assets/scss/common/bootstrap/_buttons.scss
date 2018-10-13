@@ -150,3 +150,13 @@ input[type="button"] {
 .btn-round {
   border-radius: 100px;
 }
+
+.btn-circle {
+  width: 25px;
+  height: 25px;
+
+  background: rgba($black, .2);
+  border-radius: 25px;
+
+  overflow: hidden;
+}

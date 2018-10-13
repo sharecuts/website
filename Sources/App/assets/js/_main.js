@@ -71,7 +71,8 @@ $(function() {
     delay: {
       "show": 750,
       "hide": 250
-    }
+    },
+    trigger: 'hover'
   });
 
 });

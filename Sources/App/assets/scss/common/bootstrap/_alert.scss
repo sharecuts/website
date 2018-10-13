@@ -8,6 +8,12 @@
   margin-bottom: $alert-margin-bottom;
   border: $alert-border-width solid transparent;
   @include border-radius($alert-border-radius);
+
+  a {
+    color: $white;
+    font-weight: bold;
+    text-decoration: underline;
+  }
 }
 
 // Headings for larger alerts
@@ -17,9 +23,9 @@
 }
 
 // Provide class for links that match alerts
-.alert-link {
-  font-weight: $alert-link-font-weight;
-}
+// .alert-link {
+//   font-weight: $alert-link-font-weight;
+// }
 
 
 // Dismissible alerts

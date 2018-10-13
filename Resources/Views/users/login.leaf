@@ -1,13 +1,13 @@
 #set("content") {
 
   <article class="article">
-    <h1 class="mb-3 mb-lg-4">Login</h1>
+    <h1 class="mb-3 mb-lg-4">Manage Your Account</span></h1>
 
     <hr class="mb-4 mb-lg-5">
 
-    <p class="lead">Welcome! Login to manage your shortcuts.</p>
+    <p class="lead"><b>User submissions are currently invite-only.</b></p>
 
-    <p>Account creation is currently closed, if you'd like to register to be invited in the future, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">please use this form</a>.</p>
+    <p class="mb-5">If you'd like to participate, <a href="https://guilhermerambo.typeform.com/to/aGMIc4" rel="external">please let us know</a>. Contributions will be open soon.</p>
 
     #if(isError) {
       <div class="alert alert-danger">Wrong username and/or password. Please try again.</div>
@@ -15,20 +15,20 @@
 
     <form id="upload" action="/users/login" method="post" style="max-width: 360px;">
       <div class="form-group">
-        <label class="sr-only">Username</label>
-        <input class="form-control form-control-lg" type="text" name="username" placeholder="Username">
+        <label class="font-weight-bold" for="username">Username</label>
+        <input class="form-control form-control-lg" id="username" type="text" name="username" placeholder="JaneDoe">
       </div>
       <div class="form-group">
-        <label class="sr-only">Password</label>
-        <input class="form-control form-control-lg" type="password" name="password" placeholder="Password">
+        <label class="font-weight-bold" for="password">Password</label>
+        <input class="form-control form-control-lg" id="password" type="password" name="password" placeholder="Password">
       </div>
       
-      <p>
+      <p class="mt-4 mb-5">
         <button class="btn btn-primary btn-lg" type="submit">Login</button>
       </p>
     </form>
 
-    <p><small>If you're having trouble logging in, please <a href="https://twitter.com/messages/compose?recipient_id=1016005669663764480" rel="external nofollow" target="_blank">Contact Us on Twitter</a>.</small></p>
+    <p><small>Having trouble logging in? Please <a href="https://twitter.com/messages/compose?recipient_id=1016005669663764480" rel="external nofollow" target="_blank">Contact Us on Twitter</a>.</small></p>
   </article>
     
 }

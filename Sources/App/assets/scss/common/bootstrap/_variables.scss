@@ -87,10 +87,10 @@ $theme-colors: map-merge(
     "secondary":  $secondary,
     "success":    $success,
     "info":       $info,
-    "warning":    $warning,
+    // "warning":    $warning,
     "danger":     $danger,
-    "light":      $light,
-    "dark":       $dark
+    // "light":      $light,
+    // "dark":       $dark
   ),
   $theme-colors
 );
