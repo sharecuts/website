@@ -89,8 +89,19 @@ final class ShortcutsController: RouteCollection {
 
         let request = try req.content.decode(CreateShortcutRequest.self)
         
+        guard let sizeStr = req.http.headers["content-length"].first, let size = Int(sizeStr) else {
+            throw Abort(.badRequest)
+        }
+        
+        guard size <= user.level.maxUploadSize else {
+            // filesize is over user's allowance
+            let error = user.level.allowanceExplanation
+            return req.redirect(to: "/upload", with: error)
+        }
+        
         let shortcutCreation = request.flatMap(to: Shortcut.self) { requestData in
             let fileData = requestData.shortcut.data
+            
             let decoder = PropertyListDecoder()
             let shortcutFile = try decoder.decode(ShortcutFile.self, from: fileData)
             
@@ -143,9 +154,9 @@ final class ShortcutsController: RouteCollection {
                 let logger = try req.make(Logger.self)
                 logger.error("Upload error: \(error)")
                 
-                let error = "Make sure you have entered all the information required, including the category. Also make sure the same shortcut hasn't been uploaded before.".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-                    
-                return req.redirect(to: "/upload?error=\(error)")
+                let error = "Make sure you have entered all the information required, including the category. Also make sure the same shortcut hasn't been uploaded before."
+                
+                return req.redirect(to: "/upload", with: error)
             }
         } else {
             let apiResponse = shortcutCreation.map(to: ModifyShortcutResponse.self) { shortcut in

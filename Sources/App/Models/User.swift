@@ -184,3 +184,29 @@ struct MigrateExistingUsersToIndigo: PostgreSQLMigration {
     }
 
 }
+
+extension User.Level {
+    
+    var maxUploadSize: Int {
+        switch self {
+        case .suspended, .banned, .normal: return 0
+        case .publisher: return 10_000_000
+        case .verifiedPublisher: return 20_000_000
+        case .moderator, .administrator: return 50_000_000
+        }
+    }
+    
+    private static let sizeFormatter: ByteCountFormatter = {
+        let f = ByteCountFormatter()
+        
+        f.countStyle = .file
+        
+        return f
+    }()
+    
+    var allowanceExplanation: String {
+        let allowance = User.Level.sizeFormatter.string(fromByteCount: Int64(maxUploadSize))
+        return "Sorry, that shortcut is over your upload limit of \(allowance) per shortcut."
+    }
+    
+}

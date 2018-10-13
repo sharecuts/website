@@ -20,7 +20,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     services.register { container -> NIOServerConfig in
         var def = NIOServerConfig.default()
         
-        def.maxBodySize = 5_000_000
+        def.maxBodySize = 50_000_000
         
         return def
     }
@@ -67,6 +67,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     migrations.add(model: User.self, database: .psql)
     migrations.add(model: Token.self, database: .psql)
     migrations.add(model: Tag.self, database: .psql)
+    migrations.add(model: Invite.self, database: .psql)
 
     migrations.add(migration: AddIndigoFieldsToUser.self, database: .psql)
     migrations.add(migration: MigrateExistingUsersToIndigo.self, database: .psql)
