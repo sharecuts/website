@@ -26,13 +26,15 @@
         </div>
 
         <div class="form-group">
-          <select id="tagID" class="form-control" name="tagID">
-            <option value="" selected="selected">Select a Category</option>
-            #for(tag in tags) {
-              <option value="#(tag.id)">#(tag.emoji) #(tag.name)</option>
-            }
-          </select>
-          <label class="sr-only" for="tagID">Select a Category</label>
+          <div class="has-float-label">
+            <select id="tagID" class="form-control" name="tagID">
+              <option value="" selected="selected">Select a Category</option>
+              #for(tag in tags) {
+                <option value="#(tag.id)">#(tag.emoji) #(tag.name)</option>
+              }
+            </select>
+            <label for="tagID">Select a Category</label>
+          </div>
         </div>
 
         <div class="form-group">
