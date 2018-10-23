@@ -58,34 +58,9 @@ final class WebsiteController: RouteCollection {
         
         tagRoutes.get(String.parameter, use: tag)
     }
-    
-    private func navigationContext(in req: Request, with tag: Tag? = nil) -> Future<NavigationContext> {
-        let query = Tag.query(on: req).sort(\.name, .ascending).all()
-        
-        return query.map(to: NavigationContext.self) { tags in
-            return NavigationContext(tags: tags, activeTag: tag)
-        }
-    }
-    
-    private func homeContext(with req: Request, count: Int = 50) -> Future<HomeContext> {
-        let query = Shortcut.query(on: req).range(0...count).sort(\.createdAt, .descending).all()
-
-        return navigationContext(in: req).flatMap(to: HomeContext.self) { navContext in
-            return query.flatMap(to: HomeContext.self) { shortcuts in
-                let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
-                
-                return userFutures.map(to: HomeContext.self, on: req) { users in
-                    let unwrappedUsers = users.compactMap({ $0 })
-                    let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers, req: req) })
-                    
-                    return HomeContext(navigation: navContext, cards: cards)
-                }
-            }
-        }
-    }
 
     func index(_ req: Request) throws -> Future<View> {
-        return homeContext(with: req).flatMap(to: View.self) { context in
+        return ShortcutCard.homeContext(with: req).flatMap(to: View.self) { context in
             return try req.view().render("index", context)
         }
     }
@@ -200,7 +175,7 @@ final class WebsiteController: RouteCollection {
             
             let shortcuts = try user.shortcuts.query(on: req).all()
             
-            return self.navigationContext(in: req).flatMap(to: View.self) { navContext in
+            return ShortcutCard.navigationContext(in: req).flatMap(to: View.self) { navContext in
                 return shortcuts.flatMap(to: View.self) { shortcuts in
                     let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: [user], req: req) })
                     
@@ -259,7 +234,7 @@ final class WebsiteController: RouteCollection {
             
             let shortcuts = try tag.shortcuts.query(on: req).all()
             
-            return self.navigationContext(in: req, with: tag).flatMap(to: View.self) { navContext in
+            return ShortcutCard.navigationContext(in: req, with: tag).flatMap(to: View.self) { navContext in
                 return shortcuts.flatMap(to: View.self) { shortcuts in
                     let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
                     
@@ -447,7 +422,7 @@ final class WebsiteController: RouteCollection {
     // MARK: - Feed
     
     func feedRSS(_ req: Request) throws -> Future<Response> {
-        return homeContext(with: req, count: 100).flatMap(to: Response.self) { context in
+        return ShortcutCard.homeContext(with: req, count: 100).flatMap(to: Response.self) { context in
             let view = try req.view().render("feed.xml", context)
             
             return view.map(to: Response.self) { view in
@@ -457,8 +432,37 @@ final class WebsiteController: RouteCollection {
     }
     
     func feedJSON(_ req: Request) throws -> Future<JSONFeed> {
-        return homeContext(with: req, count: 100).map(to: JSONFeed.self) { context in
+        return ShortcutCard.homeContext(with: req, count: 100).map(to: JSONFeed.self) { context in
             return try JSONFeed(cards: context.cards)
+        }
+    }
+
+}
+
+extension ShortcutCard {
+
+    static func homeContext(with req: Request, count: Int = 50) -> Future<HomeContext> {
+        let query = Shortcut.query(on: req).range(0...count).sort(\.createdAt, .descending).all()
+
+        return navigationContext(in: req).flatMap(to: HomeContext.self) { navContext in
+            return query.flatMap(to: HomeContext.self) { shortcuts in
+                let userFutures = shortcuts.map({ $0.user.query(on: req).first() })
+
+                return userFutures.map(to: HomeContext.self, on: req) { users in
+                    let unwrappedUsers = users.compactMap({ $0 })
+                    let cards = shortcuts.compactMap({ try? ShortcutCard($0, users: unwrappedUsers, req: req) })
+
+                    return HomeContext(navigation: navContext, cards: cards)
+                }
+            }
+        }
+    }
+
+    static func navigationContext(in req: Request, with tag: Tag? = nil) -> Future<NavigationContext> {
+        let query = Tag.query(on: req).sort(\.name, .ascending).all()
+
+        return query.map(to: NavigationContext.self) { tags in
+            return NavigationContext(tags: tags, activeTag: tag)
         }
     }
 

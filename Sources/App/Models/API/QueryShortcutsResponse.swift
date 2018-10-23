@@ -30,3 +30,17 @@ struct QueryShortcutsResponse: Codable {
 }
 
 extension QueryShortcutsResponse: Content { }
+
+struct HomeResponse: Codable {
+
+    let count: Int
+    let results: [ShortcutCard]
+
+    init(_ cards: [ShortcutCard]) {
+        self.results = cards
+        self.count = cards.count
+    }
+
+}
+
+extension HomeResponse: Content { }

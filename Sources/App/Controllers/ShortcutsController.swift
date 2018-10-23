@@ -44,6 +44,7 @@ final class ShortcutsController: RouteCollection {
         protectedByToken.delete("/", Shortcut.parameter, use: delete)
 
         shortcutsRoutes.get("latest", use: latest)
+        shortcutsRoutes.get("home", use: home)
         shortcutsRoutes.get("/", Shortcut.parameter, use: details)
         
         shortcutsRoutes.put(Shortcut.parameter, "vote", use: vote)
@@ -63,6 +64,12 @@ final class ShortcutsController: RouteCollection {
 
         return query.map(to: QueryShortcutsResponse.self) { shortcuts in
             return QueryShortcutsResponse(results: shortcuts)
+        }
+    }
+
+    func home(_ req: Request) throws -> Future<HomeResponse> {
+        return ShortcutCard.homeContext(with: req).map(to: HomeResponse.self) { context in
+            return HomeResponse(context.cards)
         }
     }
 
