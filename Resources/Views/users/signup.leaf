@@ -35,7 +35,7 @@
 
         <div class="form-group">
           <div class="has-float-label">
-            <input id="url" class="form-control" type="url" name="url" placeholder="Your Website, Twitter, or Any Other URL" value="https://" #if(error){disabled="disabled"}>
+            <input id="url" class="form-control" type="url" name="url" placeholder="Your Website, Twitter, or Any Other URL" #if(error){disabled="disabled"}>
             <label for="url">Website</label>
           </div>
         </div>
