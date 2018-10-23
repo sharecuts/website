@@ -36,9 +36,75 @@ After getting the authentication token, all authenticated requests should includ
 
 ## Shortcuts
 
+### Get homepage contents
+
+Returns the same content that can be seen in the Sharecuts website home page, including detailed information for the user, deep link and color information. Note that there can be a delay between a new shortcut being published and this endpoint receiving the update since it's cached.
+
+**Request**
+
+`GET https://sharecuts.app/api/shortcuts/home`
+
+**Response**
+
+```json
+{
+    "count": 41,
+    "results": [
+        {
+            "shortcut": {
+                "id": "B35C554D-75FF-4FF8-92D2-058F58FBE4B7",
+                "updatedAt": "2018-10-23T21:44:07Z",
+                "userID": "D1DFA276-9DDA-4928-A797-D2F971E1E947",
+                "fileHash": "1aff9b6917b52552dadc6baa3a726ee3",
+                "tagID": "11A8CEDA-8625-407B-A9D3-1088BF550FA8",
+                "actionIdentifiers": [
+                    "is.workflow.actions.gettext",
+                    "is.workflow.actions.setvariable",
+                    "is.workflow.actions.gettext",
+                    "is.workflow.actions.setvariable",
+                    "is.workflow.actions.gettext",
+                    "is.workflow.actions.setvariable",
+                    "is.workflow.actions.gettext",
+                    "is.workflow.actions.setvariable",
+                    "is.workflow.actions.gettext",
+                    "is.workflow.actions.speaktext",
+                    "is.workflow.actions.url",
+                    "is.workflow.actions.downloadurl",
+                    "is.workflow.actions.getvalueforkey",
+                    "is.workflow.actions.setvariable",
+                    "is.workflow.actions.gettext",
+                    "is.workflow.actions.speaktext"
+                ],
+                "downloads": 4,
+                "title": "Trigger Bitrise Build",
+                "color": 463140863,
+                "summary": "Trigger a Bitrise build. This shortcut is configured to trigger a build using the Bitrise app slug, Bitrise API access token, git branch and workflow identifier. You can extend it by adding a passphrase check to prevent triggering unwanted builds or adding additional info to specify build parameters to Bitrise.",
+                "filePath": "trigger-bitrise-buildA3B9A634-45E5-423C-8683-A4268772D50F.shortcut",
+                "actionCount": 16,
+                "fileID": "4_z775fd4fd45c276586c490e1f_f10999b01e66dbf68_d20181023_m214407_c001_v0001105_t0049",
+                "createdAt": "2018-10-23T21:44:07Z",
+                "votes": 4
+            },
+            "voted": false,
+            "actionCountSuffix": "actions",
+            "downloadLink": "https:\/\/sharecuts.app\/download\/B35C554D-75FF-4FF8-92D2-058F58FBE4B7.shortcut",
+            "colorCode": "1B9AF7",
+            "deepLink": "shortcuts:\/\/import-workflow?url=https:\/\/sharecuts.app\/download\/B35C554D-75FF-4FF8-92D2-058F58FBE4B7.shortcut&name=Trigger%20Bitrise%20Build",
+            "colorName": "lightBlue",
+            "creator": {
+                "username": "yigit",
+                "id": "D1DFA276-9DDA-4928-A797-D2F971E1E947",
+                "name": "Yigit Yurtsever",
+                "url": "https:\/\/www.twitter.com\/ygtyurtsever"
+            }
+        },
+	...
+}
+```
+
 ### Get the latest shortcuts
 
-Returns the latest shortcuts, the same collection that shows on the website's home page.
+Returns the latest shortcuts.
 
 **Request**
 
