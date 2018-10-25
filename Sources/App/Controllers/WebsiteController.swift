@@ -441,8 +441,14 @@ final class WebsiteController: RouteCollection {
 
 extension ShortcutCard {
 
-    static func homeContext(with req: Request, count: Int = 50) -> Future<HomeContext> {
-        let query = Shortcut.query(on: req).range(0...count).sort(\.createdAt, .descending).all()
+    static func homeContext(with req: Request, searchTerm: String? = nil, count: Int = 50) -> Future<HomeContext> {
+        var baseQuery = Shortcut.query(on: req)
+
+        if let term = searchTerm {
+            baseQuery = baseQuery.filter(\.title, PostgreSQLBinaryOperator.ilike, "%\(term)%")
+        }
+
+        let query = baseQuery.range(0...count).sort(\.createdAt, .descending).all()
 
         return navigationContext(in: req).flatMap(to: HomeContext.self) { navContext in
             return query.flatMap(to: HomeContext.self) { shortcuts in

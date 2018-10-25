@@ -45,6 +45,7 @@ final class ShortcutsController: RouteCollection {
 
         shortcutsRoutes.get("latest", use: latest)
         shortcutsRoutes.get("home", use: home)
+        shortcutsRoutes.get("search", use: search)
         shortcutsRoutes.get("/", Shortcut.parameter, use: details)
         
         shortcutsRoutes.put(Shortcut.parameter, "vote", use: vote)
@@ -69,6 +70,18 @@ final class ShortcutsController: RouteCollection {
 
     func home(_ req: Request) throws -> Future<HomeResponse> {
         return ShortcutCard.homeContext(with: req).map(to: HomeResponse.self) { context in
+            return HomeResponse(context.cards)
+        }
+    }
+
+    func search(_ req: Request) throws -> Future<HomeResponse> {
+        let searchTerm = req.query[String.self, at: "query"]
+
+        guard let term = searchTerm, term.count >= 3 else {
+            throw Abort(.badRequest)
+        }
+
+        return ShortcutCard.homeContext(with: req, searchTerm: term).map(to: HomeResponse.self) { context in
             return HomeResponse(context.cards)
         }
     }
