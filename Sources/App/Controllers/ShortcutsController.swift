@@ -69,7 +69,7 @@ final class ShortcutsController: RouteCollection {
     }
 
     func home(_ req: Request) throws -> Future<HomeResponse> {
-        return ShortcutCard.homeContext(with: req).map(to: HomeResponse.self) { context in
+        return ShortcutCard.homeContext(with: req, filter: .all).map(to: HomeResponse.self) { context in
             return HomeResponse(context.cards)
         }
     }
@@ -81,7 +81,7 @@ final class ShortcutsController: RouteCollection {
             throw Abort(.badRequest)
         }
 
-        return ShortcutCard.homeContext(with: req, searchTerm: term).map(to: HomeResponse.self) { context in
+        return ShortcutCard.homeContext(with: req, filter: .search(term)).map(to: HomeResponse.self) { context in
             return HomeResponse(context.cards)
         }
     }

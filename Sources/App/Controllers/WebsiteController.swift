@@ -60,7 +60,7 @@ final class WebsiteController: RouteCollection {
     }
 
     func index(_ req: Request) throws -> Future<View> {
-        return ShortcutCard.homeContext(with: req).flatMap(to: View.self) { context in
+        return ShortcutCard.homeContext(with: req, filter: .all).flatMap(to: View.self) { context in
             return try req.view().render("index", context)
         }
     }
@@ -422,7 +422,7 @@ final class WebsiteController: RouteCollection {
     // MARK: - Feed
     
     func feedRSS(_ req: Request) throws -> Future<Response> {
-        return ShortcutCard.homeContext(with: req, count: 100).flatMap(to: Response.self) { context in
+        return ShortcutCard.homeContext(with: req, filter: .all, count: 100).flatMap(to: Response.self) { context in
             let view = try req.view().render("feed.xml", context)
             
             return view.map(to: Response.self) { view in
@@ -432,20 +432,32 @@ final class WebsiteController: RouteCollection {
     }
     
     func feedJSON(_ req: Request) throws -> Future<JSONFeed> {
-        return ShortcutCard.homeContext(with: req, count: 100).map(to: JSONFeed.self) { context in
+        return ShortcutCard.homeContext(with: req, filter: .all, count: 100).map(to: JSONFeed.self) { context in
             return try JSONFeed(cards: context.cards)
         }
     }
 
 }
 
+enum ShortcutCardFilter<A> {
+    static var all: ShortcutCardFilter<String> {
+        return .search("")
+    }
+
+    case search(A)
+    case custom(FilterOperator<PostgreSQLDatabase, A>)
+}
+
 extension ShortcutCard {
 
-    static func homeContext(with req: Request, searchTerm: String? = nil, count: Int = 50) -> Future<HomeContext> {
+    static func homeContext<A>(with req: Request, filter: ShortcutCardFilter<A>, count: Int = 50) -> Future<HomeContext> {
         var baseQuery = Shortcut.query(on: req)
 
-        if let term = searchTerm {
+        switch filter {
+        case .search(let term):
             baseQuery = baseQuery.filter(\.title, PostgreSQLBinaryOperator.ilike, "%\(term)%")
+        case .custom(let predicate):
+            baseQuery = baseQuery.filter(predicate)
         }
 
         let query = baseQuery.range(0...count).sort(\.createdAt, .descending).all()

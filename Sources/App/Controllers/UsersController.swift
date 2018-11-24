@@ -37,6 +37,7 @@ final class UsersController: RouteCollection {
         usersRoute.get(User.parameter, use: get)
         usersRoute.patch(User.parameter, use: update)
         usersRoute.get("usernamecheck", use: checkUsernameAvailability)
+        usersRoute.get(User.parameter, "shortcuts", use: shortcuts)
     }
     
     func authenticate(_ req: Request) throws -> Future<Token> {
@@ -48,6 +49,20 @@ final class UsersController: RouteCollection {
     }
 
     func get(_ req: Request) throws -> Future<User.Public> {
+        do {
+            let fetchUser = try req.parameters.next(User.self)
+
+            return fetchUser.map(to: User.Public.self) { user in
+                return user.publicView
+            }.thenIfErrorThrowing { _ in
+                throw Abort(.notFound)
+            }
+        } catch {
+            throw Abort(.notFound)
+        }
+    }
+
+    func shortcuts(_ req: Request) throws -> Future<User.Public> {
         do {
             let fetchUser = try req.parameters.next(User.self)
 
