@@ -62,12 +62,16 @@ final class UsersController: RouteCollection {
         }
     }
 
-    func shortcuts(_ req: Request) throws -> Future<User.Public> {
+    func shortcuts(_ req: Request) throws -> Future<HomeResponse> {
         do {
             let fetchUser = try req.parameters.next(User.self)
 
-            return fetchUser.map(to: User.Public.self) { user in
-                return user.publicView
+            return fetchUser.flatMap { user in
+                guard let id = user.id else { throw Abort(.unprocessableEntity) }
+
+                let context = ShortcutCard.homeContext(with: req, filter: .custom(\Shortcut.userID == id), count: 50)
+
+                return context.map { HomeResponse($0.cards) }
             }.thenIfErrorThrowing { _ in
                 throw Abort(.notFound)
             }
