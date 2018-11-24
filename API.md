@@ -437,6 +437,69 @@ Example:  `GET https://sharecuts.app/api/tags/developer`
 }
 ```
 
+### Shortcuts by user
+
+**Request**
+
+`GET https://sharecuts.app/api/users/[user_id]/shortcuts`
+
+Example:  `GET https://sharecuts.app/api/users/355E489E-0C50-4281-BB4D-3792A6EB71B5/shortcuts`
+
+**Response**
+
+```json
+{
+  "count": 1,
+  "results": [
+    {
+      "shortcut": {
+        "id": "055D9457-B6F7-472A-956C-4545F59CC272",
+        "updatedAt": "2018-11-18T02:33:13Z",
+        "userID": "355E489E-0C50-4281-BB4D-3792A6EB71B5",
+        "fileHash": "2e40dcf5cb300707b904038491dbafc3",
+        "tagID": "2E8603D9-D997-4EB4-AA7D-89B10C8C548D",
+        "actionIdentifiers": [
+          "is.workflow.actions.count",
+          "is.workflow.actions.conditional",
+          "is.workflow.actions.getvariable",
+          "is.workflow.actions.detect.link",
+          "is.workflow.actions.conditional",
+          "is.workflow.actions.ask",
+          "is.workflow.actions.conditional",
+          "is.workflow.actions.urlencode",
+          "is.workflow.actions.gettext",
+          "is.workflow.actions.url",
+          "is.workflow.actions.downloadurl",
+          "is.workflow.actions.detect.dictionary",
+          "is.workflow.actions.getvalueforkey",
+          "is.workflow.actions.showresult"
+        ],
+        "downloads": 109,
+        "title": "Summarise Webpage",
+        "color": 4292093695,
+        "summary": "Uses smmry.com to get the summary of a web page.",
+        "filePath": "summarise-webpage1630C718-0985-4495-90EF-932F8C8746E5.shortcut",
+        "actionCount": 14,
+        "fileID": "4_z775fd4fd45c276586c490e1f_f109b9c555ac13163_d20181118_m023312_c001_v0001102_t0053",
+        "createdAt": "2018-11-18T02:33:13Z",
+        "votes": 10
+      },
+      "voted": false,
+      "actionCountSuffix": "actions",
+      "downloadLink": "https:\/\/sharecuts.app\/download\/055D9457-B6F7-472A-956C-4545F59CC272.shortcut",
+      "colorCode": "FFD426",
+      "deepLink": "shortcuts:\/\/import-workflow?url=https:\/\/sharecuts.app\/download\/055D9457-B6F7-472A-956C-4545F59CC272.shortcut&name=Summarise%20Webpage",
+      "colorName": "green",
+      "creator": {
+        "username": "jluongo",
+        "id": "355E489E-0C50-4281-BB4D-3792A6EB71B5",
+        "name": "Josh Luongo",
+        "url": "https:\/\/twitter.com\/joshluongo"
+      }
+    }
+  ]
+}
+```
 ---
 ---
 ---
