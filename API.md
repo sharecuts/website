@@ -257,7 +257,7 @@ Returns details for the shortcut specified, including full user profile, downloa
 ---
 ---
 
-### Upload a shortcut 🔐
+### Upload a shortcut file 🔐
 
 Uploads a shortcut to the service. Uploading requires an authenticated user with upload permissions.
 
@@ -323,6 +323,36 @@ This means the api key is missing or invalid.
 #### **`400`**: Bad Request
 
 This means the shortcut file provided is not a valid shortcut file. The service validates the shortcut file to make sure it's in the correct format. Empty shortcuts with no actions also trigger this error.
+
+#### **`409`**: Conflict
+
+This means the uploaded shortcut is alreay in Sharecuts.
+
+---
+---
+---
+
+### Upload a shortcut via iCloud link 🔐
+
+Uploads a shortcut to the service via its iCloud link, obtained using the "Copy iCloud Link" option in the Shortcuts app. Uploading requires an authenticated user with upload permissions.
+
+**Request**
+
+`POST https://sharecuts.app/api/shortcuts`
+
+**Request body**
+
+The body should be encoded as `form/url-encoded` with the following parameters:
+
+`title: String`: The short title for the shortcut
+
+`summary: String`: A brief description of the shortcut
+
+`shortcutURL: String`: The iCloud URL
+
+**Response**
+
+See "Upload a shortcut file" above for responses.
 
 ---
 ---
