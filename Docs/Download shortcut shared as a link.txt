@@ -1,0 +1,59 @@
+The shared shortcut link looks like this:
+https://www.icloud.com/shortcuts/d8bc5ec3c1b74ab4bc1fdb9cd9bcacf1
+
+To grab the information about the link, call the api like this:
+https://www.icloud.com/shortcuts/api/records/d8bc5ec3c1b74ab4bc1fdb9cd9bcacf1
+
+So the format is https://www.icloud.com/shortcuts/api/records/:LAST_PATH_COMPONENT_OF_LINK
+
+From the response, take shortcut.downloadURL and replace ${f} by the last path component of the link, which is the shortcut ID.
+
+Sample response:
+
+{
+"recordName": "D8BC5EC3-C1B7-4AB4-BC1F-DB9CD9BCACF1",
+"recordChangeTag": "jsmfraaz",
+"fields": {
+"name": {
+"value": "Track Flight",
+"type": "STRING"
+},
+"icon_glyph": {
+"value": 59511,
+"type": "NUMBER_INT64"
+},
+"shortcut": {
+"value": {
+"size": 4056,
+"downloadURL": "https:\/\/cvws.icloud-content.com\/B\/AR9NwjCuBkZFlaLKyLtSHR6MsXJE\/${f}?o=Arfq0PVlFrfx3KpXhpBlFnedvAxtdCIVLb6gmcVzU2Rx6p4DFTVJp6Wlph_pt0H5mg&v=1&x=3&a=B_XzmA8eAU_g51k0fkejW6q6-nAsA0B6SQEAAAMEekk&e=1551229415&k=_&fl=&r=55fe65d2-3df6-455b-855f-f967d54ed073-1&ckc=com.apple.shortcuts&ckz=_defaultZone&p=33&s=PzvNmUWW1jn2XUSIf16RDg_6Knk",
+"fileChecksum": "AR9NwjCuBkZFlaLKyLtSHR6MsXJE"
+},
+"type": "ASSETID"
+},
+"icon": {
+"value": {
+"size": 71473,
+"downloadURL": "https:\/\/cvws.icloud-content.com\/B\/AXTHiUMupMWZEuxzBqOHzmrDYwB2\/${f}?o=AiCgDWCSqq-Hc9bjZS9b5a_Zcns9RyYIHrZz8rEU90LwW3pZkHby5h0SgrrptacTDg&v=1&x=3&a=B7RBpfijiOc0zlcdRc6ctfs7RnP2A0B6SQEAAAMEekk&e=1551229415&k=_&fl=&r=55fe65d2-3df6-455b-855f-f967d54ed073-1&ckc=com.apple.shortcuts&ckz=_defaultZone&p=33&s=KYFWQKDz1FqoO0cH-0dFvZwIclc",
+"fileChecksum": "AXTHiUMupMWZEuxzBqOHzmrDYwB2"
+},
+"type": "ASSETID"
+},
+"icon_color": {
+"value": 4274264319,
+"type": "NUMBER_INT64"
+}
+},
+"modified": {
+"timestamp": 1551225746426,
+"userRecordName": "_d0d0c8fca94beab861aed20bcfcf740c",
+"deviceID": "7B373254765CB39F9D922BBC0C490BC1745E372F50F1EB9B5A7F3AF53939676C"
+},
+"recordType": "SharedShortcut",
+"deleted": false,
+"pluginFields": {},
+"created": {
+"timestamp": 1551225746426,
+"userRecordName": "_d0d0c8fca94beab861aed20bcfcf740c",
+"deviceID": "7B373254765CB39F9D922BBC0C490BC1745E372F50F1EB9B5A7F3AF53939676C"
+}
+}

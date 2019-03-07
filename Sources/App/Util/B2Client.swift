@@ -27,15 +27,15 @@ final class B2Client {
         return URL(fileURLWithPath: NSTemporaryDirectory())
     }()
 
-    private func writeTemporaryFile(_ file: File) throws -> URL {
-        let originURL = URL(fileURLWithPath: "/"+file.filename)
+    private func writeTemporaryFile(_ data: Data) throws -> URL {
+        let originURL = URL(fileURLWithPath: "/"+UUID().uuidString)
         let sanitizedName = originURL.deletingPathExtension().lastPathComponent.slugified + "." + originURL.pathExtension
 
         let url = temporaryStorageURL.appendingPathComponent(sanitizedName)
 
         let finalPath = url.deletingPathExtension().path + UUID().uuidString + "." + originURL.pathExtension
         let finalURL = URL(fileURLWithPath: finalPath)
-        try file.data.write(to: finalURL)
+        try data.write(to: finalURL)
 
         return finalURL
     }
@@ -111,7 +111,7 @@ final class B2Client {
         return promise.futureResult
     }
 
-    func upload(on req: Request, file: File, info: ShortcutFile) -> Future<B2UploadResult> {
+    func upload(on req: Request, data: Data, info: ShortcutFile) -> Future<B2UploadResult> {
         let promise: EventLoopPromise<B2UploadResult> = req.eventLoop.newPromise()
 
         if config?.fake == true {
@@ -133,7 +133,7 @@ final class B2Client {
             do {
                 let logger = try req.make(Logger.self)
 
-                let tempURL = try self.writeTemporaryFile(file)
+                let tempURL = try self.writeTemporaryFile(data)
 
                 let process = Process()
 

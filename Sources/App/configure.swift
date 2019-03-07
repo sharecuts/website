@@ -93,6 +93,10 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     services.register(PwnageVerifier.self) { (container: Container) -> PwnageVerifier in
         return try PwnageVerifier(container: container)
     }
+
+    services.register(ShortcutLinkImporter.self) { (container: Container) -> ShortcutLinkImporter in
+        return try ShortcutLinkImporter(container: container)
+    }
     
     services.register(JobScheduler.self) { (container: Container) -> JobScheduler in
         return JobScheduler()

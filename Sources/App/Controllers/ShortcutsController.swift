@@ -109,60 +109,62 @@ final class ShortcutsController: RouteCollection {
 
         let request = try req.content.decode(CreateShortcutRequest.self)
         
-        guard let sizeStr = req.http.headers["content-length"].first, let size = Int(sizeStr) else {
-            throw Abort(.badRequest)
-        }
-        
-        guard size <= user.level.maxUploadSize else {
-            // filesize is over user's allowance
-            let error = user.level.allowanceExplanation
-            return req.redirect(to: "/upload", with: error)
-        }
-        
         let shortcutCreation = request.flatMap(to: Shortcut.self) { requestData in
-            let fileData = requestData.shortcut.data
-            
-            let decoder = PropertyListDecoder()
-            let shortcutFile = try decoder.decode(ShortcutFile.self, from: fileData)
-            
-            let calculatedHash = try Digest(algorithm: .md5).hash(fileData).hexEncodedString()
-            
-            guard shortcutFile.isValid else {
-                throw Abort(.badRequest)
-            }
-            
-            let dupeCheck = Shortcut.query(on: req).filter(\.fileHash, .equal, calculatedHash).count()
+            let dataResolver: Future<Data> = Future.flatMap(on: req) {
+                if requestData.isFileUploadRequest {
+                    return req.future(requestData.shortcut!.data)
+                } else {
+                    guard let urlStr = requestData.shortcutURL, let url = URL(string: urlStr) else {
+                        throw Abort(.badRequest)
+                    }
 
-            let upload = B2Client.shared.upload(on: req, file: requestData.shortcut, info: shortcutFile)
-            
-            let finalColor = Color.validColorOrRandom(from: shortcutFile.icon.color)
-            
-            return dupeCheck.flatMap(to: Shortcut.self) { hashMatch in
-                if hashMatch > 0 {
-                    throw Abort(.conflict)
+                    return try req.make(ShortcutLinkImporter.self).importShortcut(from: url)
                 }
-                
-                return upload.flatMap { result in
-                    let shortcut = try Shortcut(
-                        userID: user.requireID(),
-                        tagID: requestData.tagID,
-                        title: requestData.title,
-                        summary: requestData.summary,
-                        filePath: result.fileName,
-                        fileID: result.fileId,
-                        actionCount: shortcutFile.actions.count,
-                        actionIdentifiers: shortcutFile.actions.map({ $0.identifier }),
-                        fileHash: calculatedHash,
-                        votes: 0,
-                        downloads: 0,
-                        color: finalColor
-                    )
-                    
-                    // Purge homepage cache
-                    let cfClient = try req.make(CloudFlareClient.self)
-                    cfClient.purgeCache(at: "/")
-                    
-                    return shortcut.save(on: req)
+            }
+
+            return dataResolver.flatMap { fileData in
+                let decoder = PropertyListDecoder()
+                let shortcutFile = try decoder.decode(ShortcutFile.self, from: fileData)
+
+                let calculatedHash = try Digest(algorithm: .md5).hash(fileData).hexEncodedString()
+
+                guard shortcutFile.isValid else {
+                    throw Abort(.badRequest)
+                }
+
+                let dupeCheck = Shortcut.query(on: req).filter(\.fileHash, .equal, calculatedHash).count()
+
+                let upload = B2Client.shared.upload(on: req, data: fileData, info: shortcutFile)
+
+                let finalColor = Color.validColorOrRandom(from: shortcutFile.icon.color)
+
+                return dupeCheck.flatMap(to: Shortcut.self) { hashMatch in
+                    if hashMatch > 0 {
+                        throw Abort(.conflict)
+                    }
+
+                    return upload.flatMap { result in
+                        let shortcut = try Shortcut(
+                            userID: user.requireID(),
+                            tagID: requestData.tagID,
+                            title: requestData.title,
+                            summary: requestData.summary,
+                            filePath: result.fileName,
+                            fileID: result.fileId,
+                            actionCount: shortcutFile.actions.count,
+                            actionIdentifiers: shortcutFile.actions.map({ $0.identifier }),
+                            fileHash: calculatedHash,
+                            votes: 0,
+                            downloads: 0,
+                            color: finalColor
+                        )
+
+                        // Purge homepage cache
+                        let cfClient = try req.make(CloudFlareClient.self)
+                        cfClient.purgeCache(at: "/")
+
+                        return shortcut.save(on: req)
+                    }
                 }
             }
         }

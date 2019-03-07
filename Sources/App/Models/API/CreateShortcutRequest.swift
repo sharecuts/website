@@ -12,7 +12,16 @@ struct CreateShortcutRequest: Codable {
     let tagID: UUID
     let title: String
     let summary: String
-    let shortcut: File
+    let shortcut: File?
+    let shortcutURL: String?
 }
 
 extension CreateShortcutRequest: Content { }
+
+extension CreateShortcutRequest {
+
+    var isFileUploadRequest: Bool {
+        return shortcut != nil
+    }
+
+}
