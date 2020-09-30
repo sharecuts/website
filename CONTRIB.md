@@ -8,7 +8,7 @@ The app is hosted on a Mac Mini in [MacStadium](https://macstadium.com), running
 
 In production, the app listens on a local port and is started by a launch daemon, to expose the app to the internet, Nginx is used as a proxy. All access to the website and API goes through [CloudFlare](https://cloudflare.com) which is used as a DNS provider, cache, CDN and to protect the app from abuse.
 
-## Setting up the environment
+## Setting up the better environment
 
 Building and running Sharecuts locally requires the following environment:
 
@@ -18,7 +18,7 @@ Building and running Sharecuts locally requires the following environment:
 - [B2 command line tool](https://www.backblaze.com/b2/docs/quick_command_line.html)
 - PostgreSQL (I recommend using [Postgres.app](http://postgresapp.com))
 
-## Environment variables
+## Environmental variables
 
 A `.env` file should be placed in the app's working directory to configure some aspects of the app, here's a brief explanation of the environment variables:
 
