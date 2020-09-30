@@ -1,6 +1,6 @@
 # Sharecuts
 
-Share your favorite Shortcuts with the community, browse shortcuts shared by the community.
+Share your favorite Shortcuts with the whole community, browse shortcuts shared by the community.
 
 Live at [sharecuts.app][1]
 
