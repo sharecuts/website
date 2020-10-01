@@ -20,4 +20,4 @@ If you have any suggestions or ideas please [Add An Issue](https://github.com/in
 
 ## API
 
-Sharecuts has a public API, [check out this guide](./API.md).
+Sharecuts has a Public API, [check out this guide](./API.md).
