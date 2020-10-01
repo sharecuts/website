@@ -19,12 +19,14 @@ window.addEventListener("DOMContentLoaded", function(){
 
         let result = await checkUsername(username);
 
-        console.log(result);
+//         console.log(result);
 
         if (!result.isAvailable) {
             $(this).removeClass("is-valid").addClass("is-invalid");
             errorContainer.text(result.message);
-        } else {
+                                  }
+      else
+        {
             $(this).removeClass("is-invalid").addClass("is-valid");
             errorContainer.text("");
         }
