@@ -1,4 +1,4 @@
-# Sharecuts
+# SHARECUTS
 
 Share your favorite Shortcuts with the community, browse shortcuts shared by the community.
 
