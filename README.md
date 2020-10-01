@@ -2,6 +2,12 @@
 
 Share your favorite Shortcuts with the community, browse shortcuts shared by the community.
 
+This is the best website where you can make your work easier and faster by applying the computer shortcuts that various knowledgeable people around the world uses in day to day life in just one click 😊. 
+
+you can also share your knowledge by contributing to this website 😉.
+
+thankyou for your kindness 😇.
+
 Live at [sharecuts.app][1]
 
 **The ability to publish your own shortcuts is currently invite-only, we'll open it up to more people when we're ready.**
