@@ -1,6 +1,9 @@
 The shared shortcut link looks like this:
 https://www.icloud.com/shortcuts/d8bc5ec3c1b74ab4bc1fdb9cd9bcacf1
 
+
+
+
 To grab the information about the link, call the api like this:
 https://www.icloud.com/shortcuts/api/records/d8bc5ec3c1b74ab4bc1fdb9cd9bcacf1
 
